@@ -40,7 +40,7 @@ if (!reduced) {
   });
 
   // Rotating words in the hero
-  const words = ["machine learning", "anthropology", "library systems", "data and maps"];
+  const words = ["legal research", "law libraries", "access to justice", "legal technology"];
   const el = document.querySelector(".rotator-word");
   let i = 0;
   setInterval(() => {

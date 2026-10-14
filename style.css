@@ -74,9 +74,9 @@ section { padding: 5rem 0; }
 /* ---------- hero ---------- */
 .hero {
   min-height: 82vh;
-  display: flex; flex-direction: column; justify-content: center;
   position: relative;
   padding-bottom: 6rem;
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: center;
 }
 .eyebrow { color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.85rem; margin: 0 0 1rem; }
 h1 {
@@ -181,4 +181,45 @@ footer p { margin: 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; }
+}
+
+/* ---------- portrait ---------- */
+.portrait { margin: 0; justify-self: center; width: min(100%, 22rem); position: relative; }
+.portrait::before {
+  content: ""; position: absolute; inset: -4px; border-radius: 2rem;
+  background: var(--grad); filter: blur(22px); opacity: 0.55; z-index: -1;
+  animation: shimmer 8s linear infinite; background-size: 200% 100%;
+}
+.portrait img {
+  display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover;
+  border-radius: 1.6rem; border: 1px solid var(--border);
+}
+
+/* ---------- timeline ---------- */
+.timeline { list-style: none; margin: 0 0 3.5rem; padding: 0 0 0 1.6rem; border-left: 1px solid var(--border); }
+.timeline li { position: relative; padding-bottom: 2rem; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline li::before {
+  content: ""; position: absolute; left: calc(-1.6rem - 5px); top: 0.55rem;
+  width: 9px; height: 9px; border-radius: 50%; background: var(--grad);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 14px var(--a);
+}
+.when { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); font-weight: 600; }
+.timeline h3 { margin: 0.2rem 0 0; font-size: 1.2rem; letter-spacing: -0.02em; }
+.timeline .org { margin: 0 0 0.4rem; color: var(--a); font-size: 0.95rem; }
+.timeline p:last-child { margin: 0; color: var(--muted); font-size: 0.98rem; max-width: 40rem; }
+
+.edu h3 { font-size: 1.3rem; margin: 0 0 1rem; letter-spacing: -0.02em; }
+.edu-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.edu-grid > div {
+  display: flex; flex-direction: column; gap: 0.3rem; padding: 1.2rem 1.3rem;
+  border: 1px solid var(--border); border-radius: 1rem; background: var(--card);
+}
+.edu-grid span { color: var(--muted); font-size: 0.92rem; }
+.edu-grid small { color: var(--muted); font-size: 0.82rem; line-height: 1.5; margin-top: 0.3rem; }
+
+@media (max-width: 48rem) {
+  .hero { grid-template-columns: 1fr; gap: 2rem; min-height: 0; padding-top: 1.5rem; }
+  .portrait { order: -1; width: min(70%, 15rem); justify-self: start; }
+  .scroll-hint { display: none; }
 }
