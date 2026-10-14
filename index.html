@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brianna Imm</title>
+  <meta name="description" content="Personal homepage and portfolio of Brianna Imm.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top">Brianna Imm</a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <h1>Hi, I'm Brianna.</h1>
+      <p class="lead">A short line about what you do goes here.</p>
+    </section>
+
+    <section id="about">
+      <h2>About</h2>
+      <p>Write a few sentences about yourself, your background, and what you're interested in.</p>
+    </section>
+
+    <section id="work">
+      <h2>Work</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Project One</h3>
+          <p>A short description of the project.</p>
+        </article>
+        <article class="card">
+          <h3>Project Two</h3>
+          <p>A short description of the project.</p>
+        </article>
+        <article class="card">
+          <h3>Project Three</h3>
+          <p>A short description of the project.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Get in touch: <a href="mailto:briannarimm@gmail.com">briannarimm@gmail.com</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Brianna Imm</p>
+  </footer>
+
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
