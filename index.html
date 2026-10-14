@@ -4,58 +4,119 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Brianna Imm</title>
-  <meta name="description" content="Personal homepage and portfolio of Brianna Imm.">
+  <meta name="description" content="Brianna R. Imm: machine learning, anthropology, and library systems. Projects and links.">
+  <meta name="theme-color" content="#0b0a12">
+  <meta property="og:title" content="Brianna Imm">
+  <meta property="og:description" content="Machine learning, anthropology, and library systems.">
+  <meta property="og:type" content="website">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="aurora" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
+  <div class="spotlight" aria-hidden="true"></div>
+
   <header class="site-header">
-    <a class="brand" href="#top">Brianna Imm</a>
-    <nav>
+    <a class="brand" href="#top" aria-label="Brianna Imm, back to top">bri<span>.</span></a>
+    <nav aria-label="Primary">
       <a href="#about">About</a>
-      <a href="#work">Work</a>
-      <a href="#contact">Contact</a>
+      <a href="#projects">Projects</a>
+      <a href="#links">Elsewhere</a>
     </nav>
   </header>
 
   <main id="top">
     <section class="hero">
-      <h1>Hi, I'm Brianna.</h1>
-      <p class="lead">A short line about what you do goes here.</p>
+      <p class="eyebrow reveal">Hello, world &#x1F44B;</p>
+      <h1 class="reveal">I'm <span class="grad">Brianna&nbsp;Imm</span>.</h1>
+      <p class="lead reveal">
+        I build things at the crossroads of
+        <span class="rotator" aria-live="off"><span class="rotator-word">machine learning</span></span>.
+      </p>
+      <div class="cta reveal">
+        <a class="btn primary" href="#projects">See my work</a>
+        <a class="btn" href="https://github.com/briannarimm" rel="me">GitHub &#x2197;</a>
+      </div>
+      <a class="scroll-hint" href="#about" aria-label="Scroll to About">&#x2193;</a>
     </section>
 
-    <section id="about">
-      <h2>About</h2>
-      <p>Write a few sentences about yourself, your background, and what you're interested in.</p>
-    </section>
-
-    <section id="work">
-      <h2>Work</h2>
-      <div class="grid">
-        <article class="card">
-          <h3>Project One</h3>
-          <p>A short description of the project.</p>
-        </article>
-        <article class="card">
-          <h3>Project Two</h3>
-          <p>A short description of the project.</p>
-        </article>
-        <article class="card">
-          <h3>Project Three</h3>
-          <p>A short description of the project.</p>
-        </article>
+    <section id="about" class="reveal">
+      <h2><span class="num">01</span> About</h2>
+      <div class="about-grid">
+        <div>
+          <p>
+            I'm Brianna, and I like turning messy, human information into things
+            you can search, map, and explore. My work sits between <strong>data and
+            people</strong>: how we describe cultures, how we catalog knowledge, and
+            how a little code can make both easier to see.
+          </p>
+          <p>
+            I've clustered 141 societies with K-Modes, put the world's domesticated
+            animals on an interactive map, and built a library catalog from the
+            database up. I learn by building, and I keep building.
+          </p>
+        </div>
+        <ul class="chips" aria-label="Interests and tools">
+          <li>Machine learning</li>
+          <li>Anthropology</li>
+          <li>Library systems</li>
+          <li>Python</li>
+          <li>pandas</li>
+          <li>PHP &amp; MySQL</li>
+          <li>Data visualization</li>
+          <li>Interactive maps</li>
+        </ul>
       </div>
     </section>
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Get in touch: <a href="mailto:briannarimm@gmail.com">briannarimm@gmail.com</a></p>
+    <section id="projects">
+      <h2 class="reveal"><span class="num">02</span> Projects</h2>
+      <div class="grid">
+        <a class="card tilt reveal" href="https://dev.briannaimm.com/ml-applications-in-anthropology/">
+          <span class="tag">Python &middot; ML &middot; Maps</span>
+          <h3>ML Applications in Anthropology</h3>
+          <p>
+            Two projects that map and cluster cross-cultural data from the Standard
+            Cross-Cultural Sample: a world map of domesticated animals, and a K-Modes
+            clustering of 141 societies into three groups.
+          </p>
+          <span class="more">Explore the maps <i>&#x2192;</i></span>
+        </a>
+
+        <a class="card tilt reveal" href="https://opac.briannaimm.com">
+          <span class="tag">PHP &middot; MySQL &middot; Web</span>
+          <h3>Personal OPAC Catalog</h3>
+          <p>
+            A working library catalog of my own. Search by author, title, or
+            publisher, narrow by date range, and browse the records behind it.
+          </p>
+          <span class="more">Open the catalog <i>&#x2192;</i></span>
+        </a>
+
+        <div class="card soon reveal">
+          <span class="tag">In progress</span>
+          <h3>More on the way</h3>
+          <p>This list is going to grow. Check back soon.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="links" class="reveal">
+      <h2><span class="num">03</span> Elsewhere</h2>
+      <div class="links">
+        <a href="https://github.com/briannarimm" rel="me"><b>GitHub</b><span>@briannarimm</span><i>&#x2197;</i></a>
+        <a href="mailto:briannarimm@gmail.com"><b>Email</b><span>briannarimm@gmail.com</span><i>&#x2197;</i></a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; <span id="year"></span> Brianna Imm</p>
+    <p>&copy; <span id="year"></span> Brianna R. Imm &middot; Built by hand, more soon.</p>
   </footer>
 
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script src="script.js"></script>
 </body>
 </html>
