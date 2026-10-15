@@ -142,7 +142,7 @@ h2 .num { font-size: 0.9rem; color: var(--a); font-weight: 600; letter-spacing: 
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 0.15s ease-out, border-color 0.3s, box-shadow 0.3s;
 }
-a.card:hover { border-color: transparent; box-shadow: 0 0 0 1px var(--a), 0 20px 60px -24px var(--a); }
+a.card:hover, .card.tilt:hover { border-color: transparent; box-shadow: 0 0 0 1px var(--a), 0 20px 60px -24px var(--a); }
 .card h3 { margin: 0.2rem 0 0; font-size: 1.3rem; letter-spacing: -0.02em; }
 .card p { margin: 0; color: var(--muted); font-size: 0.98rem; flex: 1; }
 .tag { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: #6fcdb3; font-weight: 600; }
@@ -274,3 +274,21 @@ h3.sub { font-size: 1.3rem; margin: 3rem 0 1rem; letter-spacing: -0.02em; }
   nav { gap: 0.6rem; }
   nav a { font-size: 0.8rem; }
 }
+
+/* ---------- project cards ---------- */
+.card-top { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; min-height: 3.1rem; }
+.badge {
+  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+  color: var(--a); border: 1px solid rgba(216, 180, 122, 0.4); border-radius: 999px; padding: 0.1rem 0.6rem;
+}
+.card-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.9rem; }
+.plink {
+  display: inline-flex; align-items: center; gap: 0.2rem;
+  padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.88rem; font-weight: 600;
+  border: 1px solid var(--border); background: var(--card);
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+.plink:hover { transform: translateY(-2px); border-color: var(--a); }
+.plink.primary { background: var(--grad); border-color: transparent; color: #0a0e13; }
+.note { margin: 1.5rem 0 0; color: var(--muted); font-size: 0.88rem; }
+.grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }

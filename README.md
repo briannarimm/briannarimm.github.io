@@ -22,7 +22,7 @@ The website has four sections:
 
 1. **About.** A short introduction and a list of research tools.
 2. **Experience.** Work history and education.
-3. **Projects.** Links to two projects.
+3. **Projects.** Short descriptions of six projects, with links to each app and repository.
 4. **Elsewhere.** Links to GitHub and email.
 
 The website does not use a framework or a build tool. It uses plain HTML, CSS, and JavaScript. A web browser can open the files directly.
