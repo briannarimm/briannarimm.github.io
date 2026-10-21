@@ -24,6 +24,9 @@ gallery:
   - src: /assets/items/objection/evidence-diary.jpg
     alt: "Evidence card: an open diary with handwritten entries."
     caption: "Evidence: the diary"
+  - src: /assets/items/objection/receipt.png
+    alt: "Evidence card: a printed store receipt."
+    caption: "Evidence: the receipt"
 dc:
   creator: ["Brianna R. Imm"]
   contributor: ["Claude (Anthropic), AI coding assistant"]
