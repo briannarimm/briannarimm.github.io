@@ -1,0 +1,23 @@
+{%- assign it = include.item %}
+{%- if it.category == "paper" %}{% assign cat_label = "Paper" %}{% else %}{% assign cat_label = "Project" %}{% endif %}
+{%- assign kw = it.keywords | join: " " %}
+{%- capture search_text %}{{ it.title }} {{ it.description }} {{ it.display_tag }} {{ kw }} {{ cat_label }}{% endcapture %}
+<article class="card tilt reveal" data-category="{{ it.category | default: 'project' }}" data-search="{{ search_text | strip_html | strip_newlines | downcase | escape }}">
+  <a class="card-media" href="{{ it.url | relative_url }}" tabindex="-1" aria-hidden="true">
+    {%- if it.thumbnail %}
+    <img src="{{ it.thumbnail | relative_url }}" alt="" loading="lazy" decoding="async">
+    {%- else %}
+    <span class="ph"><span>{{ it.title | slice: 0 }}</span></span>
+    {%- endif %}
+    <span class="media-chip">{{ cat_label }}</span>
+  </a>
+  <div class="card-top"><span class="tag">{{ it.display_tag | default: cat_label }}</span>{% if it.ai_assisted %}<span class="badge">AI-assisted</span>{% endif %}</div>
+  <h3><a class="card-title" href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+  <p>{{ it.description }}</p>
+  <div class="card-links">
+    <a class="plink primary" href="{{ it.url | relative_url }}">View item <svg class="ico" aria-hidden="true"><use href="#arrow-right"/></svg></a>
+    {%- for l in it.links %}
+    {% include link-button.html link=l %}
+    {%- endfor %}
+  </div>
+</article>

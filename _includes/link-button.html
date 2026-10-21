@@ -1,0 +1,19 @@
+{%- comment -%}
+  One link button. Parameters: link (with kind, url, label), class.
+  Kinds: live, play, download, preview, pdf, ssrn, doi, repository, other.
+{%- endcomment -%}
+{%- assign l = include.link %}
+{%- case l.kind %}
+  {%- when "live" %}{% assign d_label = "Visit site" %}{% assign d_icon = "arrow-up-right" %}
+  {%- when "play" %}{% assign d_label = "Play" %}{% assign d_icon = "play" %}
+  {%- when "download" %}{% assign d_label = "Download" %}{% assign d_icon = "download" %}
+  {%- when "preview" %}{% assign d_label = "Preview" %}{% assign d_icon = "eye" %}
+  {%- when "pdf" %}{% assign d_label = "PDF" %}{% assign d_icon = "doc" %}
+  {%- when "ssrn" %}{% assign d_label = "Read on SSRN" %}{% assign d_icon = "doc" %}
+  {%- when "doi" %}{% assign d_label = "DOI" %}{% assign d_icon = "arrow-up-right" %}
+  {%- when "repository" %}{% assign d_label = "Repository" %}{% assign d_icon = "code" %}
+  {%- else %}{% assign d_label = "Link" %}{% assign d_icon = "arrow-up-right" %}
+{%- endcase %}
+{%- assign first_char = l.url | slice: 0 %}
+{%- if first_char == "/" %}{% assign href = l.url | relative_url %}{% else %}{% assign href = l.url %}{% endif %}
+<a class="{{ include.class | default: 'plink' }}" href="{{ href }}"{% if first_char != "/" %} rel="noopener"{% endif %}{% if l.kind == "download" and first_char == "/" %} download{% endif %}>{{ l.label | default: d_label }} <svg class="ico" aria-hidden="true"><use href="#{{ d_icon }}"/></svg></a>

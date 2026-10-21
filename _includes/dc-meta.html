@@ -1,0 +1,30 @@
+{%- comment -%}
+  Dublin Core and Google Scholar metadata for one item. Library tools,
+  Zotero, and search engines read these tags.
+{%- endcomment -%}
+{%- assign it = include.item %}
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.title" content="{{ it.title | escape }}">
+<meta name="DC.description" content="{{ it.description | strip_html | escape }}">
+<meta name="DC.date" content="{% if it.dc.date %}{{ it.dc.date | join: '; ' | escape }}{% else %}{{ it.date | date: '%Y-%m-%d' }}{% endif %}">
+{%- assign dc_keys = "creator,subject,publisher,contributor,type,format,identifier,source,language,relation,coverage,rights" | split: "," %}
+{%- for k in dc_keys %}
+{%- assign val_raw = it.dc[k] %}
+{%- if val_raw %}
+{%- assign vals = val_raw | join: "|~|" | split: "|~|" %}
+{%- for v in vals %}
+<meta name="DC.{{ k }}" content="{{ v | escape }}">
+{%- endfor %}
+{%- endif %}
+{%- endfor %}
+{%- if it.category == "paper" %}
+<meta name="citation_title" content="{{ it.title | escape }}">
+{%- assign authors = it.dc.creator | join: "|~|" | split: "|~|" %}
+{%- for a in authors %}
+<meta name="citation_author" content="{{ a | escape }}">
+{%- endfor %}
+<meta name="citation_publication_date" content="{{ it.date | date: '%Y/%m/%d' }}">
+{%- for l in it.links %}{% if l.url contains ".pdf" %}
+<meta name="citation_pdf_url" content="{{ l.url | absolute_url }}">
+{%- break %}{% endif %}{% endfor %}
+{%- endif %}

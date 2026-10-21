@@ -1,0 +1,26 @@
+---
+layout: null
+permalink: /items.json
+---
+{%- assign sorted = site.items | sort: "date" | reverse -%}
+{
+  "collection": {{ site.collection_name | jsonify }},
+  "site": {{ site.url | jsonify }},
+  "items": [
+  {%- for it in sorted %}
+    {
+      "url": {{ it.url | absolute_url | jsonify }},
+      "category": {{ it.category | jsonify }},
+      "title": {{ it.title | jsonify }},
+      "description": {{ it.description | jsonify }},
+      "date": {{ it.date | date: "%Y-%m-%d" | jsonify }},
+      "display_tag": {{ it.display_tag | jsonify }},
+      "keywords": {{ it.keywords | jsonify }},
+      "ai_assisted": {{ it.ai_assisted | default: false | jsonify }},
+      "thumbnail": {% if it.thumbnail %}{{ it.thumbnail | absolute_url | jsonify }}{% else %}null{% endif %},
+      "links": {{ it.links | jsonify }},
+      "dc": {{ it.dc | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+  {%- endfor %}
+  ]
+}

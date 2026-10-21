@@ -1,0 +1,37 @@
+---
+layout: default
+title: Papers & Projects
+description: "Papers and projects by Brianna R. Imm: legal scholarship, library systems, and software for legal research and learning."
+---
+{%- assign sorted = site.items | sort: "date" | reverse %}
+{%- assign paper_count = sorted | where: "category", "paper" | size %}
+{%- assign project_count = sorted | where: "category", "project" | size %}
+    <section class="collection-head">
+      <nav class="crumbs reveal" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}"><svg class="ico" aria-hidden="true"><use href="#arrow-left"/></svg> Home</a>
+      </nav>
+      <p class="eyebrow reveal">The collection</p>
+      <h1 class="item-title reveal">Papers &amp; <span class="grad">Projects</span></h1>
+      <p class="lead reveal">Legal scholarship, library systems, and software for legal research and learning. Each item has a full record with Dublin Core metadata.</p>
+      <div class="toolbar reveal">
+        <div class="filters" role="group" aria-label="Filter papers and projects">
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">All <span>{{ sorted.size }}</span></button>
+          <button type="button" class="filter" data-filter="paper" aria-pressed="false">Papers <span>{{ paper_count }}</span></button>
+          <button type="button" class="filter" data-filter="project" aria-pressed="false">Projects <span>{{ project_count }}</span></button>
+        </div>
+        <label class="search">
+          <span class="visually-hidden">Search the collection</span>
+          <input type="search" placeholder="Search titles, tags, descriptions" data-search-input>
+        </label>
+      </div>
+    </section>
+
+    <section class="collection-list">
+      <div class="grid" data-collection>
+        {%- for item in sorted %}
+        {% include item-card.html item=item %}
+        {%- endfor %}
+      </div>
+      <p class="empty" hidden>No items match. Try another filter or search.</p>
+      <p class="note reveal">Items marked AI-assisted were built with Claude Code. Each item describes how. Machine-readable list: <a href="{{ '/items.json' | relative_url }}">items.json</a>.</p>
+    </section>

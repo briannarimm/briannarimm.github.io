@@ -1,0 +1,10 @@
+{%- if page.url == "/" %}{% assign home = "" %}{% else %}{% assign home = "/" | relative_url %}{% endif %}
+<header class="site-header">
+  <a class="brand" href="{% if page.url == '/' %}#top{% else %}{{ '/' | relative_url }}{% endif %}" aria-label="Brianna Imm, home">bri<span>.</span></a>
+  <nav aria-label="Primary">
+    <a href="{{ home }}#about">About</a>
+    <a href="{{ home }}#experience">Experience</a>
+    <a href="{{ home }}#work">Work</a>
+    <a href="{{ home }}#links">Elsewhere</a>
+  </nav>
+</header>

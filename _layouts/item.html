@@ -1,0 +1,134 @@
+---
+layout: default
+---
+{%- assign it = page %}
+{%- if it.category == "paper" %}{% assign cat_label = "Paper" %}{% assign cat_plural = "Papers" %}{% else %}{% assign cat_label = "Project" %}{% assign cat_plural = "Projects" %}{% endif %}
+<article class="item-page">
+  <nav class="crumbs reveal" aria-label="Breadcrumb">
+    <a href="{{ '/items/' | relative_url }}"><svg class="ico" aria-hidden="true"><use href="#arrow-left"/></svg> {{ site.collection_name }}</a>
+    <span aria-hidden="true">/</span>
+    <a href="{{ '/items/' | relative_url }}#{{ it.category | default: 'project' }}">{{ cat_plural }}</a>
+  </nav>
+
+  <header class="item-head reveal">
+    <div class="card-top">
+      <span class="tag">{{ cat_label }}{% if it.display_tag %} &middot; {{ it.display_tag }}{% endif %}</span>
+      {%- if it.ai_assisted %}<span class="badge">AI-assisted</span>{% endif %}
+    </div>
+    <h1 class="item-title">{{ it.title }}</h1>
+    <p class="lead">{{ it.description }}</p>
+    {%- if it.links.size > 0 %}
+    <div class="item-actions">
+      {%- for l in it.links %}
+      {%- if forloop.first %}
+      {% include link-button.html link=l class="btn primary" %}
+      {%- else %}
+      {% include link-button.html link=l class="btn" %}
+      {%- endif %}
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </header>
+
+  {%- if it.gallery.size > 0 %}
+  <div class="carousel reveal" data-carousel>
+    <div class="carousel-track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Images of {{ it.title | escape }}">
+      {%- for g in it.gallery %}
+      <figure class="slide" aria-roledescription="slide" aria-label="{{ forloop.index }} of {{ forloop.length }}">
+        <img src="{{ g.src | relative_url }}" alt="{{ g.alt | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" decoding="async">
+        {%- if g.caption %}<figcaption>{{ g.caption }}</figcaption>{% endif %}
+      </figure>
+      {%- endfor %}
+    </div>
+    {%- if it.gallery.size > 1 %}
+    <button class="cbtn prev" type="button" aria-label="Previous image"><svg class="ico" aria-hidden="true"><use href="#chev-left"/></svg></button>
+    <button class="cbtn next" type="button" aria-label="Next image"><svg class="ico" aria-hidden="true"><use href="#chev-right"/></svg></button>
+    <div class="dots" aria-hidden="true"></div>
+    {%- endif %}
+  </div>
+  {%- elsif it.thumbnail %}
+  <figure class="item-figure reveal">
+    <img src="{{ it.thumbnail | relative_url }}" alt="{{ it.thumbnail_alt | default: it.title | escape }}" decoding="async">
+  </figure>
+  {%- endif %}
+
+  {%- for l in it.links %}
+  {%- if l.kind == "preview" and l.url contains ".pdf" %}
+  {%- assign first_char = l.url | slice: 0 %}
+  {%- if first_char == "/" %}{% assign pdf_src = l.url | relative_url %}{% else %}{% assign pdf_src = l.url %}{% endif %}
+  <div class="pdf-embed reveal">
+    <object data="{{ pdf_src }}" type="application/pdf" aria-label="Preview of {{ it.title | escape }}">
+      <p>Your browser cannot show this PDF here. <a href="{{ pdf_src }}">Open the PDF</a>.</p>
+    </object>
+  </div>
+  {%- break %}
+  {%- endif %}
+  {%- endfor %}
+
+  <div class="item-body">
+    <div class="prose reveal">
+      {{ content }}
+    </div>
+
+    <aside class="item-side">
+      {%- if it.attachments.size > 0 %}
+      <section class="side-block reveal">
+        <h2 class="side-h">Files</h2>
+        <ul class="files">
+          {%- for f in it.attachments %}
+          {%- assign first_char = f.file | slice: 0 %}
+          {%- if first_char == "/" %}{% assign f_href = f.file | relative_url %}{% else %}{% assign f_href = f.file %}{% endif %}
+          <li><a href="{{ f_href }}"{% if first_char == "/" %} download{% endif %}><svg class="ico" aria-hidden="true"><use href="#download"/></svg><span><b>{{ f.label | default: f.file }}</b>{% if f.note %}<small>{{ f.note }}</small>{% endif %}</span></a></li>
+          {%- endfor %}
+        </ul>
+      </section>
+      {%- endif %}
+
+      {%- if it.keywords.size > 0 %}
+      <section class="side-block reveal">
+        <h2 class="side-h">Tags</h2>
+        <ul class="chips">
+          {%- for k in it.keywords %}<li>{{ k }}</li>{% endfor %}
+        </ul>
+      </section>
+      {%- endif %}
+
+      <section class="side-block reveal">
+        <h2 class="side-h">Collection</h2>
+        <p class="side-p"><a href="{{ '/items/' | relative_url }}#{{ it.category | default: 'project' }}">{{ cat_plural }}</a> in {{ site.collection_name }}</p>
+      </section>
+    </aside>
+  </div>
+
+  <section class="dc reveal" aria-labelledby="dc-h">
+    <h2 id="dc-h"><span class="num">DC</span> Dublin Core</h2>
+    <dl class="dc-table">
+      {%- for el in site.data.dublin_core %}
+      {%- if el.from == "top" %}
+        {%- assign val_raw = it[el.key] %}
+      {%- else %}
+        {%- assign val_raw = it.dc[el.key] %}
+      {%- endif %}
+      {%- if el.key == "date" and val_raw == nil %}{% assign val_raw = it.date | date: "%B %-d, %Y" %}{% endif %}
+      {%- if val_raw and val_raw != "" %}
+      {%- assign vals = val_raw | join: "|~|" | split: "|~|" %}
+      <div class="dc-row">
+        <dt>{{ el.label }}</dt>
+        <dd>
+          {%- for v in vals %}
+          <span>{% if v contains "://" %}<a href="{{ v }}" rel="noopener">{{ v }}</a>{% else %}{{ v }}{% endif %}</span>
+          {%- endfor %}
+        </dd>
+      </div>
+      {%- endif %}
+      {%- endfor %}
+    </dl>
+  </section>
+
+  <section class="cite reveal" aria-labelledby="cite-h">
+    <h2 id="cite-h" class="side-h">Citation</h2>
+    {%- assign creators = it.dc.creator | default: site.author | join: ", " %}
+    <p class="cite-text" data-cite>{{ creators }}, &ldquo;{{ it.title }},&rdquo; <em>{{ site.collection_name }}</em>, {{ site.title }}<span data-accessed></span>, {{ page.url | absolute_url }}.</p>
+    <p class="side-p">Machine-readable: <a href="{{ '/items.json' | relative_url }}">items.json</a> (all items, Dublin Core fields)</p>
+  </section>
+</article>

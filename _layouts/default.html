@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+<head>
+{% include head.html %}
+</head>
+<body>
+{% include sprite.html %}
+{% include background.html %}
+{% include header.html %}
+  <main id="top">
+{{ content }}
+  </main>
+{% include footer.html %}
+  <script src="{{ '/script.js' | relative_url }}"></script>
+</body>
+</html>

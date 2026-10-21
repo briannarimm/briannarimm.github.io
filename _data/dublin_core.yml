@@ -1,0 +1,19 @@
+# The 15 Dublin Core elements, in the order the item page shows them.
+# "from" tells the item page where to read the value:
+#   top  = a top-level field (title, description, date)
+#   dc   = a field inside the "dc:" block of the item
+- { key: title,       label: Title,       from: top }
+- { key: subject,     label: Subject,     from: dc }
+- { key: description, label: Description, from: top }
+- { key: creator,     label: Creator,     from: dc }
+- { key: source,      label: Source,      from: dc }
+- { key: publisher,   label: Publisher,   from: dc }
+- { key: date,        label: Date,        from: dc }
+- { key: contributor, label: Contributor, from: dc }
+- { key: rights,      label: Rights,      from: dc }
+- { key: relation,    label: Relation,    from: dc }
+- { key: format,      label: Format,      from: dc }
+- { key: language,    label: Language,    from: dc }
+- { key: type,        label: Type,        from: dc }
+- { key: identifier,  label: Identifier,  from: dc }
+- { key: coverage,    label: Coverage,    from: dc }

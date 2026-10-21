@@ -1,0 +1,38 @@
+# Site settings. GitHub Pages builds this site with Jekyll.
+title: Brianna Imm
+collection_name: Papers & Projects
+description: "Brianna R. Imm: J.D., law library professional, and MLIS student at the University of Missouri School of Law."
+author: Brianna R. Imm
+url: https://www.briannaimm.com
+baseurl: ""
+lang: en
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Papers and projects. Each file in _items/ becomes a page at /items/<file-name>/.
+collections:
+  items:
+    output: true
+    permalink: /items/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: items
+    values:
+      layout: item
+
+exclude:
+  - README.md
+  - DESIGN.md
+  - LICENSE
+  - LICENSE-CC-BY-4.0
+  - editor/
+  - CLAUDE.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - node_modules/
