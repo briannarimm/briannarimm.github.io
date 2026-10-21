@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collection Editor</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0e13'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='34' font-weight='700' text-anchor='middle' fill='%23f3f1ec'%3Eb%3C/text%3E%3Ccircle cx='47' cy='42' r='4' fill='%23d8b47a'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/static/app.css">
+  <script>/*__CONFIG__*/</script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-left">
+      <span class="logo">bri<span>.</span></span>
+      <span class="app-name">Collection Editor</span>
+      <label class="picker">
+        <span class="visually-hidden">Choose an item</span>
+        <select id="picker"><option value="">New item</option></select>
+      </label>
+      <button class="btn ghost" id="btn-new" type="button">New</button>
+    </div>
+    <div class="bar-right">
+      <span class="who" id="who"><span class="dot"></span><span id="who-text">Connecting to GitHub...</span></span>
+      <button class="btn primary" id="btn-publish" type="button" disabled>Save &amp; publish</button>
+      <button class="btn ghost icon" id="btn-quit" type="button" title="Quit the editor" aria-label="Quit the editor">&#x2715;</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <form class="form" id="form" autocomplete="off" onsubmit="return false">
+
+      <section class="panel">
+        <h2>Basics</h2>
+        <div class="seg" role="radiogroup" aria-label="Category">
+          <label><input type="radio" name="category" value="project" checked><span>Project</span></label>
+          <label><input type="radio" name="category" value="paper"><span>Paper</span></label>
+        </div>
+        <label class="field"><span>Title <b>*</b></span><input id="f-title" required></label>
+        <div class="row2">
+          <label class="field"><span>Slug (web address) <b>*</b></span><input id="f-slug" pattern="[a-z0-9][a-z0-9-]*" spellcheck="false"><small id="slug-hint">/items/&hellip;/</small></label>
+          <label class="field"><span>Date <b>*</b></span><input id="f-date" type="date" required><small>Sets the order. Newest first.</small></label>
+        </div>
+        <label class="field"><span>Short description <b>*</b></span><textarea id="f-description" rows="3" maxlength="400"></textarea><small><span id="desc-count">0</span>/400 &middot; Shows on the card and at the top of the item page.</small></label>
+        <div class="row2">
+          <label class="field"><span>Card label</span><input id="f-tag" placeholder="Browser game · AI literacy"><small>Short type label above the title.</small></label>
+          <label class="field"><span>Tags</span><input id="f-keywords" placeholder="Legal research, AI, Python"><small>Separate with commas.</small></label>
+        </div>
+        <label class="check"><input type="checkbox" id="f-ai"><span>AI-assisted (shows the AI-assisted badge)</span></label>
+      </section>
+
+      <section class="panel">
+        <h2>Links</h2>
+        <p class="help">The first link is the main button on the item page. Cards always link to the item page and show these links as extra buttons.</p>
+        <div id="links"></div>
+        <button class="btn ghost small" type="button" id="add-link">+ Add link</button>
+      </section>
+
+      <section class="panel">
+        <h2>Thumbnail</h2>
+        <p class="help">Shows on cards and in link previews. A 16:10 image works best.</p>
+        <div class="drop" id="thumb-drop" tabindex="0">
+          <input type="file" accept="image/*" id="thumb-input" hidden>
+          <div class="drop-empty" id="thumb-empty">Drop an image here, or <u>choose a file</u></div>
+          <div class="thumb-show" id="thumb-show" hidden>
+            <img id="thumb-img" alt="">
+            <button class="btn ghost small" type="button" id="thumb-remove">Remove</button>
+          </div>
+        </div>
+        <label class="field"><span>Thumbnail description (alt text)</span><input id="f-thumb-alt" placeholder="What the image shows"></label>
+      </section>
+
+      <section class="panel">
+        <h2>Gallery (carousel)</h2>
+        <p class="help">Feature images for the item page. Independent of the thumbnail. With no gallery, the item page shows the thumbnail.</p>
+        <div id="gallery"></div>
+        <div class="drop slim" id="gal-drop" tabindex="0">
+          <input type="file" accept="image/*" id="gal-input" multiple hidden>
+          <div class="drop-empty">Drop images here, or <u>choose files</u></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Files</h2>
+        <p class="help">Downloads such as a PDF. A link can point to one of these files.</p>
+        <div id="attachments"></div>
+        <div class="drop slim" id="att-drop" tabindex="0">
+          <input type="file" id="att-input" multiple hidden>
+          <div class="drop-empty">Drop files here, or <u>choose files</u></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Page text</h2>
+        <p class="help">Markdown. Use <code>## Heading</code>, <code>**bold**</code>, <code>*italic*</code>, <code>- list</code>, and <code>[link](https://...)</code>.</p>
+        <textarea id="f-body" class="mono" rows="16" spellcheck="true"></textarea>
+      </section>
+
+      <section class="panel">
+        <h2>Dublin Core</h2>
+        <p class="help">Title, Description, and Date come from the fields above. For fields with more than one value, put each value on its own line.</p>
+        <div class="dc-grid" id="dc"></div>
+      </section>
+
+      <p class="foot">Publishing commits to <code id="repo-name"></code> on <code>main</code>. GitHub Pages then rebuilds the site.</p>
+    </form>
+
+    <section class="preview">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" class="tab" data-view="item" aria-selected="true">Item page</button>
+        <button type="button" role="tab" class="tab" data-view="card" aria-selected="false">Card</button>
+        <button type="button" role="tab" class="tab" data-view="source" aria-selected="false">Markdown file</button>
+        <span class="status" id="status"></span>
+      </div>
+      <iframe id="frame" title="Live preview"></iframe>
+      <pre id="source" class="source" hidden></pre>
+    </section>
+  </div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title">Publishing</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="modal-msg" id="modal-msg"></p>
+      <div class="modal-actions" id="modal-actions"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="/static/preview.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

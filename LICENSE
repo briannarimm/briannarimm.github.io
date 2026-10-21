@@ -26,15 +26,17 @@ Scope of this license
 This repository uses different terms for different parts. The MIT License
 above applies only to the source code:
 
-  - index.html
-  - style.css
-  - script.js
+  - index.html, items/index.html, items.json
+  - style.css, script.js
+  - _config.yml, _layouts/, _includes/, _data/
+  - editor/ (the Collection Editor), except editor/README.md
 
 The Creative Commons Attribution 4.0 International license (the full text is in
 LICENSE-CC-BY-4.0) applies to these documentation files:
 
   - README.md
   - DESIGN.md
+  - editor/README.md
 
 The following material is NOT licensed for reuse. All rights are reserved by
 Brianna R. Imm:
@@ -42,6 +44,9 @@ Brianna R. Imm:
   - All photographs in the images/ folder, including the headshot
   - The personal text on the web page: the biography, work history,
     education, and project descriptions
+  - The text, images, and files of each item in _items/ and assets/items/,
+    unless the Rights field of that item gives other terms. Papers and
+    projects keep the license that their own repository or publisher states.
   - The name "Brianna Imm" and the likeness of Brianna Imm
 
 Third-party material keeps its own license. The Fraunces and Inter fonts that

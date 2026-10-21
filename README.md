@@ -2,7 +2,7 @@
 
 This repository contains the source files of the personal website of Brianna Imm. The website is at <https://www.briannaimm.com>.
 
-The website is a single web page. It shows who Brianna is, what work she has done, and where to find her projects.
+The website has a home page and a collection of papers and projects. The home page shows who Brianna is and what work she has done. The collection has one page for each paper or project, with Dublin Core metadata.
 
 ## Contents
 
@@ -11,6 +11,7 @@ The website is a single web page. It shows who Brianna is, what work she has don
 - [Requirements](#requirements)
 - [View the website on your computer](#view-the-website-on-your-computer)
 - [Change the content](#change-the-content)
+- [Papers and projects](#papers-and-projects)
 - [Publish the website](#publish-the-website)
 - [Set up the domain name](#set-up-the-domain-name)
 - [Design](#design)
@@ -22,10 +23,10 @@ The website has four sections:
 
 1. **About.** A short introduction and a list of research tools.
 2. **Experience.** Work history and education.
-3. **Projects.** Short descriptions of six projects, with links to each app and repository.
-4. **Elsewhere.** Links to GitHub and email.
+3. **Papers & Projects.** The six newest items in the collection, with filters and a link to the full collection.
+4. **Elsewhere.** Links to GitHub, LinkedIn, and email.
 
-The website does not use a framework or a build tool. It uses plain HTML, CSS, and JavaScript. A web browser can open the files directly.
+The website uses [Jekyll](https://jekyllrb.com/), which GitHub Pages runs automatically. Jekyll makes one page for each file in the `_items/` folder and adds each item to the lists. The pages use plain HTML, CSS, and JavaScript.
 
 The website has these features:
 
@@ -33,6 +34,8 @@ The website has these features:
 - Sections that fade in when you scroll.
 - A portrait that moves a little when you move the mouse.
 - Cards that tilt toward the mouse pointer.
+- Filters and a search box for the collection.
+- An image carousel on item pages.
 - A layout that fits both phones and large screens.
 
 The website turns off all motion for users who set their system to reduce motion.
@@ -41,9 +44,18 @@ The website turns off all motion for users who set their system to reduce motion
 
 | File or folder | Purpose |
 | --- | --- |
-| `index.html` | The page content and structure. |
+| `index.html` | The home page content. |
+| `items/index.html` | The page that lists the full collection. |
+| `items.json` | A machine-readable list of all items with their Dublin Core fields. |
+| `_items/` | One Markdown file for each paper or project. |
+| `assets/items/` | The images and files of each item, in one folder per item. |
+| `_layouts/` | The page templates: `default.html` for all pages and `item.html` for item pages. |
+| `_includes/` | Shared parts of pages, such as the header, the item card, and the link buttons. |
+| `_data/dublin_core.yml` | The 15 Dublin Core elements, in display order. |
+| `_config.yml` | The Jekyll settings. |
+| `editor/` | The Collection Editor application. Jekyll does not publish this folder. |
 | `style.css` | The colors, fonts, layout, and animations. |
-| `script.js` | The scroll effects, the mouse effects, and the rotating words. |
+| `script.js` | The scroll effects, the mouse effects, the filters, the carousel, and the rotating words. |
 | `images/` | The portrait photo in three sizes. |
 | `CNAME` | The custom domain name for GitHub Pages. |
 | `DESIGN.md` | The design rules. Use this file to build other pages in the same style. |
@@ -55,37 +67,41 @@ The website turns off all motion for users who set their system to reduce motion
 
 To view the website, you need a current web browser.
 
-To view the website on your computer with the steps below, you also need Python 3. You can use any other local web server instead.
+To view the website on your computer, you also need Ruby 3 or later and Jekyll 3.10, the version that GitHub Pages uses.
 
 To publish the website, you need a GitHub account.
 
 ## View the website on your computer
 
-1. Open a terminal.
-2. Go to the folder that contains `index.html`.
-3. Start a local web server:
+1. Install Ruby with Homebrew, if necessary:
 
    ```bash
-   python3 -m http.server 8000
+   brew install ruby
    ```
 
-4. Open <http://localhost:8000> in a web browser.
-5. To stop the server, press `Control+C` in the terminal.
+2. Install Jekyll and its helpers:
 
-> **Note:** Do not open `index.html` with a double-click. Some browsers then do not load the fonts and the images correctly.
+   ```bash
+   /opt/homebrew/opt/ruby/bin/gem install jekyll:3.10.0 kramdown-parser-gfm logger base64 csv bigdecimal webrick
+   ```
+
+3. Open a terminal in the repository folder.
+4. Start Jekyll:
+
+   ```bash
+   RUBYOPT="-rlogger -rbase64 -rcsv -rbigdecimal" /opt/homebrew/lib/ruby/gems/4.0.0/bin/jekyll serve
+   ```
+
+5. Open <http://localhost:4000> in a web browser.
+6. To stop the server, press `Control+C` in the terminal.
+
+> **Note:** A plain web server, such as `python3 -m http.server`, does not run Jekyll. The pages then show template code instead of content.
 
 ## Change the content
 
-All of the text is in `index.html`. Find the text that you want to change and edit it.
+The text of the home page is in `index.html`. Find the text that you want to change and edit it.
 
-To add a project card:
-
-1. Open `index.html`.
-2. Find the `<div class="grid">` element in the Projects section.
-3. Copy one `<a class="card tilt reveal">` block.
-4. Paste the block before the `<div class="card soon reveal">` block.
-5. Change the tag, the title, the description, and the link.
-6. Save the file and refresh the browser.
+To add or change a paper or project, read [Papers and projects](#papers-and-projects).
 
 To change the words that rotate in the first section, edit the `words` list in `script.js`.
 
@@ -99,9 +115,46 @@ To replace the portrait:
 
 > **Caution:** Do not put private data on the page. Private data includes phone numbers, home addresses, and the names of clients.
 
+## Papers and projects
+
+Each paper or project is one Markdown file in `_items/`. The file name is the slug: `_items/reword.md` becomes the page `/items/reword/`. The images and files of the item go in `assets/items/<slug>/`.
+
+When a new file arrives on the `main` branch, GitHub Pages builds the website again. The new item then shows on the home page, on the collection page, and in `items.json`. You do not have to change any other file.
+
+### Use the Collection Editor
+
+The easiest way to add or change an item is the Collection Editor. It shows a live preview and publishes the item with one button. Read [editor/README.md](editor/README.md).
+
+### Write an item by hand
+
+1. Copy an existing file in `_items/`, for example `_items/opac.md`.
+2. Rename the copy. Use lowercase letters, numbers, and hyphens.
+3. Change the front matter (the part between the two `---` lines). The table below describes each field.
+4. Write the page text in Markdown below the front matter.
+5. Put the images and files in `assets/items/<slug>/`.
+6. Commit and push the changes.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `title` | Yes | The title of the item. |
+| `category` | Yes | `paper` or `project`. |
+| `date` | Yes | A date in the form `YYYY-MM-DD`. The lists show the newest item first. |
+| `description` | Yes | One or two sentences for the card and the top of the page. |
+| `display_tag` | No | A short label above the title, for example `"Desktop app · Legal writing"`. |
+| `ai_assisted` | No | `true` shows the AI-assisted badge. |
+| `keywords` | No | A list of tags. |
+| `thumbnail` | No | The card image, for example `/assets/items/reword/thumbnail.jpg`. |
+| `thumbnail_alt` | No | A description of the thumbnail. |
+| `links` | No | A list of links. Each link has a `kind`, a `url`, and an optional `label`. The first link is the main button. Kinds: `live`, `play`, `download`, `preview`, `pdf`, `ssrn`, `doi`, `repository`, `other`. |
+| `gallery` | No | A list of carousel images. Each image has a `src`, an `alt`, and an optional `caption`. |
+| `attachments` | No | A list of files. Each file has a `label`, a `file`, and an optional `note`. |
+| `dc` | No | The Dublin Core elements other than title, description, and date: `creator`, `contributor`, `subject`, `publisher`, `date` (to show a different date), `type`, `format`, `identifier`, `source`, `language`, `relation`, `coverage`, and `rights`. Each value is a list. |
+
+> **Note:** A `preview` link to a PDF also shows the PDF on the item page.
+
 ## Publish the website
 
-GitHub Pages publishes the website from the `main` branch. No build step is necessary.
+GitHub Pages builds and publishes the website from the `main` branch. You do not have to build the website yourself.
 
 1. Save your changes.
 2. Commit the changes:
@@ -144,12 +197,12 @@ This repository uses more than one license.
 
 | Material | License |
 | --- | --- |
-| Source code (`index.html`, `style.css`, `script.js`) | [MIT License](LICENSE) |
+| Source code: templates, styles, scripts, and the Collection Editor | [MIT License](LICENSE) |
 | Documentation (`README.md`, `DESIGN.md`) | [Creative Commons Attribution 4.0 International](LICENSE-CC-BY-4.0) |
-| Photographs, personal text, and the name and likeness of Brianna Imm | All rights reserved |
+| Photographs, personal text, item text and images, and the name and likeness of Brianna Imm | All rights reserved, unless the Rights field of an item says otherwise |
 
 Read the file `LICENSE` for the complete list of what each license covers.
 
 ## Contact
 
-Send an email to <briannarimm@gmail.com>. You can also find Brianna on [GitHub](https://github.com/briannarimm).
+Send an email to <briannarimm@gmail.com>. You can also find Brianna on [GitHub](https://github.com/briannarimm) and [LinkedIn](https://www.linkedin.com/in/briannarimm/).

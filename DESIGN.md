@@ -115,6 +115,15 @@ A 1px vertical hairline with a gold dot per entry (`9px`, ringed by the backgrou
 ### Portrait
 Arch-shaped frame (`border-radius: 999px 999px 1.4rem 1.4rem`, `aspect-ratio: 4/5`) with a 0.5rem gradient border (gold to emerald) and a soft gold glow beneath. The photo inside is `object-fit: cover` with `object-position: 50% 28%` so the face stays framed, plus a faint inner highlight and bottom shade. A serif name and uppercase subtitle sit beneath as a caption. Serve responsive sizes with `<picture>` and `srcset` (480, 800, 1200 wide), set `width` and `height`, and use `fetchpriority="high"` for a hero image. Write real alt text that describes the person and setting.
 
+### Collection components
+The Papers & Projects collection adds these components. All use the same tokens.
+
+- **Item card:** a glass card with a 16:10 media area on top (thumbnail, or a gradient placeholder with the first letter of the title in Fraunces), a "Project" or "Paper" chip over the image, the tag and AI-assisted badge, a serif title, and pill links. "View item" is always the primary pill.
+- **Filter pills:** pill buttons with a count. The active pill is solid gold with dark text.
+- **Item page:** breadcrumb, label row, a large light serif title, the lead paragraph, and buttons (the first link is the gradient primary button). Below: a carousel or a single framed image, the Markdown body with a sticky sidebar (Files, Tags, Collection), the Dublin Core table, and a citation box.
+- **Carousel:** a scroll-snap track with round glass arrow buttons and pill dots (the active dot widens and turns gold). Captions sit in a dark glass label at the bottom left.
+- **Dublin Core table:** two columns. Uppercase muted labels on the left, values on the right, hairlines between rows. Links in gold.
+
 ### Icons
 Inline SVG sprite (`<symbol>` plus `<use>`), 1.6px round-capped strokes, sized `1em` and colored with `currentColor`. Do not use Unicode arrows or emoji, which can render as colored emoji on some platforms.
 
