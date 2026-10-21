@@ -6,6 +6,8 @@ description: "A writing application for legal and academic documents. It combine
 display_tag: "Desktop app · Legal writing"
 ai_assisted: true
 keywords: ["Legal writing", "Bluebook", "Citation management", "Document assembly", "macOS"]
+thumbnail: /assets/items/reword/thumbnail.png
+thumbnail_alt: "An image showing an example document displayed in ReWord. The preview on the right shows a PDF with the title \"How Soccer Functions as a Religion in Brazil\"."
 links:
   - kind: download
     label: "Download for Mac"
