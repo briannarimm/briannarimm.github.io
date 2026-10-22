@@ -23,8 +23,8 @@ The website has four sections:
 
 1. **About.** A short introduction and a list of research tools.
 2. **Experience.** Work history and education.
-3. **Papers & Projects.** The six newest items in the collection, with filters and a link to the full collection.
-4. **Elsewhere.** Links to GitHub, LinkedIn, and email.
+3. **Papers & Projects.** The six newest items that are set to show on the home page, with filters and a link to the full collection.
+4. **Elsewhere.** Links to GitHub, LinkedIn, SSRN, and email.
 
 The website uses [Jekyll](https://jekyllrb.com/), which GitHub Pages runs automatically. Jekyll makes one page for each file in the `_items/` folder and adds each item to the lists. The pages use plain HTML, CSS, and JavaScript.
 
@@ -138,6 +138,7 @@ The easiest way to add or change an item is the Collection Editor. It shows a li
 | --- | --- | --- |
 | `title` | Yes | The title of the item. |
 | `category` | Yes | `paper` or `project`. |
+| `visibility` | No | `home` (the default): on the home page and in the collection. `collection`: in the collection only. `archive`: not on the website. An archived item also needs `published: false`. |
 | `date` | Yes | A date in the form `YYYY-MM-DD`. The lists show the newest item first. |
 | `description` | Yes | One or two sentences for the card and the top of the page. |
 | `display_tag` | No | A short label above the title, for example `"Desktop app · Legal writing"`. |

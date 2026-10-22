@@ -154,3 +154,18 @@ textarea.mono { font: 0.85rem/1.6 ui-monospace, "SF Mono", Menlo, monospace; }
   .form { border-right: 0; border-bottom: 1px solid var(--border); }
   .app-name { display: none; }
 }
+
+/* ---------- visibility, banners ---------- */
+.vis { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.8rem; margin-bottom: 0.9rem; }
+.vis .seg { margin: 0; }
+.vis-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+#vis-hint { flex-basis: 100%; color: var(--muted); font-size: 0.78rem; }
+.seg input[value=archive]:checked + span { background: #5b6470; color: var(--fg); }
+.banner {
+  position: fixed; top: 4rem; left: 50%; transform: translateX(-50%); z-index: 55;
+  display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: center;
+  max-width: min(44rem, 94vw); padding: 0.7rem 1.1rem; border-radius: 1rem; font-size: 0.9rem;
+  background: #2a1d1b; border: 1px solid var(--danger); color: #ffd9d3; box-shadow: 0 12px 40px -12px #000;
+}
+.banner[hidden] { display: none; }
+.banner.draft { background: #1c2129; border-color: var(--a); color: var(--fg); }

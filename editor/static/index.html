@@ -40,6 +40,15 @@
           <label><input type="radio" name="category" value="project" checked><span>Project</span></label>
           <label><input type="radio" name="category" value="paper"><span>Paper</span></label>
         </div>
+        <div class="vis">
+          <span class="vis-label">Visibility</span>
+          <div class="seg" role="radiogroup" aria-label="Visibility">
+            <label title="Shows on the home page and in the full collection"><input type="radio" name="visibility" value="home" checked><span>Home + collection</span></label>
+            <label title="Shows in the full collection only"><input type="radio" name="visibility" value="collection"><span>Collection only</span></label>
+            <label title="Not on the website at all. The file stays in the repository."><input type="radio" name="visibility" value="archive"><span>Archive</span></label>
+          </div>
+          <small id="vis-hint"></small>
+        </div>
         <label class="field"><span>Title <b>*</b></span><input id="f-title" required></label>
         <div class="row2">
           <label class="field"><span>Slug (web address) <b>*</b></span><input id="f-slug" pattern="[a-z0-9][a-z0-9-]*" spellcheck="false"><small id="slug-hint">/items/&hellip;/</small></label>
@@ -131,6 +140,8 @@
   </div>
 
   <div class="toast" id="toast" hidden></div>
+  <div class="banner" id="offline" hidden>The editor server stopped. Your draft is saved in this window. Open <b>Collection Editor</b> again to reconnect.</div>
+  <div class="banner draft" id="draft-banner" hidden><span id="draft-text"></span> <button class="btn small" type="button" id="draft-restore">Restore</button> <button class="btn ghost small" type="button" id="draft-discard">Discard</button></div>
 
   <script src="/static/preview.js"></script>
   <script src="/static/app.js"></script>

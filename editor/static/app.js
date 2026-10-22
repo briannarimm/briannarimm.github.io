@@ -59,7 +59,7 @@ const toList = (v) => (v === undefined || v === null ? [] : Array.isArray(v) ? v
 
 function blankState() {
   return {
-    isNew: true, slugTouched: false, slug: "", title: "", category: "project", date: today(),
+    isNew: true, slugTouched: false, slug: "", title: "", category: "project", visibility: "home", date: today(),
     description: "", display_tag: "", ai_assisted: false, keywords: "",
     links: [{ id: nextId(), kind: "live", label: "", url: "", fileRef: null }],
     thumb: null, thumbnail_alt: "", gallery: [], attachments: [], body: "",
@@ -149,7 +149,7 @@ function buildItem() {
   });
 
   const item = {
-    slug: state.slug, title: state.title.trim(), category: state.category, date: state.date,
+    slug: state.slug, title: state.title.trim(), category: state.category, visibility: state.visibility, date: state.date,
     description: state.description.trim(), display_tag: state.display_tag.trim(),
     ai_assisted: state.ai_assisted,
     keywords: state.keywords.split(",").map((s) => s.trim()).filter(Boolean),
@@ -165,6 +165,8 @@ function toMarkdown(item) {
   const out = ["---"];
   out.push(`title: ${q(item.title)}`);
   out.push(`category: ${item.category}`);
+  out.push(`visibility: ${item.visibility}`);
+  if (item.visibility === "archive") out.push("published: false");
   out.push(`date: ${item.date}`);
   out.push(`description: ${q(item.description)}`);
   if (item.display_tag) out.push(`display_tag: ${q(item.display_tag)}`);
@@ -214,6 +216,7 @@ function parseMarkdown(slug, text) {
   const d = fm.date instanceof Date ? fm.date.toISOString().slice(0, 10) : String(fm.date || today()).slice(0, 10);
   Object.assign(s, {
     isNew: false, slugTouched: true, slug, title: fm.title || "", category: fm.category === "paper" ? "paper" : "project",
+    visibility: ["home", "collection", "archive"].includes(fm.visibility) ? fm.visibility : fm.published === false ? "archive" : "home",
     date: d, description: fm.description || "", display_tag: fm.display_tag || "", ai_assisted: !!fm.ai_assisted,
     keywords: toList(fm.keywords).join(", "), thumbnail_alt: fm.thumbnail_alt || "", body: (m[2] || "").replace(/^\n+/, ""),
   });
@@ -237,6 +240,8 @@ function parseMarkdown(slug, text) {
 
 function fillForm() {
   document.querySelector(`input[name=category][value=${state.category}]`).checked = true;
+  document.querySelector(`input[name=visibility][value=${state.visibility}]`).checked = true;
+  updateVisHint();
   $("#f-title").value = state.title;
   $("#f-slug").value = state.slug;
   $("#f-slug").disabled = !state.isNew;
@@ -257,6 +262,12 @@ function updateSlugHint() {
     ? `${CFG.site.replace(/^https?:\/\//, "")}/items/${state.slug || "..."}/`
     : "The slug of a published item cannot change.";
 }
+const VIS_HINTS = {
+  home: "Shows on the home page and in the full collection.",
+  collection: "Shows in the full collection only, not on the home page.",
+  archive: "Not on the website at all. The file stays in the repository, so you can bring it back later.",
+};
+function updateVisHint() { $("#vis-hint").textContent = VIS_HINTS[state.visibility]; }
 function updateCount() { $("#desc-count").textContent = state.description.length; }
 
 function bindBasics() {
@@ -268,6 +279,11 @@ function bindBasics() {
       if (state.links.length === 1 && !state.links[0].url && !state.links[0].fileRef) state.links[0].kind = "ssrn";
       fillForm();
     }
+    changed();
+  }));
+  document.querySelectorAll("input[name=visibility]").forEach((r) => r.addEventListener("change", () => {
+    state.visibility = r.value;
+    updateVisHint();
     changed();
   }));
   $("#f-title").addEventListener("input", (e) => {
@@ -476,9 +492,11 @@ function render() {
   const md = toMarkdown(item);
   const dirty = md !== savedMarkdown || buildItem().uploads.length > 0;
   const status = $("#status");
-  status.textContent = state.isNew ? "New item, not published" : dirty ? "Unsaved changes" : "Published version";
+  const visNote = { home: "", collection: " · collection only", archive: " · archived" }[state.visibility];
+  status.textContent = (state.isNew ? "New item, not published" : dirty ? "Unsaved changes" : "Published version") + visNote;
   status.classList.toggle("dirty", dirty);
   render.dirty = dirty;
+  saveDraft(md, dirty);
 
   if (view === "source") {
     $("#source").textContent = md;
@@ -512,6 +530,7 @@ function validate(item) {
   mark("#f-date", !/^\d{4}-\d{2}-\d{2}$/.test(item.date)); if (!/^\d{4}-\d{2}-\d{2}$/.test(item.date)) problems.push("a date");
   mark("#f-description", !item.description); if (!item.description) problems.push("a short description");
   state.links.forEach((l) => { if (!l.fileRef && l.url && !/^(https?:\/\/|\/|mailto:)/.test(l.url.trim())) problems.push(`a full web address for "${l.url}"`); });
+  state.links.forEach((l) => { if (/X-Amz-(Expires|Signature)|[?&]Expires=/.test(l.url)) problems.push("a permanent link instead of a temporary download link (that link stops working after a few minutes; attach the PDF instead)"); });
   const noAlt = item.gallery.some((g) => !g.alt.trim());
   return { problems, warnings: noAlt ? ["Some gallery images have no alt text."] : [] };
 }
@@ -543,7 +562,7 @@ async function publish() {
   if (problems.length) return toast(`Add ${problems.join(", ")}.`, true);
   if (warnings.length) toast(warnings[0]);
 
-  const STEPS = ["Prepare files", "Commit to GitHub", "Build the website", "Live"];
+  const STEPS = ["Prepare files", "Send to GitHub", "Done"];
   const btn = $("#btn-publish");
   btn.disabled = true;
   showModal(`Publishing “${item.title}”`);
@@ -572,32 +591,19 @@ async function publish() {
     await loadPicker(state.slug);
     render();
 
-    setSteps(STEPS, 2);
+    setSteps(STEPS, 3);
+    clearDraft();
     const itemUrl = `${CFG.site}/items/${state.slug}/`;
-    $("#modal-msg").innerHTML = `Saved in commit <a href="${res.commit_url}" target="_blank">${res.commit.slice(0, 7)}</a>. GitHub Pages is building the site. This usually takes about a minute.`;
-    modalButton("Close", "ghost", () => ($("#modal").hidden = true));
-
-    const started = Date.now();
-    while (Date.now() - started < 6 * 60 * 1000) {
-      await new Promise((r) => setTimeout(r, 4000));
-      let b;
-      try { b = await api("/api/pages"); } catch (e) { continue; }
-      if (b.commit === res.commit && b.status === "built") {
-        setSteps(STEPS, 4);
-        $("#modal-title").textContent = "Live!";
-        $("#modal-msg").innerHTML = `“${esc(item.title)}” is on the website. It can take another minute for every page to update. Commit <a href="${res.commit_url}" target="_blank">${res.commit.slice(0, 7)}</a>.`;
-        $("#modal-actions").innerHTML = "";
-        modalButton("Close", "ghost", () => ($("#modal").hidden = true));
-        modalButton("Open item page", "primary", () => window.open(itemUrl, "_blank"));
-        return;
-      }
-      if (b.commit === res.commit && b.status === "errored") {
-        setSteps(STEPS, 2, 2);
-        $("#modal-msg").textContent = `The commit is saved, but the site build failed: ${b.error || "unknown error"}. The previous version of the site stays online.`;
-        return;
-      }
-    }
-    $("#modal-msg").innerHTML = `The commit is saved. The build is taking longer than usual. Check <a href="https://github.com/${CFG.repo}/actions" target="_blank">GitHub</a> later, or open the <a href="${itemUrl}" target="_blank">item page</a> in a few minutes.`;
+    $("#modal-title").textContent = "Sent to GitHub";
+    const where = {
+      home: `It will show on the home page and in the collection`,
+      collection: `It will show in the collection, but not on the home page`,
+      archive: `It is archived, so it will not show anywhere on the website`,
+    }[item.visibility];
+    $("#modal-msg").innerHTML = `\u201c${esc(item.title)}\u201d is saved in commit <a href="${res.commit_url}" target="_blank">${res.commit.slice(0, 7)}</a>. GitHub Pages now rebuilds the website, so your changes will be live in a few minutes. ${where}.`;
+    $("#modal-actions").innerHTML = "";
+    modalButton("Close", item.visibility === "archive" ? "primary" : "ghost", () => ($("#modal").hidden = true));
+    if (item.visibility !== "archive") modalButton("Open item page", "primary", () => window.open(itemUrl, "_blank"));
   } catch (e) {
     setSteps(STEPS, 1, 1);
     $("#modal-title").textContent = "Not published";
@@ -613,7 +619,8 @@ async function publish() {
 async function loadPicker(select = "") {
   const { items } = await api("/api/items");
   const p = $("#picker");
-  p.innerHTML = `<option value="">New item</option>` + items.map((i) => `<option value="${esc(i.slug)}">${esc(i.slug)}</option>`).join("");
+  const tag = { collection: " (collection only)", archive: " (archived)" };
+  p.innerHTML = `<option value="">New item</option>` + items.map((i) => `<option value="${esc(i.slug)}">${esc(i.title || i.slug)}${tag[i.visibility] || ""}</option>`).join("");
   p.value = select;
 }
 
@@ -641,6 +648,51 @@ function newItem() {
   fillForm();
   render();
   $("#f-title").focus();
+}
+
+// ---------- drafts: unsaved work survives a closed window or a stopped server
+
+const DRAFT_KEY = "collection-editor-draft";
+function saveDraft(md, dirty) {
+  try {
+    if (!dirty || (state.isNew && !state.title)) return;
+    const hasNewFiles = !!(state.thumb && state.thumb.file) || state.gallery.some((g) => g.file) || state.attachments.some((a) => a.file);
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ slug: state.slug, isNew: state.isNew, title: state.title, md, hasNewFiles, at: Date.now() }));
+  } catch (e) { /* storage full or blocked */ }
+}
+function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) { /* ignore */ } }
+function offerDraft() {
+  let d;
+  try { d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); } catch (e) { d = null; }
+  if (!d || !d.md) return;
+  const when = new Date(d.at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  $("#draft-text").textContent = `Unsaved draft of \u201c${d.title || d.slug}\u201d from ${when}.${d.hasNewFiles ? " New images and files in it must be added again." : ""}`;
+  $("#draft-banner").hidden = false;
+  $("#draft-restore").onclick = () => {
+    try {
+      state = parseMarkdown(d.slug || "new-item", d.md);
+      state.isNew = d.isNew;
+      state.slugTouched = true;
+      if (d.isNew) state.originalPaths = [];
+      $("#picker").value = d.isNew ? "" : d.slug;
+      fillForm();
+      savedMarkdown = "";
+      render();
+    } catch (e) { toast(e.message, true); }
+    $("#draft-banner").hidden = true;
+  };
+  $("#draft-discard").onclick = () => { clearDraft(); $("#draft-banner").hidden = true; };
+}
+
+// ---------- server check: show a banner if the local server stops
+
+async function heartbeat() {
+  try {
+    const r = await fetch("/api/ping", { headers: { "X-Session": CFG.session }, cache: "no-store" });
+    $("#offline").hidden = r.ok;
+  } catch (e) {
+    $("#offline").hidden = false;
+  }
 }
 
 async function boot() {
@@ -671,6 +723,9 @@ async function boot() {
   try { ctx.dublinCore = jsyaml.load(dcYml) || []; } catch (e) { ctx.dublinCore = []; }
 
   newItem();
+  offerDraft();
+  setInterval(heartbeat, 15000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) heartbeat(); });
 
   try {
     const me = await api("/api/me");

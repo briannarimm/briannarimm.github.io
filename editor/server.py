@@ -24,6 +24,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import webbrowser
+from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -35,7 +36,30 @@ BRANCH = "main"
 ITEMS_DIR = "_items"
 ASSETS_DIR = "assets/items"
 SIGNATURE = "collection-editor"
-SESSION = secrets.token_urlsafe(24)
+STATE_DIR = Path.home() / "Library" / "Application Support" / "Collection Editor"
+
+
+def load_session():
+    """Keep one session key across restarts, so an open editor window keeps
+    working if the server restarts."""
+    f = STATE_DIR / "session"
+    try:
+        key = f.read_text().strip()
+        if len(key) >= 24:
+            return key
+    except OSError:
+        pass
+    key = secrets.token_urlsafe(24)
+    try:
+        STATE_DIR.mkdir(parents=True, exist_ok=True)
+        f.write_text(key)
+        f.chmod(0o600)
+    except OSError:
+        pass
+    return key
+
+
+SESSION = load_session()
 API = "https://api.github.com"
 
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
@@ -219,6 +243,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         sys.stderr.write("[editor] " + (fmt % args) + "\n")
+        sys.stderr.flush()
 
     # Only accept requests addressed to this local server.
     def host_ok(self):
@@ -270,6 +295,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_bytes(html.encode(), "text/html; charset=utf-8")
         if p == "/ping":
             return self.send_json({"app": SIGNATURE})
+        if p == "/api/ping":
+            return self.send_json({"ok": self.api_ok()})
         if p.startswith("/static/"):
             target = (STATIC / p[len("/static/"):]).resolve()
             if STATIC not in target.parents:
@@ -308,7 +335,26 @@ class Handler(BaseHTTPRequestHandler):
                     raise
                 items = [{"slug": f["name"][:-3], "path": f["path"]}
                          for f in listing if f["type"] == "file" and f["name"].endswith(".md")]
-                return self.send_json({"items": sorted(items, key=lambda i: i["slug"])})
+
+                def describe(item):
+                    # Read the title and visibility from the front matter.
+                    try:
+                        data, _ = gh_request("GET", f"/repos/{REPO}/contents/{item['path']}?ref={BRANCH}",
+                                             accept="application/vnd.github.raw", raw=True)
+                        text = data.decode("utf-8", "replace")
+                        fm = text.split("\n---", 1)[0]
+                        t = re.search(r'^title:\s*"?(.*?)"?\s*$', fm, re.M)
+                        v = re.search(r"^visibility:\s*(\w+)", fm, re.M)
+                        unpublished = re.search(r"^published:\s*false", fm, re.M)
+                        item["title"] = t.group(1).replace('\\"', '"') if t else item["slug"]
+                        item["visibility"] = v.group(1) if v else ("archive" if unpublished else "home")
+                    except Exception:
+                        item["title"], item["visibility"] = item["slug"], "home"
+                    return item
+
+                with ThreadPoolExecutor(max_workers=8) as pool:
+                    items = list(pool.map(describe, items))
+                return self.send_json({"items": sorted(items, key=lambda i: i["title"].lower())})
             if p == "/api/item":
                 slug = (q.get("slug") or [""])[0]
                 if not SLUG_RE.match(slug):
@@ -322,10 +368,6 @@ class Handler(BaseHTTPRequestHandler):
                                          accept="application/vnd.github.raw", raw=True)
                 guessed = mimetypes.guess_type(path)[0]
                 return self.send_bytes(data, guessed or ctype, cache="max-age=300")
-            if p == "/api/pages":
-                b = gh_request("GET", f"/repos/{REPO}/pages/builds/latest")
-                return self.send_json({"status": b.get("status"), "commit": b.get("commit"),
-                                       "error": (b.get("error") or {}).get("message")})
             return self.send_json({"error": "Not found"}, 404)
         except GitHubError as e:
             return self.send_json({"error": str(e)}, e.status if 400 <= e.status < 600 else 502)
@@ -385,8 +427,8 @@ def main():
         return
 
     server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
-    print(f"Collection Editor: {url}  (repository {REPO}, branch {BRANCH})")
-    print("Press Control+C to stop.")
+    print(f"Collection Editor: {url}  (repository {REPO}, branch {BRANCH})", flush=True)
+    print("Press Control+C to stop.", flush=True)
     if args.open:
         threading.Timer(0.6, open_window, [url]).start()
     try:

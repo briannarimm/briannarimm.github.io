@@ -7,7 +7,8 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 APP="$HOME/Applications/Collection Editor.app"
 mkdir -p "$HOME/Applications"
 rm -rf "$APP"
-SCRIPT="do shell script \"cd \" & quoted form of \"$HERE\" & \" && /usr/bin/python3 server.py --open > /tmp/collection-editor.log 2>&1 &\""
+# nohup keeps the server running after the launcher exits or the window loses focus.
+SCRIPT="do shell script \"cd \" & quoted form of \"$HERE\" & \" && nohup /usr/bin/python3 -u server.py --open >> /tmp/collection-editor.log 2>&1 < /dev/null &\""
 osacompile -o "$APP" -e "$SCRIPT"
 if [ -f "$HERE/icon.icns" ]; then
   cp "$HERE/icon.icns" "$APP/Contents/Resources/applet.icns"

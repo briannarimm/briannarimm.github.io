@@ -22,7 +22,8 @@ The Collection Editor is a small application on your Mac. You use it to add and 
 - It resizes images before upload.
 - It signs in to GitHub automatically with the GitHub CLI.
 - It sends the item file and all of its images and files to GitHub in one commit.
-- It waits for GitHub Pages to build the website and tells you when the item is live.
+- It controls where each item shows: on the home page and in the collection, in the collection only, or nowhere (Archive).
+- It keeps a draft of unsaved work in the window, so a closed window or a stopped server does not lose your text.
 
 ## Requirements
 
@@ -54,7 +55,7 @@ The editor opens in its own window. If Google Chrome, Microsoft Edge, or Brave i
 ## Add an item
 
 1. Click **New**.
-2. Select **Project** or **Paper**. For a paper, the editor sets the main link type to SSRN and the Dublin Core type to Text.
+2. Select **Project** or **Paper**, and select the visibility. For a paper, the editor sets the main link type to SSRN and the Dublin Core type to Text.
 3. Enter the title. The editor makes the slug (the web address) from the title. You can change the slug before the first publish.
 4. Enter the date and a short description.
 5. Add the links. The first link is the main button on the item page.
@@ -77,8 +78,9 @@ When you click **Save & publish**, the editor:
 
 1. Prepares the item file and the new images and files.
 2. Commits everything to the `main` branch of the repository in one commit.
-3. Waits for GitHub Pages to build the website.
-4. Shows **Live!** and a button that opens the item page.
+3. Shows **Sent to GitHub**, a link to the commit, and a button that opens the item page.
+
+GitHub Pages then rebuilds the website. Your changes are live in a few minutes. You do not have to keep the editor open while the website rebuilds.
 
 If you removed an image or a file from an item, the editor also deletes it from the repository.
 
@@ -89,6 +91,7 @@ If you removed an image or a file from an item, the editor also deletes it from 
 | Field | Use |
 | --- | --- |
 | Category | Paper or Project. Controls the filters on the website. |
+| Visibility | **Home + collection**: on the home page and in the full collection. **Collection only**: in the full collection, not on the home page. **Archive**: not on the website at all. The file stays in the repository, so you can change it back later. |
 | Title, Slug, Date | Required. The date sets the order: newest first. |
 | Short description | Required. Shows on the card and at the top of the item page. |
 | Card label | A short type label, for example "Browser game · AI literacy". |
@@ -112,7 +115,10 @@ Click the **✕** button at the top right. Then close the window.
 | "The GitHub CLI is not signed in" | Run `gh auth login` in a terminal. Then restart the editor. |
 | "The GitHub CLI (gh) is not installed" | Run `brew install gh`, then `gh auth login`. |
 | The window does not open | Open <http://127.0.0.1:8790> in a browser. |
-| The build failed | The commit is saved, but the website shows the previous version. Open the repository on GitHub and read the Pages build error. |
+| A red banner says the server stopped | Open **Collection Editor** again. The window reconnects. Your text is kept as a draft. |
+| A banner offers an unsaved draft | Click **Restore** to continue the draft, or **Discard** to delete it. New images and files in a draft must be added again. |
+| "A permanent link instead of a temporary download link" | The link is a signed download link that stops working after a few minutes. Attach the PDF under **Files** and link to the attached file instead. |
+| The changes are not live after 10 minutes | The commit is saved, but the build possibly failed. The website then shows the previous version. Open the repository on GitHub, then **Settings > Pages**, and read the build status. |
 | "An item with the slug ... already exists" | Choose another slug, or select the existing item in the list to change it. |
 
 ## How it works
