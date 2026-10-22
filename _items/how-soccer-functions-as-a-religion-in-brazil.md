@@ -1,6 +1,6 @@
 ---
 title: "How Soccer Functions as a Religion in Brazil"
-category: project
+category: paper
 date: 2026-10-22
 description: "An analysis of how soccer functions as Brazil's \"national religion.\""
 display_tag: "Religious Studies Paper"
