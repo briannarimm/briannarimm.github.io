@@ -1,6 +1,7 @@
 ---
 title: "How Soccer Functions as a Religion in Brazil"
 category: paper
+visibility: home
 date: 2026-10-22
 description: "An analysis of how soccer functions as Brazil's \"national religion.\""
 display_tag: "Religious Studies Paper"
@@ -28,3 +29,5 @@ dc:
   language: ["en"]
   rights: ["CC BY 4.0"]
 ---
+
+Although scholars frequently characterize sports as religions, this description is usually treated as rhetorical rather than analytical. This article addresses the theoretical and empirical problem of how soccer functions precisely as a religion by examining the case of Brazil, where the game is widely asserted to be a national religion yet has rarely been analyzed through the theoretical vocabulary of religious studies. Adopting a consistent functional definition of religion built on the frameworks of Émile Durkheim and Clifford Geertz, the study demonstrates that soccer performs core religious functions on a national scale. Specifically, the game establishes sacred spaces and times, generates collective effervescence and moral communities through ritual assembly, and deploys a symbol system that formulates and legitimates a powerful conception of the nation. Furthermore, common objections regarding superstition, relics, and player deification are reinterpreted as standard religious phenomena under a functional lens. The findings indicate that soccer operates as a unifying civil religion that coexists harmoniously with Brazil's plural institutional faiths. The implications suggest that functional frameworks offer robust tools for analyzing postcolonial cultural phenomena and highlight the value of looking beyond North America and Europe in the study of sport as religion.
