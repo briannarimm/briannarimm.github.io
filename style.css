@@ -94,14 +94,16 @@ h1 {
   line-height: 1.02; letter-spacing: -0.03em;
   margin: 0 0 1.5rem; font-weight: 400;
 }
-.hero-logo { font-weight: 600; }
-.hero-logo span { color: var(--a); }
+.hero-logo { font-weight: 600; width: fit-content; }
 .hero-logo.is-floating { opacity: 0 !important; transition: none !important; pointer-events: none; }
-.grad {
+.grad,
+.has-hero-logo .brand {
   background: var(--grad); background-size: 200% 100%;
   -webkit-background-clip: text; background-clip: text; color: transparent;
   animation: shimmer 8s linear infinite;
 }
+.hero-logo span,
+.has-hero-logo .brand span { color: inherit; }
 @keyframes shimmer { to { background-position: 200% 0; } }
 
 .lead { font-size: clamp(1.15rem, 2.8vw, 1.6rem); color: var(--muted); max-width: 36rem; margin: 0 0 2rem; line-height: 1.45; }
