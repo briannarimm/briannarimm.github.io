@@ -18,6 +18,82 @@ document.querySelectorAll(".reveal").forEach((el, i) => {
   io.observe(el);
 });
 
+// Hero logo -> navbar brand scroll transition
+const heroLogo = document.querySelector(".hero-logo");
+const navBrand = document.querySelector(".site-header .brand");
+if (heroLogo && navBrand) {
+  document.documentElement.classList.add("has-hero-logo");
+  let heroDocTop = 0, heroLeft = 0, brandTop = 0, brandLeft = 0, scaleRatio = 1, travel = 1;
+
+  const docOffset = (el) => {
+    let top = 0, left = 0, n = el;
+    while (n) {
+      top += n.offsetTop;
+      left += n.offsetLeft;
+      n = n.offsetParent;
+    }
+    return { top, left };
+  };
+
+  const measureLogo = () => {
+    const hPos = docOffset(heroLogo);
+    heroDocTop = hPos.top;
+    heroLeft = hPos.left;
+    brandTop = navBrand.offsetTop;
+    brandLeft = navBrand.offsetLeft;
+    const hSize = parseFloat(getComputedStyle(heroLogo).fontSize) || 64;
+    const bSize = parseFloat(getComputedStyle(navBrand).fontSize) || 22.4;
+    scaleRatio = hSize / bSize;
+    travel = Math.max(1, heroDocTop - brandTop);
+  };
+
+  const syncLogo = () => {
+    const y = window.scrollY;
+    const p = Math.min(Math.max(y / travel, 0), 1);
+    if (reduced) {
+      const docked = p >= 1;
+      heroLogo.classList.toggle("is-floating", docked);
+      navBrand.classList.toggle("is-docked", docked);
+      navBrand.classList.remove("is-active");
+      navBrand.style.transform = "";
+      return;
+    }
+    if (p <= 0) {
+      heroLogo.classList.remove("is-floating");
+      navBrand.classList.remove("is-active", "is-docked");
+      navBrand.style.transform = "";
+    } else if (p < 1) {
+      const inv = 1 - p;
+      const dx = (heroLeft - brandLeft) * inv;
+      const dy = (heroDocTop - y) - brandTop;
+      const s = 1 + (scaleRatio - 1) * inv;
+      heroLogo.classList.add("is-floating");
+      navBrand.classList.add("is-active");
+      navBrand.classList.remove("is-docked");
+      navBrand.style.transform = `translate(${dx}px, ${dy}px) scale(${s})`;
+    } else {
+      heroLogo.classList.add("is-floating");
+      navBrand.classList.remove("is-active");
+      navBrand.classList.add("is-docked");
+      navBrand.style.transform = "";
+    }
+  };
+
+  measureLogo();
+  syncLogo();
+  window.addEventListener("scroll", syncLogo, { passive: true });
+  window.addEventListener("resize", () => {
+    measureLogo();
+    syncLogo();
+  });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      measureLogo();
+      syncLogo();
+    });
+  }
+}
+
 // Papers & Projects: filter buttons, search, and empty state
 document.querySelectorAll("[data-collection]").forEach((grid) => {
   const scope = grid.closest("main") || document;
