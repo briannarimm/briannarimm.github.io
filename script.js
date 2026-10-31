@@ -19,31 +19,41 @@ document.querySelectorAll(".reveal").forEach((el, i) => {
 });
 
 // Hero logo -> navbar brand scroll transition
+// The hero logo stays in the page. The navbar brand is drawn on top of it,
+// scaled and moved, and flies to the navbar as you scroll. At the start the
+// two crossfade, so the change from one element to the other cannot be seen.
 const heroLogo = document.querySelector(".hero-logo");
 const navBrand = document.querySelector(".site-header .brand");
 if (heroLogo && navBrand) {
   document.documentElement.classList.add("has-hero-logo");
   let heroDocTop = 0, heroLeft = 0, brandTop = 0, brandLeft = 0, scaleRatio = 1, travel = 1;
+  const FADE = 0.08; // part of the travel used for the crossfade
+  const ease = (t) => t * t * (3 - 2 * t);
 
-  const docOffset = (el) => {
-    let top = 0, left = 0, n = el;
-    while (n) {
-      top += n.offsetTop;
-      left += n.offsetLeft;
-      n = n.offsetParent;
-    }
-    return { top, left };
+  // Run both shimmer animations on the same clock, so their colors match.
+  const syncShimmer = () => {
+    [heroLogo, navBrand].forEach((el) => {
+      (el.getAnimations ? el.getAnimations() : []).forEach((a) => {
+        if (a.animationName === "shimmer") a.startTime = 0;
+      });
+    });
   };
 
+  // Measure with fractional pixels. The brand is measured without its transform.
   const measureLogo = () => {
-    const hPos = docOffset(heroLogo);
-    heroDocTop = hPos.top;
-    heroLeft = hPos.left;
-    brandTop = navBrand.offsetTop;
-    brandLeft = navBrand.offsetLeft;
-    const hSize = parseFloat(getComputedStyle(heroLogo).fontSize) || 64;
-    const bSize = parseFloat(getComputedStyle(navBrand).fontSize) || 22.4;
-    scaleRatio = hSize / bSize;
+    const saved = navBrand.style.transform;
+    navBrand.style.transform = "none";
+    const b = navBrand.getBoundingClientRect();
+    navBrand.style.transform = saved;
+    const h = heroLogo.getBoundingClientRect();
+    // Remove the reveal animation's offset, if it is still running.
+    const t = getComputedStyle(heroLogo).transform;
+    const m = t && t !== "none" ? new DOMMatrixReadOnly(t) : { m41: 0, m42: 0 };
+    heroDocTop = h.top - m.m42 + window.scrollY;
+    heroLeft = h.left - m.m41 + window.scrollX;
+    brandTop = b.top;
+    brandLeft = b.left;
+    scaleRatio = b.width ? h.width / b.width : 1;
     travel = Math.max(1, heroDocTop - brandTop);
   };
 
@@ -53,35 +63,58 @@ if (heroLogo && navBrand) {
     if (reduced) {
       const docked = p >= 1;
       heroLogo.classList.toggle("is-floating", docked);
+      heroLogo.style.opacity = docked ? "0" : "";
       navBrand.classList.toggle("is-docked", docked);
       navBrand.classList.remove("is-active");
       navBrand.style.transform = "";
+      navBrand.style.opacity = "";
       return;
     }
     if (p <= 0) {
       heroLogo.classList.remove("is-floating");
+      heroLogo.style.opacity = "";
       navBrand.classList.remove("is-active", "is-docked");
       navBrand.style.transform = "";
+      navBrand.style.opacity = "";
     } else if (p < 1) {
       const inv = 1 - p;
       const dx = (heroLeft - brandLeft) * inv;
       const dy = (heroDocTop - y) - brandTop;
       const s = 1 + (scaleRatio - 1) * inv;
+      const f = ease(Math.min(p / FADE, 1));
       heroLogo.classList.add("is-floating");
+      heroLogo.style.opacity = String(1 - f);
       navBrand.classList.add("is-active");
       navBrand.classList.remove("is-docked");
+      navBrand.style.opacity = String(f);
       navBrand.style.transform = `translate(${dx}px, ${dy}px) scale(${s})`;
     } else {
       heroLogo.classList.add("is-floating");
+      heroLogo.style.opacity = "0";
       navBrand.classList.remove("is-active");
       navBrand.classList.add("is-docked");
+      navBrand.style.opacity = "";
       navBrand.style.transform = "";
     }
   };
 
+  // After the reveal animation, turn off the hero's opacity transition, so the
+  // crossfade follows the scroll at once in both directions.
+  const settle = () => {
+    if (heroLogo.classList.contains("settled")) return;
+    heroLogo.classList.add("settled");
+    measureLogo();
+    syncLogo();
+  };
+  heroLogo.addEventListener("transitionend", (e) => {
+    if (e.propertyName === "opacity" && heroLogo.classList.contains("in")) settle();
+  });
+  setTimeout(settle, 1600);
+
   measureLogo();
+  syncShimmer();
   syncLogo();
-  window.addEventListener("scroll", syncLogo, { passive: true });
+  window.addEventListener("scroll", () => requestAnimationFrame(syncLogo), { passive: true });
   window.addEventListener("resize", () => {
     measureLogo();
     syncLogo();
@@ -89,6 +122,7 @@ if (heroLogo && navBrand) {
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
       measureLogo();
+      syncShimmer();
       syncLogo();
     });
   }
