@@ -1,6 +1,7 @@
 ---
 title: "ReWord"
 category: project
+visibility: home
 date: 2026-10-09
 description: "A writing application for legal and academic documents. It combines a word-processor-style editor with formatted PDF and Word output, a citation library, and research notes. It works offline on Apple Silicon Macs."
 display_tag: "Desktop app · Legal writing"

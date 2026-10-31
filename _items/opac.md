@@ -1,6 +1,7 @@
 ---
 title: "Personal OPAC Catalog"
 category: project
+visibility: home
 date: 2026-10-13
 description: "A working library catalog built with Apache, PHP, and MySQL. Each record uses the 15 Dublin Core elements, and administrators can add books from an ISBN with data from Open Library."
 display_tag: "Library systems"
