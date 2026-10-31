@@ -1,6 +1,8 @@
 # Collection Editor
 
-The Collection Editor is a small application on your Mac. You use it to add and change the items in the **Papers & Projects** collection of the website. One button saves the item and publishes it.
+The Collection Editor is an application on your Mac. You use it to add and change the items in the **Papers & Projects** collection of the website. You can publish one item at once, or queue several edits and publish them together.
+
+The application is one program. When you open it, it starts its own editor server. When you quit it or close its window, the server stops too. Nothing runs in the background.
 
 ## Contents
 
@@ -10,6 +12,7 @@ The Collection Editor is a small application on your Mac. You use it to add and 
 - [Add an item](#add-an-item)
 - [Change an item](#change-an-item)
 - [Publish](#publish)
+- [Queue several edits](#queue-several-edits)
 - [Fields](#fields)
 - [Stop the editor](#stop-the-editor)
 - [Troubleshooting](#troubleshooting)
@@ -22,6 +25,7 @@ The Collection Editor is a small application on your Mac. You use it to add and 
 - It resizes images before upload.
 - It signs in to GitHub automatically with the GitHub CLI.
 - It sends the item file and all of its images and files to GitHub in one commit.
+- It keeps a queue of edits, so you can publish several items in one step.
 - It controls where each item shows: on the home page and in the collection, in the collection only, or nowhere (Archive).
 - It keeps a draft of unsaved work in the window, so a closed window or a stopped server does not lose your text.
 
@@ -35,22 +39,23 @@ The Collection Editor is a small application on your Mac. You use it to add and 
   ```
 
 - An internet connection.
+- To build the application: the Xcode command-line tools (`xcode-select --install`).
 
 ## Start the editor
 
-Use one of these methods:
+Open **Collection Editor** in your Applications folder (`~/Applications`).
 
-- Open **Collection Editor** in your Applications folder (`~/Applications`).
-- Double-click `Collection Editor.command` in this folder.
-- In a terminal, run:
+The editor opens in its own window. File pickers, links, and copy and paste work as in other Mac applications. Links to the website and to GitHub open in your default browser.
 
-  ```bash
-  python3 editor/server.py --open
-  ```
+To build or rebuild the application, run:
 
-The editor opens in its own window. If Google Chrome, Microsoft Edge, or Brave is installed, the window has no browser toolbar. Otherwise, the editor opens in your default browser.
+```bash
+editor/make-app.sh
+```
 
-> **Note:** If you move the repository folder, run `editor/make-app.sh` again to update the application.
+> **Note:** Run `editor/make-app.sh` again after you move the repository folder or change `editor/app/main.swift`.
+
+For development only, you can run the server without the application: run `python3 editor/server.py`, then open <http://127.0.0.1:8790> in a browser. Press `Control+C` to stop it.
 
 ## Add an item
 
@@ -86,6 +91,22 @@ If you removed an image or a file from an item, the editor also deletes it from 
 
 > **Caution:** Publishing makes the item public at once. Check the preview before you click **Save & publish**.
 
+## Queue several edits
+
+Use the queue to collect edits to several items and publish them in one commit.
+
+1. Open an item, or click **New**, and make your changes.
+2. Click **Add to queue**. The **Queue** button shows the number of queued items. Queued items have a dot and "(queued)" in the item list.
+3. Repeat for the other items.
+4. Click **Queue**, then click **Publish queue**.
+
+The editor sends all queued items to GitHub in one commit and empties the queue. Your changes are live in a few minutes.
+
+- To change a queued item, select it in the item list or click its name in the queue. The editor opens the queued version, with its new images and files.
+- To take an item out of the queue, click **×** next to it. To empty the queue, click **Clear queue**. This does not change the website.
+- The queue is saved on this computer. It stays after you quit the editor.
+- **Save & publish** publishes only the open item, at once. If that item was in the queue, the editor takes it out of the queue.
+
 ## Fields
 
 | Field | Use |
@@ -106,7 +127,7 @@ If you removed an image or a file from an item, the editor also deletes it from 
 
 ## Stop the editor
 
-Click the **✕** button at the top right. Then close the window.
+Quit the application (**Command+Q**), close its window, or click the **✕** button at the top right. Each of these stops the editor server too.
 
 ## Troubleshooting
 
@@ -114,8 +135,8 @@ Click the **✕** button at the top right. Then close the window.
 | --- | --- |
 | "The GitHub CLI is not signed in" | Run `gh auth login` in a terminal. Then restart the editor. |
 | "The GitHub CLI (gh) is not installed" | Run `brew install gh`, then `gh auth login`. |
-| The window does not open | Open <http://127.0.0.1:8790> in a browser. |
-| A red banner says the server stopped | Open **Collection Editor** again. The window reconnects. Your text is kept as a draft. |
+| The editor does not open, or shows an error about the server | Read `~/Library/Logs/Collection Editor.log`. If you moved the repository folder, run `editor/make-app.sh` again. |
+| A message says the server stopped | Open **Collection Editor** again. Your unsaved text is kept as a draft, and the queue is kept. |
 | A banner offers an unsaved draft | Click **Restore** to continue the draft, or **Discard** to delete it. New images and files in a draft must be added again. |
 | "A permanent link instead of a temporary download link" | The link is a signed download link that stops working after a few minutes. Attach the PDF under **Files** and link to the attached file instead. |
 | The changes are not live after 10 minutes | The commit is saved, but the build possibly failed. The website then shows the previous version. Open the repository on GitHub, then **Settings > Pages**, and read the build status. |
@@ -123,7 +144,9 @@ Click the **✕** button at the top right. Then close the window.
 
 ## How it works
 
+- `app/main.swift` is the Mac application. It starts `server.py` as a child process, shows the editor in a window, and stops the server when it quits. If the application stops unexpectedly, the server notices and stops too.
 - `server.py` is a local web server. It uses only the Python standard library. It listens on `127.0.0.1:8790` only, and it accepts requests only from the editor page.
+- The queue is stored in the window's IndexedDB storage, with the queued images and files.
 - The server gets a GitHub token from `gh auth token`. The token stays in the server and never goes to the browser.
 - The server writes only to `_items/` and `assets/items/` in the repository.
 - `static/preview.js` copies the HTML of the site templates (`_layouts/item.html`, `_includes/item-card.html`, and `_includes/link-button.html`). If you change those templates, change `preview.js` too.
