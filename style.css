@@ -95,7 +95,8 @@ h1 {
   margin: 0 0 1.5rem; font-weight: 400;
 }
 .hero-logo { font-weight: 600; width: fit-content; }
-.hero-logo.is-floating { opacity: 0 !important; transition: none !important; pointer-events: none; }
+.hero-logo.is-floating { pointer-events: none; }
+.js .hero-logo.settled { transition: none; }
 .grad,
 .has-hero-logo .brand {
   background: var(--grad); background-size: 200% 100%;
