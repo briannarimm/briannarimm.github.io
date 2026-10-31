@@ -26,7 +26,19 @@
     </div>
     <div class="bar-right">
       <span class="who" id="who"><span class="dot"></span><span id="who-text">Connecting to GitHub...</span></span>
-      <button class="btn primary" id="btn-publish" type="button" disabled>Save &amp; publish</button>
+      <button class="btn" id="btn-queue-add" type="button" disabled title="Save this item to the queue. Publish the whole queue later in one step.">Add to queue</button>
+      <div class="queue-wrap">
+        <button class="btn ghost" id="btn-queue" type="button" aria-expanded="false" aria-controls="queue-panel">Queue <span class="qcount" id="qcount">0</span></button>
+        <div class="queue-panel" id="queue-panel" hidden>
+          <div class="queue-head"><b>Queued edits</b><small>Saved on this computer until you publish.</small></div>
+          <ul class="queue-list" id="queue-list"></ul>
+          <div class="queue-actions">
+            <button class="btn ghost small" type="button" id="queue-clear">Clear queue</button>
+            <button class="btn primary small" type="button" id="queue-publish">Publish queue</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn primary" id="btn-publish" type="button" disabled title="Publish only this item now">Save &amp; publish</button>
       <button class="btn ghost icon" id="btn-quit" type="button" title="Quit the editor" aria-label="Quit the editor">&#x2715;</button>
     </div>
   </header>

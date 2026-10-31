@@ -2,7 +2,9 @@
 """Collection Editor: a small local app that creates and edits items in the
 Papers & Projects collection and publishes them to GitHub in one commit.
 
-Run:  python3 server.py --open
+The Collection Editor app (see app/ and make-app.sh) starts this server and
+stops it when the app quits. For development you can also run it alone:
+python3 server.py, then open http://127.0.0.1:8790/.
 It uses only the Python standard library. It signs in to GitHub with the
 token of the GitHub CLI (`gh auth token`), so no login form is necessary.
 The server listens on 127.0.0.1 only.
@@ -23,7 +25,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-import webbrowser
+import signal
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -168,13 +170,14 @@ def pull_local_clone():
 
 # ---------------------------------------------------------------- publish
 
-def publish(payload):
+def prepare_item(payload):
+    """Check one item and return its files and deletions."""
     slug = payload.get("slug", "")
     if not SLUG_RE.match(slug):
         raise ValueError("The slug must use lowercase letters, numbers, and hyphens.")
     markdown = payload.get("markdown", "")
     if not markdown.startswith("---"):
-        raise ValueError("The item file must start with front matter.")
+        raise ValueError(f"The item file for '{slug}' must start with front matter.")
 
     files = [{"path": f"{ITEMS_DIR}/{slug}.md", "bytes": markdown.encode("utf-8")}]
     for f in payload.get("files", []):
@@ -187,33 +190,53 @@ def publish(payload):
         p = safe_repo_path(p)
         if p.startswith(f"{ASSETS_DIR}/{slug}/"):
             deletions.append(p)
+    return slug, files, deletions
+
+
+def publish(payload):
+    """Publish one item, or a queue of items ({"items": [...]}), in one commit."""
+    items = payload["items"] if "items" in payload else [payload]
+    if not items:
+        raise ValueError("The queue is empty.")
+    slugs = [i.get("slug", "") for i in items]
+    if len(set(slugs)) != len(slugs):
+        raise ValueError("The queue has the same item more than once.")
+
+    prepared = [prepare_item(i) for i in items]
 
     ref = gh_request("GET", f"/repos/{REPO}/git/ref/heads/{BRANCH}")
     head_sha = ref["object"]["sha"]
     head_commit = gh_request("GET", f"/repos/{REPO}/git/commits/{head_sha}")
 
-    if payload.get("is_new"):
-        try:
-            gh_request("GET", f"/repos/{REPO}/contents/{ITEMS_DIR}/{slug}.md?ref={BRANCH}")
-            raise ValueError(f"An item with the slug '{slug}' already exists. Choose another slug.")
-        except GitHubError as e:
-            if e.status != 404:
-                raise
+    for item, (slug, _, _) in zip(items, prepared):
+        if item.get("is_new"):
+            try:
+                gh_request("GET", f"/repos/{REPO}/contents/{ITEMS_DIR}/{slug}.md?ref={BRANCH}")
+                raise ValueError(f"An item with the slug '{slug}' already exists. Choose another slug.")
+            except GitHubError as e:
+                if e.status != 404:
+                    raise
 
     tree = []
-    for f in files:
-        blob = gh_request("POST", f"/repos/{REPO}/git/blobs",
-                          {"content": base64.b64encode(f["bytes"]).decode(), "encoding": "base64"})
-        tree.append({"path": f["path"], "mode": "100644", "type": "blob", "sha": blob["sha"]})
+    for _, files, _ in prepared:
+        for f in files:
+            blob = gh_request("POST", f"/repos/{REPO}/git/blobs",
+                              {"content": base64.b64encode(f["bytes"]).decode(), "encoding": "base64"})
+            tree.append({"path": f["path"], "mode": "100644", "type": "blob", "sha": blob["sha"]})
     written = {t["path"] for t in tree}
-    for p in deletions:
-        if p not in written:
-            tree.append({"path": p, "mode": "100644", "type": "blob", "sha": None})
+    for _, _, deletions in prepared:
+        for p in deletions:
+            if p not in written:
+                tree.append({"path": p, "mode": "100644", "type": "blob", "sha": None})
 
     new_tree = gh_request("POST", f"/repos/{REPO}/git/trees",
                           {"base_tree": head_commit["tree"]["sha"], "tree": tree})
-    verb = "Add" if payload.get("is_new") else "Update"
-    message = payload.get("message") or f"{verb} item: {payload.get('title') or slug}"
+    if len(items) == 1:
+        verb = "Add" if items[0].get("is_new") else "Update"
+        message = f"{verb} item: {items[0].get('title') or slugs[0]}"
+    else:
+        lines = [f"- {'Add' if i.get('is_new') else 'Update'}: {i.get('title') or i.get('slug')}" for i in items]
+        message = f"Update {len(items)} items\n\n" + "\n".join(lines)
     commit = gh_request("POST", f"/repos/{REPO}/git/commits",
                         {"message": message, "tree": new_tree["sha"], "parents": [head_sha]})
     gh_request("PATCH", f"/repos/{REPO}/git/refs/heads/{BRANCH}", {"sha": commit["sha"], "force": False})
@@ -223,6 +246,7 @@ def publish(payload):
         "commit": commit["sha"],
         "commit_url": f"https://github.com/{REPO}/commit/{commit['sha']}",
         "files": len(tree),
+        "items": slugs,
     }
 
 
@@ -397,7 +421,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json({"error": str(e)}, 400)
 
 
-def already_running():
+def running_instance():
     try:
         with urllib.request.urlopen(f"http://127.0.0.1:{PORT}/ping", timeout=2) as r:
             return json.loads(r.read()).get("app") == SIGNATURE
@@ -405,32 +429,52 @@ def already_running():
         return False
 
 
-def open_window(url):
-    """Open the editor in an app-style window when Chrome or Edge is present."""
-    for app in ("Google Chrome", "Microsoft Edge", "Brave Browser"):
-        if Path(f"/Applications/{app}.app").exists():
-            subprocess.Popen(["open", "-na", app, "--args", f"--app={url}", "--window-size=1500,950"])
-            return
-    webbrowser.open(url)
+def stop_old_instance():
+    """Stop an editor server left over from an earlier launch."""
+    req = urllib.request.Request(f"http://127.0.0.1:{PORT}/api/quit", data=b"{}", method="POST",
+                                 headers={"X-Session": SESSION, "Content-Type": "application/json",
+                                          "Host": f"127.0.0.1:{PORT}"})
+    try:
+        urllib.request.urlopen(req, timeout=3).read()
+    except Exception:
+        pass
+    for _ in range(30):
+        if not running_instance():
+            return True
+        time.sleep(0.2)
+    return False
+
+
+def watch_parent(pid):
+    """Exit when the app that started this server is gone."""
+    while True:
+        time.sleep(1)
+        if os.getppid() != pid:
+            os._exit(0)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Collection Editor")
-    ap.add_argument("--open", action="store_true", help="open the editor window")
+    ap = argparse.ArgumentParser(description="Collection Editor server. Normally the Collection Editor app starts it.")
+    ap.add_argument("--app", action="store_true", help="started by the Collection Editor app")
+    ap.add_argument("--parent-pid", type=int, help="exit when this process ends")
     args = ap.parse_args()
     url = f"http://127.0.0.1:{PORT}/"
 
-    if already_running():
-        if args.open:
-            open_window(url)
-        print(f"Collection Editor is already running at {url}")
-        return
+    if running_instance() and not stop_old_instance():
+        print(f"Another Collection Editor server is using port {PORT} and did not stop.", flush=True)
+        sys.exit(3)
 
+    if args.parent_pid:
+        threading.Thread(target=watch_parent, args=(args.parent_pid,), daemon=True).start()
+
+    # The app stops the server with SIGTERM when it quits.
+    signal.signal(signal.SIGTERM, lambda *_: os._exit(0))
+
+    ThreadingHTTPServer.allow_reuse_address = True
     server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
-    print(f"Collection Editor: {url}  (repository {REPO}, branch {BRANCH})", flush=True)
-    print("Press Control+C to stop.", flush=True)
-    if args.open:
-        threading.Timer(0.6, open_window, [url]).start()
+    print(f"Collection Editor server: {url}  (repository {REPO}, branch {BRANCH})", flush=True)
+    if not args.app:
+        print("Open the address above in a browser. Press Control+C to stop.", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

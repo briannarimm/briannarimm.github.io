@@ -490,10 +490,12 @@ function render() {
   const { item, blobFor } = buildItem();
   lastBlobMap = blobFor;
   const md = toMarkdown(item);
-  const dirty = md !== savedMarkdown || buildItem().uploads.length > 0;
+  const dirty = md !== savedMarkdown || (!state.queued && buildItem().uploads.length > 0);
   const status = $("#status");
   const visNote = { home: "", collection: " · collection only", archive: " · archived" }[state.visibility];
-  status.textContent = (state.isNew ? "New item, not published" : dirty ? "Unsaved changes" : "Published version") + visNote;
+  const base = state.queued && !dirty ? "In the queue, not published"
+    : state.isNew ? "New item, not published" : dirty ? "Unsaved changes" : "Published version";
+  status.textContent = base + visNote;
   status.classList.toggle("dirty", dirty);
   render.dirty = dirty;
   saveDraft(md, dirty);
@@ -556,11 +558,35 @@ function modalButton(label, cls, fn) {
   return b;
 }
 
-async function publish() {
+// Check the form and collect everything that one publish needs.
+function snapshot() {
   const { item, uploads } = buildItem();
   const { problems, warnings } = validate(item);
-  if (problems.length) return toast(`Add ${problems.join(", ")}.`, true);
+  if (problems.length) { toast(`Add ${problems.join(", ")}.`, true); return null; }
   if (warnings.length) toast(warnings[0]);
+  const current = new Set([item.thumbnail, ...item.gallery.map((g) => g.src), ...item.attachments.map((a) => a.file)]);
+  return {
+    item, uploads, current,
+    entry: {
+      slug: state.slug, title: item.title, isNew: state.isNew, visibility: item.visibility,
+      markdown: toMarkdown(item),
+      files: uploads.map((u) => ({ path: u.path, blob: u.blob })),
+      delete: state.originalPaths.filter((p) => !current.has(p)),
+      originalPaths: state.originalPaths, at: Date.now(),
+    },
+  };
+}
+
+async function entryPayload(e) {
+  const files = [];
+  for (const f of e.files) files.push({ path: f.path.slice(1), content_b64: await blobToB64(f.blob) });
+  return { slug: e.slug, title: e.title, markdown: e.markdown, files, delete: e.delete.map((p) => p.slice(1)), is_new: e.isNew };
+}
+
+async function publish() {
+  const snap = snapshot();
+  if (!snap) return;
+  const { item } = snap;
 
   const STEPS = ["Prepare files", "Send to GitHub", "Done"];
   const btn = $("#btn-publish");
@@ -569,16 +595,12 @@ async function publish() {
   setSteps(STEPS, 0);
 
   try {
-    const files = [];
-    for (const u of uploads) files.push({ path: u.path.slice(1), content_b64: await blobToB64(u.blob) });
-    const current = new Set([item.thumbnail, ...item.gallery.map((g) => g.src), ...item.attachments.map((a) => a.file)]);
-    const del = state.originalPaths.filter((p) => !current.has(p)).map((p) => p.slice(1));
+    const payload = await entryPayload(snap.entry);
+    const { current } = snap;
+    const markdown = snap.entry.markdown;
     setSteps(STEPS, 1);
-    const markdown = toMarkdown(item);
-    const res = await api("/api/publish", {
-      method: "POST",
-      body: JSON.stringify({ slug: state.slug, title: item.title, markdown, files, delete: del, is_new: state.isNew }),
-    });
+    const res = await api("/api/publish", { method: "POST", body: JSON.stringify(payload) });
+    await queueDelete(state.slug);
 
     // The item is now saved. Uploaded files become ordinary repository paths.
     savedMarkdown = markdown;
@@ -620,7 +642,11 @@ async function loadPicker(select = "") {
   const { items } = await api("/api/items");
   const p = $("#picker");
   const tag = { collection: " (collection only)", archive: " (archived)" };
-  p.innerHTML = `<option value="">New item</option>` + items.map((i) => `<option value="${esc(i.slug)}">${esc(i.title || i.slug)}${tag[i.visibility] || ""}</option>`).join("");
+  const queue = await queueAll();
+  const q = new Set(queue.map((e) => e.slug));
+  const known = new Set(items.map((i) => i.slug));
+  const queuedNew = queue.filter((e) => !known.has(e.slug)).map((e) => ({ slug: e.slug, title: e.title, visibility: e.visibility }));
+  p.innerHTML = `<option value="">New item</option>` + [...items, ...queuedNew].map((i) => `<option value="${esc(i.slug)}">${q.has(i.slug) ? "\u25cf " : ""}${esc(i.title || i.slug)}${tag[i.visibility] || ""}${q.has(i.slug) ? " (queued)" : ""}</option>`).join("");
   p.value = select;
 }
 
@@ -630,6 +656,8 @@ function confirmDiscard() {
 
 async function openItem(slug) {
   if (!slug) return newItem();
+  const queued = (await queueAll()).find((e) => e.slug === slug);
+  if (queued) return openQueued(queued);
   try {
     const { markdown } = await api(`/api/item?slug=${encodeURIComponent(slug)}`);
     state = parseMarkdown(slug, markdown);
@@ -684,6 +712,142 @@ function offerDraft() {
   $("#draft-discard").onclick = () => { clearDraft(); $("#draft-banner").hidden = true; };
 }
 
+// ---------- queue: save several edits, then publish them in one commit
+// The queue lives in IndexedDB, so it keeps images and files and survives a
+// closed window or a stopped server.
+
+let dbp;
+function db() {
+  dbp = dbp || new Promise((resolve, reject) => {
+    const r = indexedDB.open("collection-editor", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("queue", { keyPath: "slug" });
+    r.onsuccess = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+  });
+  return dbp;
+}
+async function tx(mode, fn) {
+  const d = await db();
+  return new Promise((resolve, reject) => {
+    const t = d.transaction("queue", mode);
+    const out = fn(t.objectStore("queue"));
+    t.oncomplete = () => resolve(out && out.result);
+    t.onerror = () => reject(t.error);
+  });
+}
+const queueAll = () => tx("readonly", (s) => s.getAll()).then((r) => (r || []).sort((a, b) => a.at - b.at)).catch(() => []);
+const queuePut = (e) => tx("readwrite", (s) => s.put(e));
+const queueDelete = (slug) => tx("readwrite", (s) => s.delete(slug)).catch(() => {});
+const queueClear = () => tx("readwrite", (s) => s.clear());
+
+async function addToQueue() {
+  const snap = snapshot();
+  if (!snap) return;
+  try {
+    await queuePut(snap.entry);
+  } catch (e) {
+    return toast(`Could not save to the queue: ${e.message}`, true);
+  }
+  state.queued = true;
+  savedMarkdown = snap.entry.markdown;
+  clearDraft();
+  await refreshQueue();
+  await loadPicker(state.slug);
+  render();
+  toast(`Queued \u201c${snap.item.title}\u201d. Publish the queue when you are ready.`);
+}
+
+function openQueued(e) {
+  const s = parseMarkdown(e.slug, e.markdown);
+  s.isNew = e.isNew;
+  s.slugTouched = true;
+  s.originalPaths = e.originalPaths || [];
+  s.queued = true;
+  // Give the queued new files back to the form, so they stay new uploads.
+  const byPath = new Map(e.files.map((f) => [f.path, f.blob]));
+  const attach = (entry, path) => {
+    const blob = byPath.get(path);
+    if (!blob) return;
+    entry.file = blob;
+    entry.objURL = URL.createObjectURL(blob);
+    entry.src = null;
+  };
+  if (s.thumb) { const p = s.thumb.src; s.thumb.ext = extOf(p); attach(s.thumb, p); }
+  s.gallery.forEach((g) => attach(g, g.src));
+  s.attachments.forEach((a) => attach(a, a.src));
+  state = s;
+  fillForm();
+  savedMarkdown = e.markdown;
+  $("#picker").value = e.slug;
+  render();
+}
+
+async function refreshQueue() {
+  const q = await queueAll();
+  const c = $("#qcount");
+  c.textContent = q.length;
+  c.classList.toggle("has", q.length > 0);
+  $("#queue-publish").disabled = !q.length;
+  $("#queue-clear").disabled = !q.length;
+  $("#queue-publish").textContent = q.length > 1 ? `Publish ${q.length} items` : "Publish queue";
+  const list = $("#queue-list");
+  if (!q.length) { list.innerHTML = '<li class="queue-empty">Nothing in the queue. Click <b>Add to queue</b> to save an edit here.</li>'; return; }
+  const vis = { home: "home + collection", collection: "collection only", archive: "archive" };
+  list.innerHTML = q.map((e) => `<li data-slug="${esc(e.slug)}"><button type="button" class="qopen">${esc(e.title || e.slug)}</button><small>${e.isNew ? "New" : "Update"} &middot; ${vis[e.visibility] || "home + collection"}${e.files.length ? ` &middot; ${e.files.length} new file${e.files.length > 1 ? "s" : ""}` : ""}</small><button type="button" class="mini del" title="Remove from queue" aria-label="Remove from queue">&times;</button></li>`).join("");
+  list.querySelectorAll("li[data-slug]").forEach((li) => {
+    const slug = li.dataset.slug;
+    li.querySelector(".qopen").addEventListener("click", async () => {
+      if (!confirmDiscard()) return;
+      $("#queue-panel").hidden = true;
+      const e = (await queueAll()).find((x) => x.slug === slug);
+      if (e) openQueued(e);
+    });
+    li.querySelector(".del").addEventListener("click", async () => {
+      await queueDelete(slug);
+      if (state.slug === slug) { state.queued = false; savedMarkdown = ""; render(); }
+      await refreshQueue();
+      loadPicker(state.isNew && !state.queued ? "" : state.slug).catch(() => {});
+    });
+  });
+}
+
+async function publishQueue() {
+  const q = await queueAll();
+  if (!q.length) return;
+  $("#queue-panel").hidden = true;
+  const STEPS = ["Prepare files", "Send to GitHub", "Done"];
+  showModal(`Publishing ${q.length} item${q.length > 1 ? "s" : ""}`);
+  setSteps(STEPS, 0);
+  $("#queue-publish").disabled = true;
+  try {
+    const items = [];
+    for (const e of q) items.push(await entryPayload(e));
+    setSteps(STEPS, 1);
+    const res = await api("/api/publish", { method: "POST", body: JSON.stringify({ items }) });
+    await queueClear();
+    setSteps(STEPS, 3);
+    $("#modal-title").textContent = "Sent to GitHub";
+    $("#modal-msg").innerHTML = `${q.map((e) => `\u201c${esc(e.title)}\u201d`).join(", ")} ${q.length > 1 ? "are" : "is"} saved in commit <a href="${res.commit_url}" target="_blank">${res.commit.slice(0, 7)}</a>. GitHub Pages now rebuilds the website, so your changes will be live in a few minutes.`;
+    $("#modal-actions").innerHTML = "";
+    modalButton("Close", "primary", () => ($("#modal").hidden = true));
+    // If the open item was in the queue, reload its published version.
+    const openSlug = state.slug;
+    if (state.queued && q.some((e) => e.slug === openSlug)) {
+      await loadPicker(openSlug);
+      await openItem(openSlug);
+    } else {
+      await loadPicker(state.isNew ? "" : openSlug);
+    }
+  } catch (e) {
+    setSteps(STEPS, 1, 1);
+    $("#modal-title").textContent = "Not published";
+    $("#modal-msg").textContent = `${e.message} The queue is unchanged, so you can try again.`;
+    modalButton("Close", "ghost", () => ($("#modal").hidden = true));
+  } finally {
+    await refreshQueue();
+  }
+}
+
 // ---------- server check: show a banner if the local server stops
 
 async function heartbeat() {
@@ -706,6 +870,25 @@ async function boot() {
     openItem(slug);
   });
   $("#btn-publish").addEventListener("click", publish);
+  $("#btn-queue-add").addEventListener("click", addToQueue);
+  $("#btn-queue").addEventListener("click", async () => {
+    const panel = $("#queue-panel");
+    panel.hidden = !panel.hidden;
+    $("#btn-queue").setAttribute("aria-expanded", String(!panel.hidden));
+    if (!panel.hidden) await refreshQueue();
+  });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".queue-wrap")) { $("#queue-panel").hidden = true; $("#btn-queue").setAttribute("aria-expanded", "false"); }
+  });
+  $("#queue-publish").addEventListener("click", publishQueue);
+  $("#queue-clear").addEventListener("click", async () => {
+    if (!confirm("Remove every edit from the queue? This does not change the website.")) return;
+    await queueClear();
+    if (state.queued) { state.queued = false; savedMarkdown = ""; render(); }
+    await refreshQueue();
+    loadPicker(state.isNew ? "" : state.slug).catch(() => {});
+  });
+  refreshQueue();
   $("#btn-quit").addEventListener("click", async () => {
     if (!confirmDiscard()) return;
     try { await api("/api/quit", { method: "POST", body: "{}" }); } catch (e) { /* already stopped */ }
@@ -733,6 +916,7 @@ async function boot() {
     who.classList.add("ok");
     who.innerHTML = `${me.avatar ? `<img src="${esc(me.avatar)}" alt="">` : '<span class="dot"></span>'}<span>Signed in as <b>@${esc(me.login)}</b></span>`;
     $("#btn-publish").disabled = false;
+    $("#btn-queue-add").disabled = false;
     await loadPicker();
   } catch (e) {
     const who = $("#who");
