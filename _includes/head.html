@@ -1,4 +1,13 @@
 <meta charset="utf-8">
+<script>
+  // Apply a stored theme choice before first paint. With no choice, CSS follows the system setting.
+  (function () {
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {%- if page.title and page.url != "/" %}
 <title>{{ page.title | escape }} &middot; {{ site.title }}</title>
@@ -7,7 +16,8 @@
 {%- endif %}
 {%- assign meta_desc = page.description | default: site.description | strip_html | strip_newlines | escape %}
 <meta name="description" content="{{ meta_desc }}">
-<meta name="theme-color" content="#0a0e13">
+<meta name="theme-color" content="#0a0e13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)">
 <link rel="canonical" href="{{ page.url | absolute_url }}">
 <meta property="og:title" content="{{ page.title | default: site.title | escape }}">
 <meta property="og:description" content="{{ meta_desc }}">

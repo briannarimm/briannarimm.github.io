@@ -4,6 +4,37 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// Theme toggle: dark by default, follows the system until the visitor chooses.
+// The choice is kept in localStorage under "theme"; head.html applies it before first paint.
+const themeToggle = document.querySelector("[data-theme-toggle]");
+if (themeToggle) {
+  const root = document.documentElement;
+  const systemLight = window.matchMedia("(prefers-color-scheme: light)");
+  const label = themeToggle.querySelector("span");
+  const icon = themeToggle.querySelector("use");
+  const current = () => root.dataset.theme || (systemLight.matches ? "light" : "dark");
+  const render = () => {
+    const light = current() === "light";
+    // The label names the theme the button switches to.
+    themeToggle.setAttribute("aria-pressed", String(light));
+    label.textContent = light ? "Dark" : "Light";
+    icon.setAttribute("href", light ? "#moon" : "#sun");
+    // A manual choice also sets the browser bar color.
+    if (root.dataset.theme) {
+      document.querySelectorAll('meta[name="theme-color"]').forEach((m) => { m.content = light ? "#f6f3ec" : "#0a0e13"; });
+    }
+  };
+  themeToggle.addEventListener("click", () => {
+    const next = current() === "light" ? "dark" : "light";
+    root.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (e) { /* storage off: the choice lasts for this page */ }
+    render();
+  });
+  systemLight.addEventListener("change", render);
+  themeToggle.hidden = false;
+  render();
+}
+
 // Scroll reveal
 const io = new IntersectionObserver((entries) => {
   entries.forEach((e) => {
