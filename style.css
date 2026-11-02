@@ -72,12 +72,13 @@ main, footer {
   backdrop-filter: blur(8px);
   mask-image: linear-gradient(#000 60%, transparent);
 }
+.wm-period { fill: var(--wm-white); }
+/* Wordmark clear space: at least the period's diameter (about 0.2 of the mark's height) on every side. */
 .brand {
-  font-family: var(--serif); font-weight: 600; font-size: 1.4rem;
-  line-height: 1.02; letter-spacing: -0.03em;
+  display: block; padding: 0.28rem; margin: -0.28rem;
   transform-origin: left top;
 }
-.brand span { color: var(--wm-white); }
+.brand .wordmark { display: block; height: 1.35rem; width: auto; }
 .has-hero-logo .brand { opacity: 0; pointer-events: none; }
 .has-hero-logo .brand.is-active { opacity: 1; }
 .has-hero-logo .brand.is-docked { opacity: 1; pointer-events: auto; }
@@ -101,9 +102,13 @@ h1 {
   line-height: 1.02; letter-spacing: -0.03em;
   margin: 0 0 1.5rem; font-weight: 400;
 }
-.hero-logo { font-weight: 600; width: fit-content; }
+.hero-logo {
+  --wm-h: clamp(3.5rem, 12vw, 7.5rem);
+  width: fit-content; line-height: 1;
+  padding-block: calc(var(--wm-h) * 0.2); margin: 0 0 0.5rem;
+}
+.hero-logo .wordmark { display: block; height: var(--wm-h); width: auto; }
 .hero-logo.is-floating { pointer-events: none; }
-.hero-logo span { color: var(--wm-white); }
 
 .lead { font-size: clamp(1.15rem, 2.8vw, 1.6rem); color: var(--muted); max-width: 36rem; margin: 0 0 2rem; line-height: 1.45; }
 .rotator { color: var(--fg); font-weight: 600; white-space: nowrap; border-bottom: 2px solid var(--accent-blue); }
@@ -278,7 +283,6 @@ h3.sub { font-size: 1.3rem; margin: 3rem 0 1rem; letter-spacing: -0.02em; }
   body { font-size: 1rem; }
   section { padding: 3.5rem 0; }
   .site-header { padding-block: 0.8rem; }
-  .brand { font-size: 1.25rem; }
   nav { gap: 0.9rem; }
   nav a { font-size: 0.88rem; }
   h1 { font-size: clamp(2.4rem, 13vw, 3.4rem); }

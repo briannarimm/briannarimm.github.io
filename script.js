@@ -26,7 +26,11 @@ const heroLogo = document.querySelector(".hero-logo");
 const navBrand = document.querySelector(".site-header .brand");
 if (heroLogo && navBrand) {
   document.documentElement.classList.add("has-hero-logo");
-  let heroDocTop = 0, heroLeft = 0, brandTop = 0, brandLeft = 0, scaleRatio = 1, travel = 1;
+  const heroMark = heroLogo.querySelector(".wordmark") || heroLogo;
+  const navMark = navBrand.querySelector(".wordmark") || navBrand;
+  // Positions are of the SVG marks themselves; offX and offY are the nav mark's
+  // offset inside its link (the clear-space padding), which the scale also moves.
+  let heroDocTop = 0, heroLeft = 0, brandTop = 0, brandLeft = 0, offX = 0, offY = 0, scaleRatio = 1, travel = 1;
   const FADE = 0.08; // part of the travel used for the crossfade
   const ease = (t) => t * t * (3 - 2 * t);
 
@@ -34,9 +38,10 @@ if (heroLogo && navBrand) {
   const measureLogo = () => {
     const saved = navBrand.style.transform;
     navBrand.style.transform = "none";
-    const b = navBrand.getBoundingClientRect();
+    const box = navBrand.getBoundingClientRect();
+    const b = navMark.getBoundingClientRect();
     navBrand.style.transform = saved;
-    const h = heroLogo.getBoundingClientRect();
+    const h = heroMark.getBoundingClientRect();
     // Remove the reveal animation's offset, if it is still running.
     const t = getComputedStyle(heroLogo).transform;
     const m = t && t !== "none" ? new DOMMatrixReadOnly(t) : { m41: 0, m42: 0 };
@@ -44,7 +49,9 @@ if (heroLogo && navBrand) {
     heroLeft = h.left - m.m41 + window.scrollX;
     brandTop = b.top;
     brandLeft = b.left;
-    scaleRatio = b.width ? h.width / b.width : 1;
+    offX = b.left - box.left;
+    offY = b.top - box.top;
+    scaleRatio = b.height ? h.height / b.height : 1;
     travel = Math.max(1, heroDocTop - brandTop);
   };
 
@@ -69,9 +76,9 @@ if (heroLogo && navBrand) {
       navBrand.style.opacity = "";
     } else if (p < 1) {
       const inv = 1 - p;
-      const dx = (heroLeft - brandLeft) * inv;
-      const dy = (heroDocTop - y) - brandTop;
       const s = 1 + (scaleRatio - 1) * inv;
+      const dx = (heroLeft - brandLeft) * inv - offX * (s - 1);
+      const dy = (heroDocTop - y) - brandTop - offY * (s - 1);
       const f = ease(Math.min(p / FADE, 1));
       heroLogo.classList.add("is-floating");
       heroLogo.style.opacity = String(1 - f);
