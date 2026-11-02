@@ -54,9 +54,9 @@ The website turns off all motion for users who set their system to reduce motion
 | `_data/dublin_core.yml` | The 15 Dublin Core elements, in display order. |
 | `_config.yml` | The Jekyll settings. |
 | `editor/` | The Collection Editor application. Jekyll does not publish this folder. |
-| `style.css` | The colors, fonts, layout, and animations. |
-| `script.js` | The scroll effects, the mouse effects, the filters, the carousel, and the rotating words. |
-| `images/` | The portrait photo in three sizes. |
+| `style.css` | The colors (dark and light themes), fonts, layout, and animations. |
+| `script.js` | The scroll effects, the mouse effects, the theme toggle, the filters, the carousel, and the rotating words. |
+| `images/` | The portrait photo in three sizes, the three "bri." wordmark files, and the favicon files. |
 | `CNAME` | The custom domain name for GitHub Pages. |
 | `DESIGN.md` | The design rules. Use this file to build other pages in the same style. |
 | `LICENSE` | The license for the code, and a list of what each license covers. |
@@ -105,7 +105,9 @@ To add or change a paper or project, read [Papers and projects](#papers-and-proj
 
 To change the words that rotate in the first section, edit the `words` list in `script.js`.
 
-To change the colors or the fonts, edit the values at the top of `style.css`. Read `DESIGN.md` first.
+To change the colors or the fonts, edit the values at the top of `style.css`. The light theme values are in the next block. Read `DESIGN.md` first.
+
+Do not change the wordmark files in `images/` or the mark in `_includes/wordmark.html`. They are artwork. `DESIGN.md` gives the rules for the mark.
 
 To replace the portrait:
 
