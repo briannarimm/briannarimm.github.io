@@ -48,6 +48,10 @@ Brianna R. Imm:
     unless the Rights field of that item gives other terms. Papers and
     projects keep the license that their own repository or publisher states.
   - The name "Brianna Imm" and the likeness of Brianna Imm
+  - The "bri." wordmark and the "b." favicon: images/bri-wordmark.svg,
+    images/bri-wordmark-light.svg, images/bri-wordmark-mono.svg,
+    images/favicon.svg, images/apple-touch-icon.png, and the outlines of
+    the mark in _includes/wordmark.html
 
 Third-party material keeps its own license. The Fraunces and Inter fonts that
 the page loads from Google Fonts use the SIL Open Font License 1.1.
