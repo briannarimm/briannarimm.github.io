@@ -30,15 +30,6 @@ if (heroLogo && navBrand) {
   const FADE = 0.08; // part of the travel used for the crossfade
   const ease = (t) => t * t * (3 - 2 * t);
 
-  // Run both shimmer animations on the same clock, so their colors match.
-  const syncShimmer = () => {
-    [heroLogo, navBrand].forEach((el) => {
-      (el.getAnimations ? el.getAnimations() : []).forEach((a) => {
-        if (a.animationName === "shimmer") a.startTime = 0;
-      });
-    });
-  };
-
   // Measure with fractional pixels. The brand is measured without its transform.
   const measureLogo = () => {
     const saved = navBrand.style.transform;
@@ -100,9 +91,11 @@ if (heroLogo && navBrand) {
 
   // After the reveal animation, turn off the hero's opacity transition, so the
   // crossfade follows the scroll at once in both directions.
+  let settled = false;
   const settle = () => {
-    if (heroLogo.classList.contains("settled")) return;
-    heroLogo.classList.add("settled");
+    if (settled) return;
+    settled = true;
+    heroLogo.style.transition = "none";
     measureLogo();
     syncLogo();
   };
@@ -112,7 +105,6 @@ if (heroLogo && navBrand) {
   setTimeout(settle, 1600);
 
   measureLogo();
-  syncShimmer();
   syncLogo();
   window.addEventListener("scroll", () => requestAnimationFrame(syncLogo), { passive: true });
   window.addEventListener("resize", () => {
@@ -122,7 +114,6 @@ if (heroLogo && navBrand) {
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
       measureLogo();
-      syncShimmer();
       syncLogo();
     });
   }
