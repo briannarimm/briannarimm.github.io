@@ -1,10 +1,11 @@
 {%- if page.url == "/" %}{% assign home = "" %}{% else %}{% assign home = "/" | relative_url %}{% endif %}
 <header class="site-header">
-  <a class="brand" href="{% if page.url == '/' %}#top{% else %}{{ '/' | relative_url }}{% endif %}" aria-label="Brianna Imm, home">bri<span>.</span></a>
+  <a class="brand" href="{% if page.url == '/' %}#top{% else %}{{ '/' | relative_url }}{% endif %}" aria-label="Brianna Imm, home">{% include wordmark.html id="wm-nav" label="false" %}</a>
   <nav aria-label="Primary">
     <a href="{{ home }}#about">About</a>
     <a href="{{ home }}#experience">Experience</a>
     <a href="{{ home }}#work">Work</a>
     <a href="{{ home }}#links">Elsewhere</a>
+    <button class="theme-toggle" type="button" aria-pressed="false" data-theme-toggle hidden><svg class="ico" aria-hidden="true"><use href="#sun"/></svg><span>Light</span></button>
   </nav>
 </header>
