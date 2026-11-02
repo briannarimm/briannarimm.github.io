@@ -16,7 +16,6 @@ if (themeToggle) {
   const render = () => {
     const light = current() === "light";
     // The label names the theme the button switches to.
-    themeToggle.setAttribute("aria-pressed", String(light));
     label.textContent = light ? "Dark" : "Light";
     icon.setAttribute("href", light ? "#moon" : "#sun");
     // A manual choice also sets the browser bar color.
