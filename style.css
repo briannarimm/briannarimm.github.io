@@ -75,13 +75,15 @@ main, footer {
 .wm-period { fill: var(--wm-white); }
 /* Wordmark clear space: at least the period's diameter (about 0.2 of the mark's height) on every side. */
 .brand {
-  display: block; padding: 0.28rem; margin: -0.28rem;
+  display: block; padding: 0.28rem;
   transform-origin: left top;
 }
 .brand .wordmark { display: block; height: 1.35rem; width: auto; }
 .has-hero-logo .brand { opacity: 0; pointer-events: none; }
 .has-hero-logo .brand.is-active { opacity: 1; }
 .has-hero-logo .brand.is-docked { opacity: 1; pointer-events: auto; }
+/* Keep the focus ring visible when the link is reached with the keyboard before the mark has docked. */
+.has-hero-logo .brand:focus-visible { opacity: 1; }
 nav { display: flex; gap: 1.5rem; white-space: nowrap; }
 nav a { color: var(--muted); font-size: 0.95rem; transition: color 0.2s; }
 nav a:hover { color: var(--fg); }
