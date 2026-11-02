@@ -180,7 +180,7 @@ The Papers & Projects collection adds these components. All use the same tokens.
 - **Dublin Core table:** two columns. Uppercase muted labels on the left, values on the right, hairlines between rows. Links in `--accent-blue`.
 
 ### Theme toggle
-A pill at the end of the header nav: an inline SVG icon (sun or moon) and the name of the theme it switches to ("Light" or "Dark"). It uses `aria-pressed` (true when light is on) and the standard focus ring. It is never icon-only. On phones the nav wraps and the toggle sits on a second row. The button stays `hidden` until `script.js` runs, because it cannot work without JavaScript; without it, the site follows the system setting.
+A pill at the end of the header nav: an inline SVG icon (sun or moon) and the name of the theme it switches to ("Light" or "Dark"). Its name is the visible label, so screen readers announce the action ("Light, button"); it has no pressed state. It uses the standard focus ring. It is never icon-only. On phones the nav wraps and the toggle sits on a second row. The button stays `hidden` until `script.js` runs, because it cannot work without JavaScript; without it, the site follows the system setting.
 
 ### Icons
 Inline SVG sprite (`<symbol>` plus `<use>`), 1.6px round-capped strokes, sized `1em` and colored with `currentColor`. Do not use Unicode arrows or emoji, which can render as colored emoji on some platforms.
