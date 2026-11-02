@@ -28,7 +28,8 @@ above applies only to the source code:
 
   - index.html, items/index.html, items.json
   - style.css, script.js
-  - _config.yml, _layouts/, _includes/, _data/
+  - _config.yml, _layouts/, _data/
+  - _includes/, except the outlines of the wordmark in _includes/wordmark.html
   - editor/ (the Collection Editor), except editor/README.md
 
 The Creative Commons Attribution 4.0 International license (the full text is in

@@ -44,6 +44,12 @@ Define everything as CSS custom properties on `:root`. The site is dark by defau
 | `--shadow-1` | `0 1px 0 rgba(255,255,255,0.06) inset, 0 8px 24px -12px rgba(0,0,0,0.6)` | Resting depth on cards and tiles |
 | `--shadow-2` | `0 20px 60px -24px rgba(165,197,226,0.45)` | Hover and focus lift |
 | `--card-fill` | `linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))` | Card and tile fill |
+| `--btn-depth` | `inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.25)` | Top highlight and bottom edge of gradient buttons |
+| `--text-soft` | `#d6d2e4` | Long-form reading paragraphs (About, item pages) |
+| `--hover-line` | `rgba(255,255,255,0.3)` | Hover border on secondary buttons and filters |
+| `--dot` | `rgba(255,255,255,0.22)` | Inactive carousel dots |
+| `--code-bg` | `rgba(255,255,255,0.07)` | Inline code and code blocks |
+| `--frame-mid`, `--spot`, `--aurora-k` | see sections 5 and 6 | Portrait frame middle stop, spotlight color, aurora opacity factor |
 
 Contrast on `--bg`: `--fg` 17.1:1, `--muted` 7.6:1, blue 10.8:1, pink 10.9:1. Ink on blue or pink is 10.8:1 or more.
 
@@ -62,6 +68,12 @@ Set under `:root[data-theme="light"]`, and under `@media (prefers-color-scheme: 
 | `--accent-pink` | `#94475f` | Pink for tags and labels (5.7:1) |
 | `--c` | `#4a5fc9` | Focus outline (5.0:1) |
 | `--wm-period` | `#0a0e13` | The wordmark's period on light |
+| `--card-fill` | `linear-gradient(160deg, rgba(21,24,29,0.07), rgba(21,24,29,0.02))` | Card and tile fill |
+| `--text-soft` | `#15181d` | Long-form reading paragraphs |
+| `--hover-line` | `rgba(21,24,29,0.3)` | Hover borders |
+| `--dot` | `rgba(21,24,29,0.22)` | Inactive carousel dots |
+| `--code-bg` | `rgba(21,24,29,0.06)` | Code backgrounds |
+| `--frame-mid`, `--spot`, `--aurora-k` | `rgba(21,24,29,0.04)`, `rgba(10,14,19,0.05)`, `0.5` | Portrait frame middle stop, spotlight, half-strength aurora |
 
 `--wm-blue`, `--wm-pink`, `--grad`, `--shadow-1`, and `--shadow-2` keep the same values in both themes.
 
@@ -98,7 +110,7 @@ Load from Google Fonts:
 
 | Element | Size | Weight | Tracking | Line height |
 | --- | --- | --- | --- | --- |
-| h1 | `clamp(2.8rem, 10vw, 6.5rem)` | 400 | `-0.03em` | 1.02 |
+| h1 (item and collection titles) | `clamp(2.8rem, 10vw, 6.5rem)` | 400 | `-0.03em` | 1.02 |
 | h2 | `clamp(1.9rem, 5vw, 2.7rem)` | 400 | `-0.02em` | default |
 | h3 (card) | `1.3rem` | 600 | `-0.02em` | default |
 | h3 (timeline) | `1.2rem` | 600 | `-0.02em` | default |
@@ -141,7 +153,7 @@ Rounded 999px, 1px border, `--card` fill, `--muted` text, `0.9rem`. Hover: text 
 ### Buttons
 Pill-shaped, `0.8rem 1.5rem`, weight 600. Hover lifts 2px.
 
-- **Primary** (`.btn.primary`, `.plink.primary`): `--grad` fill and Ink `#0a0e13` text in both themes, plus the depth recipe so it reads as a button, not a flat chip:
+- **Primary** (`.btn.primary`, `.plink.primary`): `--grad` fill and Ink `#0a0e13` text in both themes, plus the depth recipe (`--btn-depth`) so it reads as a button, not a flat chip:
   ```css
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.35),   /* top highlight */
               inset 0 -1px 0 rgba(0,0,0,0.25);        /* bottom edge */
@@ -168,7 +180,7 @@ The Papers & Projects collection adds these components. All use the same tokens.
 - **Dublin Core table:** two columns. Uppercase muted labels on the left, values on the right, hairlines between rows. Links in `--accent-blue`.
 
 ### Theme toggle
-A pill at the end of the header nav: an inline SVG icon (sun or moon) and the name of the theme it switches to ("Light" or "Dark"). It uses `aria-pressed` (true when light is on) and the standard focus ring. It is never icon-only. On phones the nav wraps and the toggle sits on a second row.
+A pill at the end of the header nav: an inline SVG icon (sun or moon) and the name of the theme it switches to ("Light" or "Dark"). It uses `aria-pressed` (true when light is on) and the standard focus ring. It is never icon-only. On phones the nav wraps and the toggle sits on a second row. The button stays `hidden` until `script.js` runs, because it cannot work without JavaScript; without it, the site follows the system setting.
 
 ### Icons
 Inline SVG sprite (`<symbol>` plus `<use>`), 1.6px round-capped strokes, sized `1em` and colored with `currentColor`. Do not use Unicode arrows or emoji, which can render as colored emoji on some platforms.
@@ -272,7 +284,7 @@ The mark is "bri." in outlined Fraunces letters with a blue-to-pink gradient and
 
 On the site, `_includes/wordmark.html` places the primary mark inline. Its period takes `--wm-period`, so the one include gives the primary variant on dark and the light variant on light. Pass a unique `id` for each use on a page.
 
-**Where it appears:** the header (once) and the hero (once per page). Everywhere else, write the name as text.
+**Where it appears:** the header (once, `1.35rem` tall) and the hero (once per page, `clamp(3.5rem, 12vw, 7.5rem)` tall). Everywhere else, write the name as text.
 
 **Clear space:** keep a margin on every side at least as wide as the period (about one fifth of the mark's height). Nothing sits inside it.
 
@@ -301,3 +313,4 @@ On the site, `_includes/wordmark.html` places the primary mark inline. Its perio
 
 - Google Fonts is loaded from a third party. For stricter privacy, self-host the two families.
 - Media wells (thumbnails, carousel, PDF preview) stay dark in both themes because they frame screenshots.
+- The dark `--text-soft` value `#d6d2e4` has a slight violet cast left over from the earlier palette. A warmer neutral such as `#d9d6cf` would match the rest.

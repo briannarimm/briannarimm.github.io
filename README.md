@@ -105,7 +105,7 @@ To add or change a paper or project, read [Papers and projects](#papers-and-proj
 
 To change the words that rotate in the first section, edit the `words` list in `script.js`.
 
-To change the colors or the fonts, edit the values at the top of `style.css`. The light theme values are in the next block. Read `DESIGN.md` first.
+To change the colors or the fonts, edit the values at the top of `style.css`. The light theme values are below the dark values, under `:root[data-theme="light"]`. Read `DESIGN.md` first.
 
 Do not change the wordmark files in `images/` or the mark in `_includes/wordmark.html`. They are artwork. `DESIGN.md` gives the rules for the mark.
 
