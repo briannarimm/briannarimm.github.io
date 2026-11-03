@@ -581,12 +581,19 @@ async function fetchRace(id) {
   return d;
 }
 /* Search by state and date. The service times out on name-only queries, so the name filter is applied here, after the fetch. */
-async function searchRaces(state, date) {
-  const q = new URLSearchParams({ country: 'US', province: state, start_date: date, end_date: date, limit: '500' });
-  const res = await fetch(`${CIVIC}/race/search?${q}`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const j = await res.json();
-  return j.races || [];
+async function searchRaces(state, date, includeLocal) {
+  const one = async (type, limit) => {
+    const q = new URLSearchParams({ country: 'US', province: state, start_date: date, end_date: date, election_type: type, limit: String(limit) });
+    const res = await fetch(`${CIVIC}/race/search?${q}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const j = await res.json();
+    return (j.races || []).map(r => ({ ...r, _tier: type === 'General' ? 0 : type === 'Statewide' ? 1 : 2 }));
+  };
+  const jobs = [one('General', 400), one('Statewide', 400)];
+  if (includeLocal) jobs.push(one('Local', 3000));
+  const parts = await Promise.all(jobs);
+  const seen = new Set();
+  return parts.flat().filter(r => !seen.has(r.id) && seen.add(r.id));
 }
 function renderRace(d, r) {
   const name = r.label || d.election_name?.en_US || d.election_name || 'Race ' + r.id;
@@ -871,8 +878,10 @@ function setupResults() {
         <select id="fstate" aria-label="State" style="width:auto;min-width:11rem">${stateOpts}</select>
         <input type="date" id="fdate" value="${esc(S.finderDate || ELECTION_DAY)}" aria-label="Election date" style="width:auto">
         <button class="btn primary sm">Load ballot</button>
+        <label class="row small" style="gap:0.35rem;cursor:pointer"><input type="checkbox" id="flocal" ${S.finderLocal ? 'checked' : ''}> Include local races (slower)</label>
       </form>
-      <div class="row" style="margin-top:0.6rem"><input type="text" id="ffilter" placeholder="Filter by name or type, e.g. Senate, Governor, District 5, Amendment" aria-label="Filter races" style="flex:1;min-width:12rem"></div>
+      <div class="row" style="margin-top:0.6rem"><input type="text" id="ffilter" placeholder="Filter by name or type, e.g. Senate, Governor, House 5, Amendment" aria-label="Filter races" style="flex:1;min-width:12rem"></div>
+      <div class="row" style="margin-top:0.5rem;gap:0.35rem"><span class="small">Quick filters:</span>${['US Senate', 'Governor', 'US House', 'Amendment', 'Proposition', 'Judicial'].map(q => `<button type="button" class="btn sm" data-q="${q}">${q}</button>`).join('')}<button type="button" class="btn sm" data-q="">All</button></div>
       <div id="findmsg" class="small" style="margin-top:0.4rem"></div>
       <div id="findlist" class="findlist"></div>
       <details style="margin-top:0.8rem"><summary class="small" style="cursor:pointer">Add by race ID instead</summary>
@@ -906,13 +915,21 @@ function setupResults() {
     refreshChips();
     $('#findf', m).onsubmit = async e => {
       e.preventDefault();
-      const st = $('#fstate', m).value, dt = $('#fdate', m).value || ELECTION_DAY;
-      S.finderState = st; S.finderDate = dt; save();
-      fmsg.textContent = 'Loading…'; list.innerHTML = ''; found = [];
-      try { found = await searchRaces(st, dt); found.sort((a, b) => String(a.type).localeCompare(String(b.type)) || String(a.election_name).localeCompare(String(b.election_name))); fmsg.textContent = `${found.length} races on the ${STATES[st]} ballot for ${dt}.`; drawFound(); }
+      const st = $('#fstate', m).value, dt = $('#fdate', m).value || ELECTION_DAY, loc = $('#flocal', m).checked;
+      S.finderState = st; S.finderDate = dt; S.finderLocal = loc; save();
+      fmsg.textContent = loc ? 'Loading… local races can take half a minute.' : 'Loading…'; list.innerHTML = ''; found = [];
+      try {
+        found = await searchRaces(st, dt, loc);
+        const typeRank = t => /US Senate|^Senate$/i.test(t) ? 0 : /Governor/i.test(t) ? 1 : /US House|House of Rep/i.test(t) ? 2 : 5;
+        found.sort((a, b) => a._tier - b._tier || typeRank(a.type) - typeRank(b.type) || String(a.type).localeCompare(String(b.type)) || String(a.election_name).localeCompare(String(b.election_name), undefined, { numeric: true }));
+        const tiers = [found.filter(r => r._tier === 0).length, found.filter(r => r._tier === 1).length, found.filter(r => r._tier === 2).length];
+        fmsg.textContent = `${STATES[st]}, ${dt}: ${tiers[0]} federal, ${tiers[1]} statewide${loc ? `, ${tiers[2]} local` : ''} races.${loc ? '' : ' Tick the box to add local races.'}`;
+        drawFound();
+      }
       catch (err) { fmsg.innerHTML = `<span class="err">Could not load (${esc(err.message)}). Try again in a moment.</span>`; }
     };
     ffilter.oninput = drawFound;
+    m.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { ffilter.value = b.dataset.q; drawFound(); });
     $('#addf', m).onsubmit = async e => {
       e.preventDefault();
       const raw = $('#rid', m).value.trim(); const mm = raw.match(/race\/(\d+)/); const id = mm ? mm[1] : raw.replace(/\/+$/, ''); if (!id) return;
