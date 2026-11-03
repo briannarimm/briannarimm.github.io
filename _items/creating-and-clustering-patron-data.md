@@ -5,7 +5,7 @@ visibility: home
 date: 2026-10-31
 description: "A small Python program for generating random circulation data, and then using clustering to find trends in the data."
 display_tag: "ML in Libraries - Topic Exploration"
-ai_assisted: false
+ai_assisted: true
 keywords: ["machine learning", "python", "library sciences"]
 links:
   - kind: repository
