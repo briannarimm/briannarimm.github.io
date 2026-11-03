@@ -88,7 +88,12 @@ h3 { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; letter-spa
 .filter:hover { color: var(--fg); border-color: var(--hover-line); }
 .filter[aria-pressed="true"] { color: #0a0e13; background: var(--accent); border-color: transparent; }
 .filters { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0 0 1.2rem; }
-input[type=text], input[type=number], input[type=url], textarea, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 0.7rem; padding: 0.55rem 0.8rem; width: 100%; color: var(--fg); }
+.findlist { display: grid; gap: 0.35rem; margin-top: 0.6rem; max-height: 26rem; overflow: auto; }
+.findrow { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.7rem; border: 1px solid var(--border); border-radius: 0.8rem; background: rgba(255,255,255,0.03); }
+.findrow > div { flex: 1; min-width: 0; display: grid; gap: 0.1rem; }
+.findrow b { font-weight: 600; font-size: 0.88rem; }
+.findrow .small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+input[type=text], input[type=number], input[type=url], input[type=date], textarea, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 0.7rem; padding: 0.55rem 0.8rem; width: 100%; color: var(--fg); }
 input::placeholder, textarea::placeholder { color: rgba(154,163,173,0.7); }
 textarea { resize: vertical; min-height: 4.4rem; font-size: 0.85rem; line-height: 1.5; }
 input:focus, textarea:focus, select:focus { outline: 2px solid var(--c); outline-offset: -1px; border-color: transparent; }
@@ -116,6 +121,7 @@ code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-rad
 .ph .acts a, .ph .acts button { display: grid; place-items: center; width: 1.7rem; height: 1.7rem; color: var(--muted); background: none; border: 0; border-radius: 999px; cursor: pointer; transition: color 0.2s, background 0.2s; }
 .ph .acts a:hover, .ph .acts button:hover { color: var(--fg); background: rgba(255,255,255,0.08); }
 .ph .acts button[aria-pressed="true"] { color: var(--accent); }
+.ph .acts button[hidden] { display: none; }
 .pb { flex: 1; position: relative; min-height: 0; background: var(--well); }
 .pb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
 .pb.video iframe { background: #000; }
@@ -173,7 +179,7 @@ code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-rad
 .cand .num b { color: var(--fg); font-weight: 600; }
 .bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 0.2rem; }
 .bar i { display: block; height: 100%; border-radius: 3px; transition: width 0.8s ease; }
-.win { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--fg); border: 1px solid var(--border); border-radius: 999px; padding: 0 0.4rem; margin-left: 0.3rem; vertical-align: 0.1em; }
+.win { font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #0a0e13; background: var(--fg); border-radius: 999px; padding: 0.05rem 0.4rem; vertical-align: 0.1em; }
 .status { font-size: 0.74rem; color: var(--muted); padding: 0.4rem 0.85rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem; align-items: center; }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dem); flex: none; }
 .dot.busy { background: var(--ind); } .dot.err { background: var(--gop); }
@@ -318,7 +324,9 @@ footer a { color: var(--accent); }
    ================================================================ */
 const KEY = 'electionNight.v2';
 const MAX_STREAMS = 6, MAX_BROWSERS = 4;
-const CIVIC = 'https://civicapi.org/api/v1';
+const CIVIC = 'https://civicapi.org/api/v2';
+const ELECTION_DAY = '2026-11-03';
+const STATES = { AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming' };
 const ET = 'America/New_York';
 
 const DEFAULT_BOOKMARKS = [
@@ -451,7 +459,7 @@ function resolveEmbed(code) {
   if (frames.length === 1 && !others.length && frames[0].getAttribute('src')) {
     return { src: normalizeUrl(frames[0].getAttribute('src')), allow: frames[0].getAttribute('allow') };
   }
-  return { srcdoc: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:sans-serif}body>*{max-width:100%}iframe,video{width:100%!important;height:100%!important;border:0;display:block}</style></head><body>${code}</body></html>` };
+  return { srcdoc: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:sans-serif}body>*{max-width:100%}body>div,body>div>div{height:100%}iframe,video{width:100%!important;height:100%!important;max-height:100%!important;border:0;display:block}</style></head><body>${code}</body></html>` };
 }
 function ytEmbed(id, extra = '') {
   return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}${extra}`;
@@ -565,13 +573,20 @@ function partyColor(party) {
   return 'var(--other)';
 }
 async function fetchRace(id) {
-  const path = /^\d+$/.test(String(id)) ? `/race/${id}` : `/race/${String(id).replace(/^\/+|\/+$/g, '')}`;
-  const res = await fetch(CIVIC + path, { cache: 'no-store' });
+  const res = await fetch(`${CIVIC}/race/${encodeURIComponent(id)}?light`, { cache: 'no-store' });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   const j = await res.json();
-  let d = j.data ?? j; if (Array.isArray(d)) d = d[0]; if (d && d.data) d = d.data;
-  if (!d) throw new Error('empty response');
+  let d = j.data ?? j; if (Array.isArray(d)) d = d[0];
+  if (!d || !d.candidates) throw new Error('empty response');
   return d;
+}
+/* Search by state and date. The service times out on name-only queries, so the name filter is applied here, after the fetch. */
+async function searchRaces(state, date) {
+  const q = new URLSearchParams({ country: 'US', province: state, start_date: date, end_date: date, limit: '500' });
+  const res = await fetch(`${CIVIC}/race/search?${q}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const j = await res.json();
+  return j.races || [];
 }
 function renderRace(d, r) {
   const name = r.label || d.election_name?.en_US || d.election_name || 'Race ' + r.id;
@@ -587,7 +602,10 @@ function renderRace(d, r) {
     ${cands.slice(0, 6).map(x => {
       const pct = x.percent != null ? +x.percent : (total ? 100 * (+x.votes || 0) / total : 0);
       const col = partyColor(x.party);
-      return `<div class="cand"><div class="top"><span class="nm">${esc(x.name)}${x.party ? ` <small>(${esc(String(x.party).slice(0, 14))})</small>` : ''}${x.incumbent ? ' <small title="Incumbent">inc.</small>' : ''}${x.winner ? '<span class="win">Winner</span>' : ''}</span><span class="num"><b>${pct.toFixed(1)}%</b> · ${fmt(x.votes)}</span></div><div class="bar"><i style="width:${Math.min(100, pct)}%;background:${col}"></i></div></div>`;
+      const seatsOnly = !total && x.seats != null;
+      const num = seatsOnly ? `<b>${fmt(x.seats)}</b> seats` : `<b>${pct.toFixed(1)}%</b> · ${fmt(x.votes)}`;
+      const width = seatsOnly && d.seats ? 100 * x.seats / d.seats : pct;
+      return `<div class="cand"><div class="top"><span class="nm">${x.winner ? '<span class="win">Winner</span> ' : ''}${esc(x.name)}${x.party && x.party !== x.name ? ` <small>(${esc(String(x.party).slice(0, 14))})</small>` : ''}${x.incumbent ? ' <small title="Incumbent">inc.</small>' : ''}</span><span class="num">${num}</span></div><div class="bar"><i style="width:${Math.min(100, width)}%;background:${col}"></i></div></div>`;
     }).join('')}
     ${!cands.length ? '<div class="meta">No candidate data yet.</div>' : ''}
   </div>`);
@@ -754,7 +772,7 @@ const views = {
     return g;
   },
   streams() {
-    const wrap = el(`<div><h2><span class="num">01</span>Streams</h2><p class="lead">Every configured stream. Use the speaker button on a YouTube stream to hear that one and mute the rest.</p><div class="streams-grid"></div></div>`);
+    const wrap = el(`<div><h2><span class="num">01</span>Streams</h2><p class="lead">Every configured stream. Each player has its own volume; YouTube players also get a speaker button that unmutes one and silences the rest.</p><div class="streams-grid"></div></div>`);
     const g = $('.streams-grid', wrap);
     const any = S.streams.some(s => s.code);
     S.streams.forEach((s, i) => { if (s.code) g.append(streamPanel(i)); });
@@ -790,7 +808,7 @@ function setupView() {
   return w;
 }
 function setupStreams() {
-  const w = el(`<div><p class="lead">Up to six. Paste an embed code or just a link. YouTube and Twitch links turn into players automatically and start muted; the speaker button on each stream picks which one you hear.</p><div class="grid-forms"></div></div>`);
+  const w = el(`<div><p class="lead">Up to six. Paste the embed code a network or streaming site gives you (an <code>&lt;iframe&gt;</code> or a <code>&lt;script&gt;</code> snippet) and it runs as-is in its own frame; each player keeps its own volume controls. A plain link works too, and YouTube and Twitch links turn into muted players with a speaker button for switching audio.</p><div class="grid-forms"></div></div>`);
   S.streams.forEach((s, i) => {
     const c = el(`<div class="card"><label class="f">Label</label><input type="text" value="${esc(s.label)}" data-k="label" maxlength="40">
       <label class="f">Embed code or link</label><textarea data-k="code" placeholder="https://www.youtube.com/watch?v=…  or an <iframe> embed code">${esc(s.code)}</textarea>
@@ -799,7 +817,7 @@ function setupStreams() {
     $('[data-a=clear]', c).onclick = () => { s.code = ''; save(); render(); };
     $('.grid-forms', w).append(c);
   });
-  w.append(el(`<div class="note"><b>Tips.</b> For a channel that goes live at night, paste <code>youtube.com/channel/UC…/live</code> and the player follows whatever is live. Streams only run in the section you are looking at, so the dashboard and the Streams section never double up.</div>`));
+  w.append(el(`<div class="note"><b>Tips.</b> If an embed stays black, open the stream's own page once in a browser pane or a new tab; some players refuse to run until you have visited the site, and a few only allow certain host sites. Streams only run in the section you are looking at, so the dashboard and the Streams section never double up.</div>`));
   return w;
 }
 function setupBrowsers() {
@@ -844,23 +862,66 @@ function setupResults() {
   $('#iv', w).onchange = e => { R.interval = Math.max(15, +e.target.value || 60); save(); render(); };
   const m = $('#mode', w);
   if (R.mode === 'civic') {
+    const stateOpts = Object.entries(STATES).map(([k, n]) => `<option value="${k}" ${k === (S.finderState || 'MO') ? 'selected' : ''}>${n}</option>`).join('');
     m.append(el(`<div>
-      <label class="f">Add a race: civicAPI race ID, API link, or a path like <code>US/MO/General/2026</code></label>
-      <form class="row" id="addf"><input type="text" id="rid" placeholder="e.g. 12345" style="flex:1;min-width:10rem"><input type="text" id="rlabel" placeholder="Label (optional), e.g. MO-Sen" style="flex:1;min-width:10rem"><button class="btn primary sm">Add</button></form>
-      <div id="addmsg" class="small" style="margin-top:0.4rem"></div>
-      <div class="chips">${R.races.map((r, i) => `<span class="chip">${esc(r.label || r.id)}<button data-i="${i}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="small">No races yet.</span>'}</div>
-      <div class="note">Find race IDs at <a href="https://civicapi.org" target="_blank" rel="noopener">civicapi.org</a>: open a race and the ID is in its address or API link. Add the Senate, governor, and House seats you care about and they update together. It is a small free service, so coverage and speed will not match a newsroom feed; keep a network stream up for the calls.</div>
+      <h3 style="margin-top:0.4rem">Tracked races</h3>
+      <div class="chips">${R.races.map((r, i) => `<span class="chip">${esc(r.label || r.id)}<button data-i="${i}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="small">No races yet. Find some below.</span>'}</div>
+      <h3 style="margin-top:1.4rem">Find races</h3>
+      <form class="row" id="findf">
+        <select id="fstate" aria-label="State" style="width:auto;min-width:11rem">${stateOpts}</select>
+        <input type="date" id="fdate" value="${esc(S.finderDate || ELECTION_DAY)}" aria-label="Election date" style="width:auto">
+        <button class="btn primary sm">Load ballot</button>
+      </form>
+      <div class="row" style="margin-top:0.6rem"><input type="text" id="ffilter" placeholder="Filter by name or type, e.g. Senate, Governor, District 5, Amendment" aria-label="Filter races" style="flex:1;min-width:12rem"></div>
+      <div id="findmsg" class="small" style="margin-top:0.4rem"></div>
+      <div id="findlist" class="findlist"></div>
+      <details style="margin-top:0.8rem"><summary class="small" style="cursor:pointer">Add by race ID instead</summary>
+        <form class="row" id="addf" style="margin-top:0.5rem"><input type="text" id="rid" placeholder="civicAPI race ID or API link" style="flex:1;min-width:10rem"><input type="text" id="rlabel" placeholder="Label (optional)" style="flex:1;min-width:8rem"><button class="btn sm">Add</button></form>
+        <div id="addmsg" class="small" style="margin-top:0.4rem"></div></details>
+      <div class="note">Results come from <a href="https://civicapi.org" target="_blank" rel="noopener">civicAPI</a>, a small free service, so coverage and speed will not match a newsroom feed; keep a network stream up for the calls. Statewide party totals (for example "Missouri State House") show seats rather than votes until counts come in.</div>
     </div>`));
+    const list = $('#findlist', m), fmsg = $('#findmsg', m), ffilter = $('#ffilter', m);
+    let found = [];
+    const added = () => new Set(R.races.map(r => String(r.id)));
+    function drawFound() {
+      const needle = ffilter.value.trim().toLowerCase();
+      const have = added();
+      const rows = found.filter(r => !needle || `${r.election_name} ${r.type} ${r.district || ''}`.toLowerCase().includes(needle));
+      list.innerHTML = '';
+      if (!found.length) return;
+      if (!rows.length) { list.append(el('<p class="small" style="padding:0.5rem 0">Nothing matches that filter.</p>')); return; }
+      rows.slice(0, 150).forEach(r => {
+        const on = have.has(String(r.id));
+        const cands = (r.candidates || []).slice(0, 4).map(c => esc(c.name) + (c.party ? ` <span style="color:${partyColor(c.party)}">(${esc(String(c.party).slice(0, 3))})</span>` : '')).join(', ');
+        const row = el(`<div class="findrow"><div><b>${esc(r.election_name)}</b><span class="small">${esc(r.type || '')}${r.district ? ' · ' + esc(r.district) : ''}${cands ? ' · ' + cands : ''}</span></div><button class="btn sm ${on ? '' : 'primary'}" ${on ? 'disabled' : ''}>${on ? 'Added' : 'Add'}</button></div>`);
+        $('button', row).onclick = () => { R.races.push({ id: String(r.id), label: r.election_name }); save(); drawFound(); refreshChips(); };
+        list.append(row);
+      });
+      if (rows.length > 150) list.append(el(`<p class="small">Showing 150 of ${rows.length}. Narrow the filter to see the rest.</p>`));
+    }
+    function refreshChips() {
+      const c = $('.chips', m); c.innerHTML = R.races.map((r, i) => `<span class="chip">${esc(r.label || r.id)}<button data-i="${i}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="small">No races yet. Find some below.</span>';
+      c.querySelectorAll('[data-i]').forEach(b => b.onclick = () => { R.races.splice(+b.dataset.i, 1); save(); refreshChips(); drawFound(); $('#pv', w).innerHTML = ''; const pv = resultsPanel(); pv.style.flex = '1'; $('#pv', w).append(pv); });
+    }
+    refreshChips();
+    $('#findf', m).onsubmit = async e => {
+      e.preventDefault();
+      const st = $('#fstate', m).value, dt = $('#fdate', m).value || ELECTION_DAY;
+      S.finderState = st; S.finderDate = dt; save();
+      fmsg.textContent = 'Loading…'; list.innerHTML = ''; found = [];
+      try { found = await searchRaces(st, dt); found.sort((a, b) => String(a.type).localeCompare(String(b.type)) || String(a.election_name).localeCompare(String(b.election_name))); fmsg.textContent = `${found.length} races on the ${STATES[st]} ballot for ${dt}.`; drawFound(); }
+      catch (err) { fmsg.innerHTML = `<span class="err">Could not load (${esc(err.message)}). Try again in a moment.</span>`; }
+    };
+    ffilter.oninput = drawFound;
     $('#addf', m).onsubmit = async e => {
       e.preventDefault();
-      const id = $('#rid', m).value.trim().replace(/^https?:\/\/[^/]+\/api\/v1\/race\//, '').replace(/\/+$/, ''); if (!id) return;
+      const raw = $('#rid', m).value.trim(); const mm = raw.match(/race\/(\d+)/); const id = mm ? mm[1] : raw.replace(/\/+$/, ''); if (!id) return;
       const msg = $('#addmsg', m); msg.textContent = 'Checking…';
       let label = $('#rlabel', m).value.trim();
-      try { const d = await fetchRace(id); label = label || d.election_name?.en_US || ''; msg.textContent = 'Added ' + (label || id) + '.'; }
+      try { const d = await fetchRace(id); label = label || d.election_name?.en_US || d.election_name || ''; msg.textContent = 'Added ' + (label || id) + '.'; }
       catch (err) { msg.innerHTML = `<span class="err">Could not fetch that race yet (${esc(err.message)}). Added anyway; it will retry on each refresh.</span>`; }
       R.races.push({ id, label }); save(); setTimeout(render, 700);
     };
-    m.querySelectorAll('.chip [data-i]').forEach(b => b.onclick = () => { R.races.splice(+b.dataset.i, 1); save(); render(); });
   } else if (R.mode === 'embed') {
     m.append(el(`<div><label class="f">Results embed code</label><textarea id="emb" style="min-height:9rem" placeholder="Paste the widget code an outlet gives you">${esc(R.embed)}</textarea>
       <div class="row" style="margin-top:0.6rem"><button class="btn primary sm" id="saveEmb">Save</button></div>
