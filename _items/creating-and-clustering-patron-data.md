@@ -24,14 +24,9 @@ dc:
 
 ## Patron clustering
 
-A small experiment for my ML for Libraries topic exploration (ISLT 7301). The question: can you use clustering to find patterns in circulation data?
 
-I cannot use real patron records for a class project, so the project simulates them. The simulation is built so that it cannot cheat.
+A small experiment for my ML for Libraries topic exploration (ISLT 7301). Inspired by discussion of k-means clustering analysis in Lund (2026, pp. 88–89).
 
-### How it works
+I simulate patron records. In the future, I want to incorporate data from public libraries, especially [the data available from Seattle Public Libraries](https://data.seattle.gov/Community-and-Culture/Checkouts-by-Title/tmmm-ytt6/about_data).
 
-1. **Simulate patrons.** Each patron gets an age, an activity level, a household card flag, and a mix of interests. The generator has no patron "types" in it. A kids-and-DVDs patron can only appear because age tilts the interest mix toward kids' books and shows. The `coupling` setting controls how strong that tilt is. At 0, interests have nothing to do with age.
-2. **Simulate a year of checkouts** from those traits. The result looks like what an ILS would export: patron id, date, format, subject. Nothing else.
-3. **Build one row per patron** from the checkouts (share of DVDs, share of kids' subjects, total checkouts, and so on) and cluster the rows with k-means, a Gaussian mixture, or hierarchical clustering.
-
-Only after clustering does the code look back at the hidden traits, to ask whether the clusters mean anything. The traits never go into the clustering.
+AI Disclosure: While I tried to hand code as much of this program as I could based on some old anthropology notes (see [this repo](https://github.com/briannarimm/ml-applications-in-anthropology), if you're interested in that experiment!), I used Claude to help with debugging the clustering code, helping to create the patron data simulation code, and to refactor all of the code (mostly as a sanity check).

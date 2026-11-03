@@ -1,10 +1,11 @@
 ---
 title: "ML Applications in Anthropology"
 category: project
+visibility: home
 date: 2021-01-01
 description: "Two Python projects that map and cluster cross-cultural data from the Standard Cross-Cultural Sample: the main domesticated animal of 118 societies, and a K-Modes clustering of 141 societies into three groups."
 display_tag: "Data · Maps"
-ai_assisted: false
+ai_assisted: true
 keywords: ["Anthropology", "Machine learning", "Python", "Clustering", "Maps"]
 thumbnail: /assets/items/ml-applications-in-anthropology/thumbnail.jpg
 thumbnail_alt: "Cows grazing on a green mountain pasture."
@@ -29,30 +30,23 @@ dc:
   subject: ["Machine learning", "Ethnology -- Statistical methods", "Cross-cultural studies"]
   publisher: ["Brianna R. Imm"]
   date: ["2021"]
-  source: ["D-PLACE (Database of Places, Language, Culture and Environment)", "Standard Cross-Cultural Sample (SCCS)"]
   type: ["InteractiveResource", "Dataset", "Software"]
   format: ["text/html"]
   identifier: ["https://www.briannaimm.com/ml-applications-in-anthropology/"]
+  source: ["D-PLACE (Database of Places, Language, Culture and Environment)", "Standard Cross-Cultural Sample (SCCS)"]
   language: ["en"]
   relation: ["https://github.com/briannarimm/ml-applications-in-anthropology", "https://library.briannaimm.com/omeka/items/show/1"]
   coverage: ["Anthropology", "Machine learning"]
   rights: ["MIT License. Photos from Pixabay; see CREDITS.md in the repository."]
 ---
 
-This item contains two small Python projects. Both apply machine learning and data tools to cross-cultural data from [D-PLACE](https://d-place.org/), and each produces an interactive map.
+**Online showcase:** <https://www.briannaimm.com/ml-applications-in-anthropology/>
 
-## The data
+This repository has two small Python projects. Both projects look for patterns in anthropology data. Each project makes an interactive map that you open in a web browser.
 
-The data describes 141 societies from the Standard Cross-Cultural Sample (SCCS). For each society it records the main domesticated animal, the role of the gods, the animals that people hunt, the main religion, and the year the data describes. Glottolog supplied coordinates for 118 of the societies.
+* **Domesticated animals map.** The map shows the main farm animal of 118 societies.
+* **Clustering demo.** A machine learning method puts 141 societies into 3 groups. The groups are shown on a map and in charts.
 
-## Project 1: Domesticated animals map
+You do not need to know machine learning or anthropology to use this repository.
 
-A script joins the data with pandas and draws a world map with Folium. Each society has an animal icon. Hover over an icon to see the society's name, or click it to see the focal year, the role of the gods, the animals hunted, and the religion.
-
-## Project 2: Clustering demo
-
-The second project groups societies that have similar animals, gods, and religion. It uses the K-Modes algorithm, which works like K-Means but on categories instead of numbers. The script plots an elbow curve for one to five groups, makes three groups, and shows them on a map and in charts.
-
-## Credits
-
-The cover photo of grazing cows is by Pixel-Sepp on Pixabay. The repository's `CREDITS.md` lists all sources, icon authors, and software licenses.
+**Disclosures:** I wrote all of this code back in 2021. I used Claude to help fix the little things that broke since 2021 and to migrate the experiment to a page on my website. Also, while the folder [clustering-demo/published](clustering-demo/published) keeps the charts and the map from the 2021 analysis, that analysis used a different random start, so the cluster sizes are a little different. The main pattern, however, remains across old and new.
