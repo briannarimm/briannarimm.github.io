@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Election Night · Brianna Imm</title>
+<meta name="description" content="An all-in-one election-night dashboard: video streams, browser panes, live results, poll closings, balance of power, and a call log.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0a0e13">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #0a0e13; --fg: #f3f1ec; --muted: #9aa3ad; --text-soft: #d9d6cf;
+  --card: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.09); --hover-line: rgba(255,255,255,0.3);
+  --card-fill: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+  --shadow-1: 0 1px 0 rgba(255,255,255,0.06) inset, 0 8px 24px -12px rgba(0,0,0,0.6);
+  --btn-depth: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.25);
+  --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Election palette: the site's dusty pastels, tuned to blue, red, and purple. */
+  --dem: #8fb4e3; --gop: #e39a97; --ind: #b3a3e6; --other: #9aa3ad;
+  --accent: var(--dem); --accent-2: var(--gop); --c: var(--ind);
+  --grad: linear-gradient(120deg, #8fb4e3, #b3a3e6 55%, #e39a97);
+  --shadow-2: 0 20px 60px -24px rgba(179,163,230,0.5);
+  --well: #10151c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 0.95rem/1.55 var(--sans); overflow-x: clip; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; border-radius: 6px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- background ---------- */
+.aurora { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
+.blob { position: absolute; width: 55vmax; height: 55vmax; border-radius: 50%; filter: blur(90px); opacity: 0.34; animation: drift 24s ease-in-out infinite alternate; }
+.b1 { background: #3f5f94; top: -20vmax; left: -15vmax; }
+.b2 { background: #8f4a4e; bottom: -25vmax; right: -15vmax; animation-duration: 30s; animation-delay: -8s; opacity: 0.3; }
+.b3 { background: #5a4a9e; top: 30vh; left: 40vw; width: 38vmax; height: 38vmax; animation-duration: 36s; animation-delay: -15s; opacity: 0.22; }
+@keyframes drift { to { transform: translate(12vmax, 8vmax) scale(1.2) rotate(30deg); } }
+.spotlight { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 30%), rgba(255,255,255,0.06), transparent 60%); }
+
+/* ---------- header ---------- */
+.site-header { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 1rem 1.4rem; flex-wrap: wrap; padding: 0.75rem max(1rem, 2vw); }
+.site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(var(--bg) 40%, transparent); backdrop-filter: blur(8px); mask-image: linear-gradient(#000 60%, transparent); }
+.brand { display: flex; align-items: center; gap: 0.9rem; padding: 0.28rem; }
+.brand img { display: block; height: 1.35rem; width: auto; }
+.brand .title { font-family: var(--serif); font-weight: 400; font-size: 1.25rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
+.live { width: 8px; height: 8px; border-radius: 50%; background: var(--gop); box-shadow: 0 0 0 0 rgba(227,154,151,0.6); animation: pulse 2s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(227,154,151,0); } 100% { box-shadow: 0 0 0 0 rgba(227,154,151,0); } }
+nav.primary { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+nav.primary button { background: none; border: 1px solid transparent; padding: 0.4rem 0.9rem; border-radius: 999px; color: var(--muted); cursor: pointer; font-weight: 500; font-size: 0.9rem; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+nav.primary button:hover { color: var(--fg); }
+nav.primary button[aria-current="page"] { background: var(--card); border-color: var(--border); color: var(--fg); }
+.hdr-right { margin-left: auto; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.clock { display: flex; gap: 0.9rem; color: var(--muted); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.clock b { color: var(--fg); font-weight: 500; }
+.clock small { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.3rem; }
+.iconbtn { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; font-size: 0.82rem; font-weight: 500; color: var(--muted); padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); transition: color 0.2s, border-color 0.2s; }
+.iconbtn:hover { color: var(--fg); border-color: var(--hover-line); }
+.iconbtn[aria-pressed="true"] { color: var(--fg); border-color: var(--accent); }
+.ico { width: 1em; height: 1em; flex: none; vertical-align: -0.12em; }
+
+main { padding: 1rem max(1rem, 2vw) 3rem; }
+.wrap { width: min(100%, 90rem); margin-inline: auto; }
+h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.6rem, 3.5vw, 2.1rem); letter-spacing: -0.02em; margin: 0.4rem 0 0.3rem; }
+h2 .num { font-family: var(--sans); font-size: 0.78rem; color: var(--accent); font-weight: 600; letter-spacing: 0.1em; vertical-align: super; margin-right: 0.6rem; }
+h3 { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; letter-spacing: -0.02em; margin: 0 0 0.6rem; }
+.lead { color: var(--muted); margin: 0 0 1.4rem; max-width: 52rem; }
+.lead a, .note a { color: var(--accent); }
+.tag { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-2); font-weight: 600; }
+
+/* ---------- controls ---------- */
+.btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.55rem 1.1rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; white-space: nowrap; }
+.btn:hover { transform: translateY(-2px); border-color: var(--hover-line); }
+.btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+.btn.primary { background: var(--grad); border-color: transparent; color: #0a0e13; box-shadow: var(--btn-depth); }
+.btn.primary:hover { box-shadow: var(--btn-depth), var(--shadow-2); }
+.btn.sm { padding: 0.3rem 0.75rem; font-size: 0.8rem; }
+.btn.danger:hover { border-color: var(--gop); }
+.filter { font-size: 0.88rem; font-weight: 500; cursor: pointer; padding: 0.4rem 0.95rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); transition: color 0.2s, border-color 0.2s, background 0.2s; }
+.filter:hover { color: var(--fg); border-color: var(--hover-line); }
+.filter[aria-pressed="true"] { color: #0a0e13; background: var(--accent); border-color: transparent; }
+.filters { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0 0 1.2rem; }
+input[type=text], input[type=number], input[type=url], textarea, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 0.7rem; padding: 0.55rem 0.8rem; width: 100%; color: var(--fg); }
+input::placeholder, textarea::placeholder { color: rgba(154,163,173,0.7); }
+textarea { resize: vertical; min-height: 4.4rem; font-size: 0.85rem; line-height: 1.5; }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--c); outline-offset: -1px; border-color: transparent; }
+label.f { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0.9rem 0 0.35rem; }
+label.f:first-child { margin-top: 0; }
+.row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+.row.nowrap { flex-wrap: nowrap; }
+.spacer { flex: 1; }
+.card { background: var(--card-fill); border: 1px solid var(--border); border-radius: 1.2rem; box-shadow: var(--shadow-1); padding: 1.3rem; backdrop-filter: blur(10px); }
+.grid-forms { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1rem; }
+.note { font-size: 0.84rem; color: var(--muted); border: 1px dashed var(--border); border-radius: 0.9rem; padding: 0.7rem 0.95rem; margin-top: 1rem; }
+.note b { color: var(--text-soft); font-weight: 600; }
+code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-radius: 0.35rem; background: rgba(255,255,255,0.07); }
+.err { color: var(--gop); }
+.ok { color: var(--dem); }
+.small { font-size: 0.8rem; color: var(--muted); }
+
+/* ---------- panels ---------- */
+.panel { display: flex; flex-direction: column; min-height: 0; background: var(--card-fill); border: 1px solid var(--border); border-radius: 1rem; box-shadow: var(--shadow-1); overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
+.panel:hover { border-color: rgba(255,255,255,0.16); }
+.ph { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.6rem 0.45rem 0.85rem; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.03); font-weight: 600; font-size: 0.85rem; cursor: default; }
+.ph .ico.kind { color: var(--accent); }
+.ph .t { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ph .acts { display: flex; gap: 0.1rem; }
+.ph .acts a, .ph .acts button { display: grid; place-items: center; width: 1.7rem; height: 1.7rem; color: var(--muted); background: none; border: 0; border-radius: 999px; cursor: pointer; transition: color 0.2s, background 0.2s; }
+.ph .acts a:hover, .ph .acts button:hover { color: var(--fg); background: rgba(255,255,255,0.08); }
+.ph .acts button[aria-pressed="true"] { color: var(--accent); }
+.pb { flex: 1; position: relative; min-height: 0; background: var(--well); }
+.pb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.pb.video iframe { background: #000; }
+.pb.scroll { overflow: auto; background: transparent; }
+.empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 0.86rem; text-align: center; padding: 1.4rem; line-height: 1.5; }
+.empty .btn { margin-top: 0.4rem; }
+.urlbar { display: flex; gap: 0.4rem; padding: 0.4rem; border-bottom: 1px solid var(--border); }
+.urlbar input { padding: 0.35rem 0.7rem; font-size: 0.82rem; border-radius: 999px; }
+.urlbar .btn { padding: 0.3rem 0.8rem; }
+.bookmarks { display: flex; gap: 0.35rem; padding: 0.35rem 0.5rem; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); }
+.bookmarks::-webkit-scrollbar { display: none; }
+.bookmarks button { flex: none; font-size: 0.74rem; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; }
+.bookmarks button:hover { color: var(--fg); border-color: var(--accent); }
+
+/* Focus mode: one panel fills the viewport. */
+.panel.focused { position: fixed; inset: 0; z-index: 40; border-radius: 0; }
+.panel.focused .ph { padding-top: 0.6rem; padding-bottom: 0.6rem; }
+
+/* ---------- views ---------- */
+.streams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr)); gap: 1rem; }
+.streams-grid .panel { aspect-ratio: 16 / 10; }
+.browsers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: 1rem; }
+.browsers-grid .panel { height: calc(100vh - 11rem); min-height: 28rem; }
+.dash { display: grid; gap: 0.75rem; grid-auto-flow: dense; grid-auto-rows: minmax(var(--rowh, 240px), auto); }
+.dash .panel { min-height: var(--rowh, 240px); }
+.tools-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); align-items: start; }
+.tools-grid .panel { min-height: 24rem; max-height: calc(100vh - 11rem); }
+@media (max-width: 48rem) {
+  .dash { grid-template-columns: 1fr !important; }
+  .dash .panel { grid-column: auto !important; grid-row: span 1 !important; min-height: 18rem; }
+  .dash .panel.tall { min-height: 26rem; }
+  .browsers-grid .panel { height: 72vh; }
+  main { padding-inline: 0.75rem; }
+  .site-header { padding-inline: 0.75rem; }
+  .clock { display: none; }
+}
+
+/* ---------- results ---------- */
+.races { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 0.6rem; padding: 0.6rem; }
+.race { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 0.85rem; padding: 0.75rem 0.85rem; }
+.race.called { border-color: rgba(255,255,255,0.18); }
+.race h4 { font-family: var(--serif); font-weight: 600; font-size: 0.98rem; letter-spacing: -0.01em; margin: 0; display: flex; gap: 0.4rem; align-items: flex-start; line-height: 1.25; }
+.race h4 span { flex: 1; }
+.race h4 .star { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0; display: grid; }
+.race h4 .star[aria-pressed="true"] { color: var(--accent-2); }
+.race .meta { font-size: 0.72rem; color: var(--muted); margin: 0.2rem 0 0.5rem; display: flex; gap: 0.7rem; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
+.race .meta b { color: var(--text-soft); font-weight: 600; }
+.rptbar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: -0.25rem 0 0.6rem; overflow: hidden; }
+.rptbar i { display: block; height: 100%; background: var(--ind); }
+.cand { margin: 0.35rem 0; }
+.cand .top { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.8rem; }
+.cand .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cand .nm small { color: var(--muted); font-weight: 400; }
+.cand .num { font-variant-numeric: tabular-nums; font-size: 0.76rem; color: var(--muted); white-space: nowrap; }
+.cand .num b { color: var(--fg); font-weight: 600; }
+.bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 0.2rem; }
+.bar i { display: block; height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+.win { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--fg); border: 1px solid var(--border); border-radius: 999px; padding: 0 0.4rem; margin-left: 0.3rem; vertical-align: 0.1em; }
+.status { font-size: 0.74rem; color: var(--muted); padding: 0.4rem 0.85rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem; align-items: center; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dem); flex: none; }
+.dot.busy { background: var(--ind); } .dot.err { background: var(--gop); }
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+.chip { display: inline-flex; gap: 0.4rem; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 0.2rem 0.3rem 0.2rem 0.75rem; font-size: 0.82rem; }
+.chip button { background: none; border: 0; color: var(--muted); cursor: pointer; display: grid; padding: 0.15rem; border-radius: 999px; }
+.chip button:hover { color: var(--gop); }
+
+/* ---------- poll closings ---------- */
+.closings { list-style: none; margin: 0; padding: 0.4rem 0; }
+.closings li { display: grid; grid-template-columns: 4.6rem 1fr auto; gap: 0.6rem; align-items: start; padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+.closings li:last-child { border-bottom: 0; }
+.closings .tm { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--fg); }
+.closings .st { color: var(--text-soft); line-height: 1.45; }
+.closings .st small { color: var(--muted); }
+.closings .cd { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 0.76rem; }
+.closings li.past { opacity: 0.45; }
+.closings li.next { background: rgba(143,180,227,0.08); }
+.closings li.next .cd { color: var(--accent); font-weight: 600; }
+
+/* ---------- balance of power ---------- */
+.bop { padding: 0.6rem 0.85rem; display: grid; gap: 0.9rem; }
+.chamber { border: 1px solid var(--border); border-radius: 0.85rem; padding: 0.7rem 0.8rem; background: rgba(255,255,255,0.03); }
+.chamber h4 { margin: 0 0 0.45rem; font-family: var(--serif); font-weight: 600; font-size: 0.98rem; display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
+.chamber h4 small { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.bopbar { position: relative; height: 14px; border-radius: 7px; background: rgba(255,255,255,0.08); overflow: hidden; display: flex; }
+.bopbar i { display: block; height: 100%; transition: width 0.6s ease; }
+.bopbar .d { background: var(--dem); } .bopbar .r { background: var(--gop); margin-left: auto; } .bopbar .i { background: var(--ind); }
+.bopbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 2px; background: var(--fg); opacity: 0.7; }
+.counts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-top: 0.55rem; }
+.counts > div { display: grid; gap: 0.15rem; text-align: center; }
+.counts label { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+.counts .dl { color: var(--dem); } .counts .rl { color: var(--gop); } .counts .il { color: var(--ind); }
+.counts .n { display: flex; align-items: center; justify-content: center; gap: 0.2rem; }
+.counts .n b { font-family: var(--serif); font-weight: 600; font-size: 1.35rem; min-width: 2.2rem; font-variant-numeric: tabular-nums; }
+.counts .n button { width: 1.5rem; height: 1.5rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.counts .n button:hover { color: var(--fg); border-color: var(--hover-line); }
+.majority { font-size: 0.72rem; color: var(--muted); margin-top: 0.45rem; display: flex; justify-content: space-between; }
+.majority b { font-weight: 600; }
+.majority .has { color: var(--fg); }
+
+/* ---------- call log ---------- */
+.logform { display: flex; gap: 0.4rem; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+.logform input { border-radius: 999px; padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+.log { list-style: none; margin: 0; padding: 0.3rem 0; }
+.log li { display: grid; grid-template-columns: 4.6rem 1fr auto; gap: 0.5rem; align-items: start; padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--border); font-size: 0.84rem; }
+.log li:last-child { border-bottom: 0; }
+.log time { color: var(--accent-2); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
+.log .txt { color: var(--text-soft); overflow-wrap: anywhere; }
+.log .txt.auto { color: var(--muted); font-style: italic; }
+.log button { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0.1rem; display: grid; border-radius: 999px; }
+.log button:hover { color: var(--gop); }
+
+/* ---------- layout editor ---------- */
+.lay-list { display: flex; flex-direction: column; gap: 0.4rem; }
+.lay-item { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 0.6rem; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 0.8rem; padding: 0.45rem 0.65rem; font-size: 0.88rem; }
+.lay-item.off { opacity: 0.45; }
+.lay-item.dragging { opacity: 0.3; }
+.lay-item.over { border-color: var(--accent); }
+.lay-item .handle { cursor: grab; color: var(--muted); display: grid; }
+.lay-item select { width: auto; padding: 0.25rem 0.4rem; font-size: 0.8rem; border-radius: 0.5rem; }
+.lay-item .ico.kind { color: var(--accent); margin-right: 0.3rem; }
+.preview { display: grid; gap: 0.3rem; grid-auto-flow: dense; grid-auto-rows: 2.1rem; margin-top: 0.8rem; }
+.preview div { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 0.4rem; font-size: 0.68rem; color: var(--muted); display: grid; place-items: center; overflow: hidden; white-space: nowrap; padding: 0 0.3rem; }
+.two { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.2rem; align-items: start; }
+@media (max-width: 56rem) { .two { grid-template-columns: 1fr; } }
+input[type=checkbox] { width: 1rem; height: 1rem; accent-color: #8fb4e3; }
+
+/* ---------- toasts ---------- */
+.toasts { position: fixed; right: 1rem; bottom: 1rem; z-index: 60; display: grid; gap: 0.5rem; max-width: min(24rem, calc(100% - 2rem)); }
+.toast { background: rgba(10,14,19,0.9); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0.8rem; padding: 0.7rem 0.9rem; font-size: 0.86rem; box-shadow: var(--shadow-1); backdrop-filter: blur(8px); animation: rise 0.4s ease; }
+.toast b { display: block; font-family: var(--serif); font-weight: 600; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+.kbd { font-size: 0.72rem; color: var(--muted); border: 1px solid var(--border); border-radius: 0.35rem; padding: 0 0.35rem; }
+
+footer { width: min(100%, 90rem); margin: 0 auto; padding: 1.5rem max(1rem, 2vw) 2.5rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); display: flex; gap: 1rem 2rem; flex-wrap: wrap; justify-content: space-between; }
+footer a { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-tv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 20h16M7 16V9M12 16V5M17 16v-6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 20h14M4 8h16M6 8l-3 7a3 3 0 0 0 6 0L6 8zM18 8l-3 7a3 3 0 0 0 6 0l-3-7z"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16v4zM13 7l4 4"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+    <symbol id="i-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-vol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h4l5 4V6L8 10H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h4l5 4V6L8 10H4zM16 9l5 6M21 9l-5 6"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1.1 6.3L12 17.5l-5.6 2.9 1.1-6.3L3 9.7l6.2-.9z"/></symbol>
+    <symbol id="i-star-f" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1.1 6.3L12 17.5l-5.6 2.9 1.1-6.3L3 9.7l6.2-.9z"/></symbol>
+    <symbol id="i-grip" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2zM10 20a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12h12"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14l6-6 6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10l6 6 6-6"/></symbol>
+  </defs>
+</svg>
+<div class="aurora" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<div class="spotlight" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Brianna Imm, home"><img src="/images/bri-wordmark.svg" alt="" width="255" height="158"><span class="title"><span class="live" aria-hidden="true"></span>Election Night</span></a>
+  <nav class="primary" id="nav" aria-label="Dashboard sections">
+    <button data-v="dashboard">Dashboard</button>
+    <button data-v="streams">Streams</button>
+    <button data-v="browsers">Browsers</button>
+    <button data-v="results">Results</button>
+    <button data-v="tools">Tracker</button>
+    <button data-v="setup">Setup</button>
+  </nav>
+  <div class="hdr-right">
+    <div class="clock" id="clock" aria-live="off"></div>
+    <button class="iconbtn" id="alerts" aria-pressed="false" title="Play a chime and show a notice when a race gets called"><svg class="ico"><use href="#i-bell"/></svg><span>Alerts</span></button>
+    <button class="iconbtn" id="wake" aria-pressed="false" title="Keep the screen awake while this page is open" hidden><svg class="ico"><use href="#i-sun"/></svg><span>Stay awake</span></button>
+  </div>
+</header>
+<main><div class="wrap" id="main"></div></main>
+<footer>
+  <span>Settings live in this browser. Use Setup → Backup to copy them to another device.</span>
+  <span>Keyboard: <span class="kbd">1</span>–<span class="kbd">6</span> switch sections · <span class="kbd">Esc</span> leaves focus mode</span>
+</footer>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+/* ================================================================
+   Election Night dashboard. One file, no build step, no server.
+   State is kept in localStorage under KEY.
+   ================================================================ */
+const KEY = 'electionNight.v2';
+const MAX_STREAMS = 6, MAX_BROWSERS = 4;
+const CIVIC = 'https://civicapi.org/api/v1';
+const ET = 'America/New_York';
+
+const DEFAULT_BOOKMARKS = [
+  { label: 'DDHQ', url: 'https://decisiondeskhq.com' },
+  { label: 'AP', url: 'https://apnews.com' },
+  { label: 'Ballotpedia', url: 'https://ballotpedia.org/Elections' },
+  { label: 'Cook', url: 'https://www.cookpolitical.com' },
+  { label: 'MO SOS', url: 'https://www.sos.mo.gov/elections' },
+  { label: 'KS SOS', url: 'https://sos.ks.gov/elections' },
+  { label: 'Wikipedia 2026', url: 'https://en.wikipedia.org/wiki/2026_United_States_elections' }
+];
+
+/* Standard poll-closing times for a November general election, in Eastern time.
+   Split states list the portion that closes at each time. Verify with the state before relying on one. */
+const CLOSINGS = [
+  ['18:00', 'Indiana (eastern)', 'Kentucky (eastern)'],
+  ['19:00', 'Georgia', 'South Carolina', 'Vermont', 'Virginia', 'Florida (most)', 'Indiana (rest)', 'Kentucky (rest)'],
+  ['19:30', 'North Carolina', 'Ohio', 'West Virginia'],
+  ['20:00', 'Alabama', 'Connecticut', 'Delaware', 'D.C.', 'Florida (panhandle)', 'Illinois', 'Kansas (most)', 'Maine', 'Maryland', 'Massachusetts', 'Michigan (most)', 'Mississippi', 'Missouri', 'New Hampshire', 'New Jersey', 'Oklahoma', 'Pennsylvania', 'Rhode Island', 'Tennessee', 'Texas (most)'],
+  ['20:30', 'Arkansas'],
+  ['21:00', 'Arizona', 'Colorado', 'Kansas (west)', 'Louisiana', 'Michigan (west)', 'Minnesota', 'Nebraska (most)', 'New Mexico', 'New York', 'North Dakota (east)', 'South Dakota (east)', 'Texas (west)', 'Wisconsin', 'Wyoming'],
+  ['22:00', 'Idaho (south)', 'Iowa', 'Montana', 'Nebraska (west)', 'Nevada', 'North Dakota (west)', 'Oregon (most)', 'South Dakota (west)', 'Utah'],
+  ['23:00', 'California', 'Idaho (north)', 'Oregon (rest)', 'Washington'],
+  ['24:00', 'Hawaii'],
+  ['25:00', 'Alaska (most)']
+];
+
+const defaults = () => ({
+  streams: Array.from({ length: MAX_STREAMS }, (_, i) => ({ label: 'Stream ' + (i + 1), code: '' })),
+  browsers: [{ label: 'Browser 1', url: '' }, { label: 'Browser 2', url: '' }],
+  bookmarks: DEFAULT_BOOKMARKS.slice(),
+  results: { mode: 'civic', races: [], interval: 60, embed: '', url: '' },
+  bop: {
+    senate: { d: 0, r: 0, i: 0 }, house: { d: 0, r: 0, i: 0 }, gov: { d: 0, r: 0, i: 0 }
+  },
+  log: [],
+  layout: { cols: 3, rowh: 240, panels: [] },
+  view: 'setup'
+});
+let S;
+try { S = Object.assign(defaults(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { S = defaults(); }
+S.bop = Object.assign(defaults().bop, S.bop || {});
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+/* ---------- panel registry ---------- */
+const EXTRA_PANELS = ['results', 'closings', 'balance', 'log'];
+function allPanelKeys() {
+  const k = [];
+  S.streams.forEach((s, i) => k.push('stream-' + i));
+  S.browsers.forEach((b, i) => k.push('browser-' + i));
+  return k.concat(EXTRA_PANELS);
+}
+function syncLayout() {
+  const keys = allPanelKeys(), have = new Map(S.layout.panels.map(p => [p.key, p]));
+  const out = S.layout.panels.filter(p => keys.includes(p.key));
+  keys.forEach(k => {
+    if (have.has(k)) return;
+    const stream = k.startsWith('stream-'), browser = k.startsWith('browser-');
+    const on = k === 'results' || k === 'closings' || browser || (stream && !!S.streams[+k.split('-')[1]].code);
+    out.push({ key: k, on, w: 1, h: (k === 'results' || k === 'closings' || browser) ? 2 : 1 });
+  });
+  S.layout.panels = out;
+}
+const PANEL_META = {
+  results: ['Results feed', 'i-chart'], closings: ['Poll closings', 'i-clock'],
+  balance: ['Balance of power', 'i-scale'], log: ['Call log', 'i-pen']
+};
+function panelName(k) {
+  if (PANEL_META[k]) return PANEL_META[k][0];
+  const [t, i] = k.split('-');
+  return t === 'stream' ? (S.streams[i].label || 'Stream ' + (+i + 1)) : (S.browsers[i].label || 'Browser ' + (+i + 1));
+}
+function panelIcon(k) { return PANEL_META[k] ? PANEL_META[k][1] : k.startsWith('stream') ? 'i-tv' : 'i-globe'; }
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+const fmt = n => (n == null || n === '') ? '' : Number(n).toLocaleString();
+const icon = (id, cls = 'ico') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+const timeStr = (d, tz) => d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', timeZone: tz });
+let timers = [];
+function clearTimers() { timers.forEach(clearInterval); timers = []; }
+function toast(title, body) {
+  const t = el(`<div class="toast"><b>${esc(title)}</b>${esc(body || '')}</div>`);
+  $('#toasts').append(t); setTimeout(() => t.remove(), 9000);
+}
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Alerts: a chime on race calls, only after the user turns it on (browsers require a click first). */
+let alertsOn = false, audioCtx = null;
+$('#alerts').onclick = () => {
+  alertsOn = !alertsOn; $('#alerts').setAttribute('aria-pressed', alertsOn);
+  if (alertsOn) { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); chime(); } catch (e) {} toast('Alerts on', 'You will get a chime and a notice when a tracked race gets a winner.'); }
+};
+function chime() {
+  if (!alertsOn || !audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    [523.25, 659.25, 783.99].forEach((f, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.0001, now + i * 0.12); g.gain.exponentialRampToValueAtTime(0.18, now + i * 0.12 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.12 + 0.5);
+      o.start(now + i * 0.12); o.stop(now + i * 0.12 + 0.55);
+    });
+  } catch (e) {}
+}
+
+/* Wake lock: keep a wall display from sleeping. */
+let wakeLock = null;
+if ('wakeLock' in navigator) {
+  const wb = $('#wake'); wb.hidden = false;
+  wb.onclick = async () => {
+    try {
+      if (wakeLock) { await wakeLock.release(); wakeLock = null; }
+      else { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; wb.setAttribute('aria-pressed', 'false'); }); }
+      wb.setAttribute('aria-pressed', !!wakeLock);
+    } catch (e) { toast('Could not keep the screen awake', e.message); }
+  };
+  document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && wb.getAttribute('aria-pressed') === 'true' && !wakeLock) { try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} } });
+}
+
+/* ---------- embeds ---------- */
+function resolveEmbed(code) {
+  code = (code || '').trim(); if (!code) return null;
+  if (/^https?:\/\//i.test(code)) return { src: normalizeUrl(code) };
+  if (/^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(code)) return { src: normalizeUrl('https://' + code) };
+  const doc = new DOMParser().parseFromString(code, 'text/html');
+  const frames = doc.querySelectorAll('iframe'), others = doc.body.querySelectorAll('script,blockquote,video,div');
+  if (frames.length === 1 && !others.length && frames[0].getAttribute('src')) {
+    return { src: normalizeUrl(frames[0].getAttribute('src')), allow: frames[0].getAttribute('allow') };
+  }
+  return { srcdoc: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:sans-serif}body>*{max-width:100%}iframe,video{width:100%!important;height:100%!important;border:0;display:block}</style></head><body>${code}</body></html>` };
+}
+function ytEmbed(id, extra = '') {
+  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}${extra}`;
+}
+function normalizeUrl(u) {
+  try {
+    const x = new URL(u, location.href), h = x.hostname.replace(/^www\.|^m\./, '');
+    let id = null;
+    if (h === 'youtu.be') id = x.pathname.slice(1);
+    else if (h === 'youtube.com' || h === 'youtube-nocookie.com') {
+      if (x.pathname === '/watch') id = x.searchParams.get('v');
+      else {
+        const m = x.pathname.match(/^\/(live|shorts|embed)\/([\w-]+)/); if (m) id = m[2];
+        const c = x.pathname.match(/^\/channel\/(UC[\w-]+)\/live/); if (c) return ytEmbed('live_stream', '&channel=' + c[1]);
+      }
+      if (id === 'live_stream' && x.searchParams.get('channel')) return ytEmbed('live_stream', '&channel=' + x.searchParams.get('channel'));
+    }
+    if (id && id !== 'live_stream') return ytEmbed(id);
+    if (h === 'twitch.tv' && x.pathname.split('/')[1]) return `https://player.twitch.tv/?channel=${x.pathname.split('/')[1]}&parent=${location.hostname || 'localhost'}&muted=true`;
+    return x.href;
+  } catch (e) { return u; }
+}
+function frameFor(code) {
+  const r = resolveEmbed(code); if (!r) return null;
+  const f = document.createElement('iframe');
+  f.setAttribute('allow', r.allow || 'autoplay; encrypted-media; fullscreen; picture-in-picture');
+  f.setAttribute('allowfullscreen', '');
+  f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+  if (r.src) f.src = r.src; else f.srcdoc = r.srcdoc;
+  return f;
+}
+const isYouTube = f => f && f.src && /youtube(-nocookie)?\.com\/embed/.test(f.src);
+function ytCommand(f, func, args) { try { f.contentWindow.postMessage(JSON.stringify({ event: 'command', func, args: args || [] }), '*'); } catch (e) {} }
+function reloadFrame(f) { if (!f) return; if (f.srcdoc) f.srcdoc = f.srcdoc; else f.src = f.src; }
+
+/* ---------- panel chrome ---------- */
+function panelShell(key, { kind, title, extraActions = '' }) {
+  const p = el(`<div class="panel" data-key="${key}">
+    <div class="ph">${icon(kind, 'ico kind')}<span class="t">${esc(title)}</span>
+      <div class="acts">${extraActions}<button data-a="focus" title="Focus this panel">${icon('i-expand')}</button></div></div></div>`);
+  $('[data-a=focus]', p).onclick = () => toggleFocus(p);
+  return p;
+}
+function toggleFocus(p) {
+  const on = !p.classList.contains('focused');
+  document.querySelectorAll('.panel.focused').forEach(x => { x.classList.remove('focused'); $('[data-a=focus] use', x).setAttribute('href', '#i-expand'); });
+  if (on) { p.classList.add('focused'); $('[data-a=focus] use', p).setAttribute('href', '#i-shrink'); }
+}
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea,select')) return;
+  if (e.key === 'Escape') { const f = $('.panel.focused'); if (f) toggleFocus(f); }
+  const views = ['dashboard', 'streams', 'browsers', 'results', 'tools', 'setup'];
+  if (/^[1-6]$/.test(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) go(views[+e.key - 1]);
+});
+
+/* ---------- stream panel ---------- */
+function streamPanel(i) {
+  const s = S.streams[i];
+  const p = panelShell('stream-' + i, { kind: 'i-tv', title: s.label || 'Stream ' + (i + 1),
+    extraActions: `<button data-a="listen" title="Listen to this stream (mutes the others)" hidden>${icon('i-mute')}</button><button data-a="reload" title="Reload">${icon('i-refresh')}</button>` });
+  const body = el('<div class="pb video"></div>'); p.append(body);
+  const f = frameFor(s.code);
+  if (f) body.append(f);
+  else body.append(el(`<div class="empty"><div>No embed yet.<br><button class="btn sm" onclick="go('setup','streams')">Add a stream</button></div></div>`));
+  $('[data-a=reload]', p).onclick = () => reloadFrame($('iframe', body));
+  const lb = $('[data-a=listen]', p);
+  if (isYouTube(f)) {
+    lb.hidden = false;
+    lb.onclick = () => {
+      const on = lb.getAttribute('aria-pressed') !== 'true';
+      document.querySelectorAll('[data-a=listen]').forEach(b => { b.setAttribute('aria-pressed', 'false'); $('use', b).setAttribute('href', '#i-mute'); });
+      document.querySelectorAll('.pb.video iframe').forEach(fr => { if (isYouTube(fr)) ytCommand(fr, 'mute'); });
+      if (on) { lb.setAttribute('aria-pressed', 'true'); $('use', lb).setAttribute('href', '#i-vol'); ytCommand(f, 'unMute'); ytCommand(f, 'setVolume', [100]); ytCommand(f, 'playVideo'); }
+    };
+  }
+  return p;
+}
+
+/* ---------- browser panel ---------- */
+function browserPanel(i) {
+  const b = S.browsers[i];
+  const p = panelShell('browser-' + i, { kind: 'i-globe', title: b.label || 'Browser ' + (i + 1),
+    extraActions: `<button data-a="reload" title="Reload">${icon('i-refresh')}</button><a target="_blank" rel="noopener" title="Open in a new tab">${icon('i-ext')}</a>` });
+  const bar = el(`<form class="urlbar"><input type="text" placeholder="Address, e.g. results.sos.state.xx.us" value="${esc(b.url)}" aria-label="Address"><button class="btn sm">Go</button></form>`);
+  const marks = el('<div class="bookmarks"></div>');
+  S.bookmarks.forEach(m => { const bt = el(`<button type="button">${esc(m.label)}</button>`); bt.onclick = () => { b.url = m.url; input.value = m.url; save(); load(); }; marks.append(bt); });
+  const body = el('<div class="pb"></div>');
+  p.append(bar, marks, body);
+  const a = $('a', p), input = $('input', bar);
+  function load() {
+    body.innerHTML = '';
+    if (!b.url) { body.append(el(`<div class="empty"><div>Type an address above or tap a bookmark.<br><span class="small">Big outlets (AP, CNN, NYT, DDHQ) refuse to load inside other pages. State election offices, Ballotpedia, and Wikipedia usually work. The arrow opens any site in a new tab.</span></div></div>`)); a.removeAttribute('href'); return; }
+    const u = /^https?:/i.test(b.url) ? b.url : 'https://' + b.url;
+    a.href = u;
+    const f = document.createElement('iframe'); f.src = u; f.setAttribute('referrerpolicy', 'no-referrer-when-downgrade'); f.setAttribute('allow', 'fullscreen');
+    body.append(f);
+  }
+  bar.onsubmit = e => { e.preventDefault(); b.url = input.value.trim(); save(); load(); };
+  $('[data-a=reload]', p).onclick = load;
+  load();
+  return p;
+}
+
+/* ---------- results panel ---------- */
+const lastWinners = new Map();
+function partyColor(party) {
+  const p = String(party || '').toLowerCase();
+  if (/^d|democrat/.test(p)) return 'var(--dem)';
+  if (/^r|republican|gop/.test(p)) return 'var(--gop)';
+  if (/green|libert|indep|^i\b|^ind/.test(p)) return 'var(--ind)';
+  return 'var(--other)';
+}
+async function fetchRace(id) {
+  const path = /^\d+$/.test(String(id)) ? `/race/${id}` : `/race/${String(id).replace(/^\/+|\/+$/g, '')}`;
+  const res = await fetch(CIVIC + path, { cache: 'no-store' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const j = await res.json();
+  let d = j.data ?? j; if (Array.isArray(d)) d = d[0]; if (d && d.data) d = d.data;
+  if (!d) throw new Error('empty response');
+  return d;
+}
+function renderRace(d, r) {
+  const name = r.label || d.election_name?.en_US || d.election_name || 'Race ' + r.id;
+  const cands = (d.candidates || []).filter(c => !c.dropped_out).sort((a, b) => (b.votes || 0) - (a.votes || 0));
+  const total = cands.reduce((s, c) => s + (+c.votes || 0), 0);
+  const pr = d.percent_reporting != null ? Math.max(0, Math.min(100, +d.percent_reporting)) : null;
+  const upd = d.last_updated ? new Date(d.last_updated) : null;
+  const winner = cands.find(c => c.winner);
+  const c = el(`<div class="race ${winner ? 'called' : ''}">
+    <h4><span>${esc(name)}</span><button class="star" aria-pressed="${!!r.pin}" title="Pin to top">${icon(r.pin ? 'i-star-f' : 'i-star')}</button></h4>
+    <div class="meta">${pr != null ? `<b>${pr.toFixed(pr % 1 ? 1 : 0)}% in</b>` : ''}${total ? `<span>${fmt(total)} votes</span>` : ''}${upd && !isNaN(upd) ? `<span>src ${timeStr(upd)}</span>` : ''}</div>
+    ${pr != null ? `<div class="rptbar"><i style="width:${pr}%"></i></div>` : ''}
+    ${cands.slice(0, 6).map(x => {
+      const pct = x.percent != null ? +x.percent : (total ? 100 * (+x.votes || 0) / total : 0);
+      const col = partyColor(x.party);
+      return `<div class="cand"><div class="top"><span class="nm">${esc(x.name)}${x.party ? ` <small>(${esc(String(x.party).slice(0, 14))})</small>` : ''}${x.incumbent ? ' <small title="Incumbent">inc.</small>' : ''}${x.winner ? '<span class="win">Winner</span>' : ''}</span><span class="num"><b>${pct.toFixed(1)}%</b> · ${fmt(x.votes)}</span></div><div class="bar"><i style="width:${Math.min(100, pct)}%;background:${col}"></i></div></div>`;
+    }).join('')}
+    ${!cands.length ? '<div class="meta">No candidate data yet.</div>' : ''}
+  </div>`);
+  $('.star', c).onclick = () => { r.pin = !r.pin; save(); render(); };
+  if (winner) {
+    const prev = lastWinners.get(r.id);
+    if (prev !== undefined && prev !== winner.name) { toast('Race called', `${name}: ${winner.name}`); chime(); addLog(`${name}: ${winner.name} (civicAPI)`, true); }
+    lastWinners.set(r.id, winner.name);
+  } else if (!lastWinners.has(r.id)) lastWinners.set(r.id, null);
+  return c;
+}
+function resultsPanel() {
+  const R = S.results;
+  const p = panelShell('results', { kind: 'i-chart', title: 'Results', extraActions: `<button data-a="r" title="Refresh now">${icon('i-refresh')}</button>` });
+  const body = el('<div class="pb scroll"></div>'); p.append(body);
+  if (R.mode === 'embed' || R.mode === 'url') {
+    body.classList.remove('scroll');
+    const f = frameFor(R.mode === 'embed' ? R.embed : R.url);
+    if (f) {
+      body.append(f);
+      $('[data-a=r]', p).onclick = () => reloadFrame(f);
+      if (R.mode === 'url' && R.interval > 0) timers.push(setInterval(() => reloadFrame($('iframe', body)), R.interval * 1000));
+    } else body.append(el(`<div class="empty"><div>Nothing configured yet.<br><button class="btn sm" onclick="go('setup','results')">Set up results</button></div></div>`));
+    return p;
+  }
+  const status = el(`<div class="status"><span class="dot"></span><span class="st">idle</span></div>`); p.append(status);
+  const dot = $('.dot', status), st = $('.st', status);
+  if (!R.races.length) { body.append(el(`<div class="empty"><div>No races added yet.<br><button class="btn sm" onclick="go('setup','results')">Add races</button></div></div>`)); return p; }
+  const wrap = el('<div class="races"></div>'); body.append(wrap);
+  const ordered = R.races.slice().sort((a, b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0));
+  const cards = ordered.map(r => { const c = el(`<div class="race"><h4><span>${esc(r.label || 'Race ' + r.id)}</span></h4><div class="meta">loading…</div></div>`); wrap.append(c); return c; });
+  async function refresh() {
+    dot.className = 'dot busy'; st.textContent = 'updating…';
+    let errs = 0;
+    await Promise.all(ordered.map(async (r, i) => {
+      try { const n = renderRace(await fetchRace(r.id), r); cards[i].replaceWith(n); cards[i] = n; }
+      catch (e) { errs++; const m = $('.meta', cards[i]); if (m) m.innerHTML = `<span class="err">Could not load (${esc(e.message)})</span>`; }
+    }));
+    dot.className = 'dot' + (errs ? ' err' : '');
+    st.textContent = `civicAPI · updated ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })} · every ${R.interval}s${errs ? ` · ${errs} failed` : ''}`;
+  }
+  $('[data-a=r]', p).onclick = refresh;
+  refresh(); if (R.interval > 0) timers.push(setInterval(refresh, R.interval * 1000));
+  return p;
+}
+
+/* ---------- poll closings panel ---------- */
+function etParts(d) {
+  const f = new Intl.DateTimeFormat('en-US', { timeZone: ET, hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const o = {}; f.formatToParts(d).forEach(x => o[x.type] = x.value);
+  return o;
+}
+function closingsPanel() {
+  const p = panelShell('closings', { kind: 'i-clock', title: 'Poll closings (ET)' });
+  const body = el('<div class="pb scroll"></div>'); p.append(body);
+  const list = el('<ul class="closings"></ul>'); body.append(list);
+  const items = CLOSINGS.map(([t, ...states]) => {
+    const [h, m] = t.split(':').map(Number);
+    const label = `${((h % 24) % 12) || 12}:${String(m).padStart(2, '0')} ${h % 24 < 12 ? 'AM' : 'PM'}`;
+    const li = el(`<li><span class="tm">${label}</span><span class="st">${states.map(esc).join(', ')}</span><span class="cd"></span></li>`);
+    list.append(li); return { h, m, li };
+  });
+  function tick() {
+    const o = etParts(new Date());
+    const nowMin = +o.hour * 60 + +o.minute; const sec = +o.second;
+    let nextSet = false;
+    items.forEach(it => {
+      const diff = (it.h * 60 + it.m) - nowMin;
+      it.li.classList.remove('past', 'next');
+      if (diff <= 0) { it.li.classList.add('past'); it.li.querySelector('.cd').textContent = 'closed'; }
+      else {
+        const total = diff * 60 - sec, hh = Math.floor(total / 3600), mm = Math.floor((total % 3600) / 60), ss = total % 60;
+        it.li.querySelector('.cd').textContent = hh ? `${hh}h ${String(mm).padStart(2, '0')}m` : `${mm}m ${String(ss).padStart(2, '0')}s`;
+        if (!nextSet) { it.li.classList.add('next'); nextSet = true; }
+      }
+    });
+  }
+  tick(); timers.push(setInterval(tick, 1000));
+  body.append(el('<p class="small" style="padding:0.5rem 0.85rem 0.8rem;margin:0">Standard general-election closing times. Split states show the part that closes at each time. Confirm with the state office if a call depends on it.</p>'));
+  return p;
+}
+
+/* ---------- balance of power panel ---------- */
+const CHAMBERS = [['senate', 'Senate', 100, 51], ['house', 'House', 435, 218], ['gov', 'Governors', 50, 26]];
+function balancePanel() {
+  const p = panelShell('balance', { kind: 'i-scale', title: 'Balance of power', extraActions: `<button data-a="reset" title="Reset all counts to zero">${icon('i-refresh')}</button>` });
+  const body = el('<div class="pb scroll"><div class="bop"></div></div>'); p.append(body);
+  const bop = $('.bop', body);
+  function draw() {
+    bop.innerHTML = '';
+    CHAMBERS.forEach(([k, name, seats, maj]) => {
+      const c = S.bop[k], d = +c.d || 0, r = +c.r || 0, i = +c.i || 0;
+      const w = n => (100 * n / seats).toFixed(2) + '%';
+      const box = el(`<div class="chamber"><h4>${name}<small>${d + r + i} of ${seats} called</small></h4>
+        <div class="bopbar"><i class="d" style="width:${w(d)}"></i><i class="i" style="width:${w(i)}"></i><i class="r" style="width:${w(r)}"></i></div>
+        <div class="counts">
+          <div><label class="dl">Dem</label><div class="n"><button data-k="d" data-d="-1" aria-label="Fewer Democrats">${icon('i-minus')}</button><b>${d}</b><button data-k="d" data-d="1" aria-label="More Democrats">${icon('i-plus')}</button></div></div>
+          <div><label class="il">Other</label><div class="n"><button data-k="i" data-d="-1" aria-label="Fewer independents">${icon('i-minus')}</button><b>${i}</b><button data-k="i" data-d="1" aria-label="More independents">${icon('i-plus')}</button></div></div>
+          <div><label class="rl">Rep</label><div class="n"><button data-k="r" data-d="-1" aria-label="Fewer Republicans">${icon('i-minus')}</button><b>${r}</b><button data-k="r" data-d="1" aria-label="More Republicans">${icon('i-plus')}</button></div></div>
+        </div>
+        <div class="majority"><span class="${d >= maj ? 'has' : ''}">D needs <b>${Math.max(0, maj - d)}</b> more</span><span>majority ${maj}</span><span class="${r >= maj ? 'has' : ''}">R needs <b>${Math.max(0, maj - r)}</b> more</span></div></div>`);
+      box.querySelectorAll('button[data-k]').forEach(b => b.onclick = () => {
+        const nk = b.dataset.k; c[nk] = Math.max(0, Math.min(seats, (+c[nk] || 0) + +b.dataset.d)); save(); draw();
+      });
+      bop.append(box);
+    });
+  }
+  $('[data-a=reset]', p).onclick = () => { S.bop = defaults().bop; save(); draw(); };
+  draw();
+  body.append(el('<p class="small" style="padding:0 0.85rem 0.8rem;margin:0">Hand-tallied, so count seats as they get called. Set the seats not on the ballot first so the bar reflects the real picture.</p>'));
+  return p;
+}
+
+/* ---------- call log panel ---------- */
+function addLog(text, auto) {
+  S.log.unshift({ t: Date.now(), text, auto: !!auto }); if (S.log.length > 400) S.log.length = 400; save();
+  document.querySelectorAll('.panel[data-key=log]').forEach(p => p._redraw && p._redraw());
+}
+function logPanel() {
+  const p = panelShell('log', { kind: 'i-pen', title: 'Call log', extraActions: `<button data-a="copy" title="Copy the whole log">${icon('i-copy')}</button>` });
+  const form = el(`<form class="logform"><input type="text" placeholder="Note a call, a number, a hunch… press Enter" aria-label="New log entry" maxlength="500"><button class="btn sm primary">Add</button></form>`);
+  const body = el('<div class="pb scroll"><ul class="log"></ul></div>');
+  p.append(form, body);
+  const list = $('.log', body);
+  function draw() {
+    list.innerHTML = '';
+    if (!S.log.length) { list.append(el('<li><span></span><span class="txt auto">Nothing logged yet. Entries are stamped with the time you add them; race calls from the results feed land here too.</span><span></span></li>')); return; }
+    S.log.forEach((e, i) => {
+      const li = el(`<li><time datetime="${new Date(e.t).toISOString()}">${timeStr(new Date(e.t))}</time><span class="txt ${e.auto ? 'auto' : ''}">${esc(e.text)}</span><button title="Delete">${icon('i-x')}</button></li>`);
+      $('button', li).onclick = () => { S.log.splice(i, 1); save(); draw(); };
+      list.append(li);
+    });
+  }
+  p._redraw = draw;
+  form.onsubmit = e => { e.preventDefault(); const v = $('input', form).value.trim(); if (!v) return; $('input', form).value = ''; addLog(v); };
+  $('[data-a=copy]', p).onclick = async () => {
+    const txt = S.log.slice().reverse().map(e => `${new Date(e.t).toLocaleString()} — ${e.text}`).join('\n');
+    try { await navigator.clipboard.writeText(txt); toast('Copied', `${S.log.length} entries copied as text.`); } catch (e) { toast('Copy failed', 'Your browser blocked clipboard access.'); }
+  };
+  draw();
+  return p;
+}
+
+/* ---------- views ---------- */
+function build(key) {
+  if (key === 'results') return resultsPanel();
+  if (key === 'closings') return closingsPanel();
+  if (key === 'balance') return balancePanel();
+  if (key === 'log') return logPanel();
+  const [t, i] = key.split('-'); return t === 'stream' ? streamPanel(+i) : browserPanel(+i);
+}
+const views = {
+  dashboard() {
+    syncLayout();
+    const L = S.layout, on = L.panels.filter(p => p.on);
+    if (!on.length) return el(`<div class="card"><h2>Your dashboard is empty</h2><p class="lead">Pick panels in Setup → Layout.</p><button class="btn primary" onclick="go('setup','layout')">Set up the layout</button></div>`);
+    const g = el(`<div class="dash" style="grid-template-columns:repeat(${L.cols},1fr);--rowh:${L.rowh}px"></div>`);
+    on.forEach(p => {
+      const node = build(p.key);
+      node.style.gridColumn = `span ${Math.min(p.w, L.cols)}`; node.style.gridRow = `span ${p.h}`;
+      if (p.h > 1) node.classList.add('tall');
+      g.append(node);
+    });
+    return g;
+  },
+  streams() {
+    const wrap = el(`<div><h2><span class="num">01</span>Streams</h2><p class="lead">Every configured stream. Use the speaker button on a YouTube stream to hear that one and mute the rest.</p><div class="streams-grid"></div></div>`);
+    const g = $('.streams-grid', wrap);
+    const any = S.streams.some(s => s.code);
+    S.streams.forEach((s, i) => { if (s.code) g.append(streamPanel(i)); });
+    if (!any) g.append(el(`<div class="card">No streams yet. <button class="btn primary sm" onclick="go('setup','streams')">Add streams</button></div>`));
+    return wrap;
+  },
+  browsers() {
+    const wrap = el(`<div><h2><span class="num">02</span>Browsers</h2><p class="lead">Type any address, or tap a bookmark. If a pane stays blank, that site refuses to be framed; the arrow opens it in a new tab.</p><div class="browsers-grid"></div></div>`);
+    S.browsers.forEach((b, i) => $('.browsers-grid', wrap).append(browserPanel(i)));
+    return wrap;
+  },
+  results() {
+    const wrap = el(`<div><h2><span class="num">03</span>Results</h2><p class="lead">Refreshes on its own. Pin the races you care most about and they stay at the top.</p></div>`);
+    const p = resultsPanel(); p.style.minHeight = '72vh'; wrap.append(p); return wrap;
+  },
+  tools() {
+    const wrap = el(`<div><h2><span class="num">04</span>Tracker</h2><p class="lead">Poll closings with countdowns, a hand-tallied balance of power, and a timestamped call log. Each of these can also sit on the dashboard.</p><div class="tools-grid"></div></div>`);
+    const g = $('.tools-grid', wrap); g.append(closingsPanel(), balancePanel(), logPanel());
+    return wrap;
+  },
+  setup() { return setupView(); }
+};
+
+/* ---------- setup ---------- */
+let setupTab = 'streams';
+function setupView() {
+  const tabs = [['streams', 'Streams'], ['browsers', 'Browsers'], ['results', 'Results'], ['layout', 'Layout'], ['backup', 'Backup']];
+  const w = el(`<div><h2><span class="num">05</span>Setup</h2>
+    <div class="filters" role="tablist">${tabs.map(([k, n]) => `<button class="filter" role="tab" aria-pressed="${k === setupTab}" data-t="${k}">${n}</button>`).join('')}</div>
+    <div id="setupBody"></div></div>`);
+  w.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { setupTab = b.dataset.t; render(); });
+  $('#setupBody', w).append(({ streams: setupStreams, browsers: setupBrowsers, results: setupResults, layout: setupLayout, backup: setupBackup })[setupTab]());
+  return w;
+}
+function setupStreams() {
+  const w = el(`<div><p class="lead">Up to six. Paste an embed code or just a link. YouTube and Twitch links turn into players automatically and start muted; the speaker button on each stream picks which one you hear.</p><div class="grid-forms"></div></div>`);
+  S.streams.forEach((s, i) => {
+    const c = el(`<div class="card"><label class="f">Label</label><input type="text" value="${esc(s.label)}" data-k="label" maxlength="40">
+      <label class="f">Embed code or link</label><textarea data-k="code" placeholder="https://www.youtube.com/watch?v=…  or an <iframe> embed code">${esc(s.code)}</textarea>
+      <div class="row" style="margin-top:0.7rem"><button class="btn sm" data-a="clear">Clear</button><span class="spacer"></span><span class="small">${s.code ? 'set' : 'empty'}</span></div></div>`);
+    c.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { s[inp.dataset.k] = inp.value; if (inp.dataset.k === 'code') { syncLayout(); const lp = S.layout.panels.find(p => p.key === 'stream-' + i); if (lp && inp.value.trim()) lp.on = true; } save(); });
+    $('[data-a=clear]', c).onclick = () => { s.code = ''; save(); render(); };
+    $('.grid-forms', w).append(c);
+  });
+  w.append(el(`<div class="note"><b>Tips.</b> For a channel that goes live at night, paste <code>youtube.com/channel/UC…/live</code> and the player follows whatever is live. Streams only run in the section you are looking at, so the dashboard and the Streams section never double up.</div>`));
+  return w;
+}
+function setupBrowsers() {
+  const w = el(`<div><p class="lead">Name each pane and give it a starting page. The bookmark row above every pane is editable here too.</p>
+    <h3>Panes</h3><div class="grid-forms"></div>
+    <div class="row" style="margin-top:0.8rem"><button class="btn sm" data-a="add">${icon('i-plus')} Add pane</button><button class="btn sm" data-a="rm">${icon('i-minus')} Remove last</button></div>
+    <h3 style="margin-top:1.6rem">Bookmarks</h3><div class="chips" id="bm"></div>
+    <form class="row" id="bmf" style="margin-top:0.7rem"><input type="text" placeholder="Label" style="max-width:10rem" required><input type="text" placeholder="https://…" required style="flex:1;min-width:12rem"><button class="btn sm primary">Add</button><button type="button" class="btn sm" id="bmreset">Restore defaults</button></form>
+    <div class="note"><b>About framing.</b> Sites decide for themselves whether they can be shown inside another page. Most big outlets say no, so those panes come up blank; that is their rule, not a bug here. Things that usually do work: state and county election-results pages, Ballotpedia, Wikipedia, Google Sheets published to the web, and most smaller trackers and blogs.</div></div>`);
+  S.browsers.forEach((b, i) => {
+    const c = el(`<div class="card"><label class="f">Label</label><input type="text" data-k="label" value="${esc(b.label)}" maxlength="40"><label class="f">Starting address</label><input type="text" data-k="url" value="${esc(b.url)}" placeholder="https://…"></div>`);
+    c.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { b[inp.dataset.k] = inp.value.trim(); save(); });
+    $('.grid-forms', w).append(c);
+  });
+  $('[data-a=add]', w).disabled = S.browsers.length >= MAX_BROWSERS;
+  $('[data-a=rm]', w).disabled = S.browsers.length <= 1;
+  $('[data-a=add]', w).onclick = () => { if (S.browsers.length < MAX_BROWSERS) { S.browsers.push({ label: 'Browser ' + (S.browsers.length + 1), url: '' }); syncLayout(); save(); render(); } };
+  $('[data-a=rm]', w).onclick = () => { if (S.browsers.length > 1) { S.browsers.pop(); syncLayout(); save(); render(); } };
+  const bm = $('#bm', w);
+  S.bookmarks.forEach((m, i) => { const ch = el(`<span class="chip">${esc(m.label)}<button title="Remove">${icon('i-x')}</button></span>`); $('button', ch).onclick = () => { S.bookmarks.splice(i, 1); save(); render(); }; bm.append(ch); });
+  $('#bmf', w).onsubmit = e => { e.preventDefault(); const [l, u] = $('#bmf', w).querySelectorAll('input'); S.bookmarks.push({ label: l.value.trim(), url: u.value.trim() }); save(); render(); };
+  $('#bmreset', w).onclick = () => { S.bookmarks = DEFAULT_BOOKMARKS.slice(); save(); render(); };
+  return w;
+}
+function setupResults() {
+  const R = S.results;
+  const w = el(`<div class="two">
+   <div>
+    <p class="lead">Decision Desk HQ and AP sell their feeds to newsrooms, so the free default is <b>civicAPI</b>: no key, live vote counts, winner flags. You can also drop in an embed code or a results web page.</p>
+    <div class="filters">
+      <button class="filter" aria-pressed="${R.mode === 'civic'}" data-m="civic">civicAPI (live data)</button>
+      <button class="filter" aria-pressed="${R.mode === 'embed'}" data-m="embed">Embed code</button>
+      <button class="filter" aria-pressed="${R.mode === 'url'}" data-m="url">Web page</button>
+    </div>
+    <div id="mode"></div>
+    <label class="f">Refresh every (seconds)</label>
+    <input type="number" min="15" step="5" value="${R.interval}" id="iv" style="max-width:9rem">
+   </div>
+   <div class="card"><span class="tag">Preview</span><div id="pv" style="height:30rem;display:flex;margin-top:0.6rem"></div></div>
+  </div>`);
+  w.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { R.mode = b.dataset.m; save(); render(); });
+  $('#iv', w).onchange = e => { R.interval = Math.max(15, +e.target.value || 60); save(); render(); };
+  const m = $('#mode', w);
+  if (R.mode === 'civic') {
+    m.append(el(`<div>
+      <label class="f">Add a race: civicAPI race ID, API link, or a path like <code>US/MO/General/2026</code></label>
+      <form class="row" id="addf"><input type="text" id="rid" placeholder="e.g. 12345" style="flex:1;min-width:10rem"><input type="text" id="rlabel" placeholder="Label (optional), e.g. MO-Sen" style="flex:1;min-width:10rem"><button class="btn primary sm">Add</button></form>
+      <div id="addmsg" class="small" style="margin-top:0.4rem"></div>
+      <div class="chips">${R.races.map((r, i) => `<span class="chip">${esc(r.label || r.id)}<button data-i="${i}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="small">No races yet.</span>'}</div>
+      <div class="note">Find race IDs at <a href="https://civicapi.org" target="_blank" rel="noopener">civicapi.org</a>: open a race and the ID is in its address or API link. Add the Senate, governor, and House seats you care about and they update together. It is a small free service, so coverage and speed will not match a newsroom feed; keep a network stream up for the calls.</div>
+    </div>`));
+    $('#addf', m).onsubmit = async e => {
+      e.preventDefault();
+      const id = $('#rid', m).value.trim().replace(/^https?:\/\/[^/]+\/api\/v1\/race\//, '').replace(/\/+$/, ''); if (!id) return;
+      const msg = $('#addmsg', m); msg.textContent = 'Checking…';
+      let label = $('#rlabel', m).value.trim();
+      try { const d = await fetchRace(id); label = label || d.election_name?.en_US || ''; msg.textContent = 'Added ' + (label || id) + '.'; }
+      catch (err) { msg.innerHTML = `<span class="err">Could not fetch that race yet (${esc(err.message)}). Added anyway; it will retry on each refresh.</span>`; }
+      R.races.push({ id, label }); save(); setTimeout(render, 700);
+    };
+    m.querySelectorAll('.chip [data-i]').forEach(b => b.onclick = () => { R.races.splice(+b.dataset.i, 1); save(); render(); });
+  } else if (R.mode === 'embed') {
+    m.append(el(`<div><label class="f">Results embed code</label><textarea id="emb" style="min-height:9rem" placeholder="Paste the widget code an outlet gives you">${esc(R.embed)}</textarea>
+      <div class="row" style="margin-top:0.6rem"><button class="btn primary sm" id="saveEmb">Save</button></div>
+      <div class="note">Embeds update themselves, so the refresh interval does not apply here.</div></div>`));
+    $('#saveEmb', m).onclick = () => { R.embed = $('#emb', m).value; save(); render(); };
+  } else {
+    m.append(el(`<div><label class="f">Results page address (reloads on the interval)</label><form class="row" id="uf"><input type="text" id="url" value="${esc(R.url)}" placeholder="https://…" style="flex:1;min-width:12rem"><button class="btn primary sm">Save</button></form>
+      <div class="note">Good for state election-office results pages, many of which allow framing.</div></div>`));
+    $('#uf', m).onsubmit = e => { e.preventDefault(); R.url = $('#url', m).value.trim(); save(); render(); };
+  }
+  const pv = resultsPanel(); pv.style.flex = '1'; $('#pv', w).append(pv);
+  return w;
+}
+function setupLayout() {
+  syncLayout();
+  const L = S.layout;
+  const w = el(`<div class="two"><div>
+    <p class="lead">Turn panels on, size them in columns and rows, and drag to reorder. On a phone the dashboard stacks into one column.</p>
+    <div class="row" style="margin-bottom:0.8rem">
+      <label class="row" style="gap:0.4rem;font-size:0.85rem">Columns <select id="cols">${[1, 2, 3, 4, 5, 6].map(n => `<option ${n == L.cols ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+      <label class="row" style="gap:0.4rem;font-size:0.85rem">Row height <select id="rowh">${[180, 220, 240, 280, 320, 380].map(n => `<option value="${n}" ${n == L.rowh ? 'selected' : ''}>${n}px</option>`).join('')}</select></label>
+    </div>
+    <div class="row" style="margin-bottom:0.8rem"><span class="small">Presets:</span><button class="btn sm" data-p="streams">Streams first</button><button class="btn sm" data-p="results">Results first</button><button class="btn sm" data-p="browsers">Browsers first</button></div>
+    <div class="lay-list"></div>
+    <div class="row" style="margin-top:0.9rem"><button class="btn primary" onclick="go('dashboard')">Open the dashboard</button></div>
+   </div>
+   <div class="card"><span class="tag">Preview</span><div class="preview" id="prev"></div></div></div>`);
+  $('#cols', w).onchange = e => { L.cols = +e.target.value; save(); render(); };
+  $('#rowh', w).onchange = e => { L.rowh = +e.target.value; save(); render(); };
+  w.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+    const by = k => L.panels.filter(p => p.key.startsWith(k));
+    const one = k => L.panels.filter(p => p.key === k);
+    const streams = by('stream-').map(p => ({ ...p, w: 1, h: 1 }));
+    const browsers = by('browser-').map(p => ({ ...p, w: Math.max(1, Math.floor(L.cols / 2)), h: 2 }));
+    const results = one('results').map(p => ({ ...p, w: 1, h: 2, on: true }));
+    const closings = one('closings').map(p => ({ ...p, w: 1, h: 2 }));
+    const balance = one('balance').map(p => ({ ...p, w: 1, h: 2 }));
+    const log = one('log').map(p => ({ ...p, w: 1, h: 1 }));
+    const order = { streams: [...streams, ...results, ...closings, ...balance, ...log, ...browsers], results: [...results, ...balance, ...closings, ...streams, ...log, ...browsers], browsers: [...browsers, ...results, ...streams, ...closings, ...balance, ...log] }[b.dataset.p];
+    L.panels = order; save(); render();
+  });
+  const list = $('.lay-list', w);
+  let dragFrom = null;
+  L.panels.forEach((p, i) => {
+    const sizeOpts = max => Array.from({ length: max }, (_, n) => n + 1);
+    const empty = p.key.startsWith('stream') && !S.streams[+p.key.split('-')[1]].code;
+    const it = el(`<div class="lay-item ${p.on ? '' : 'off'}" draggable="true">
+      <span class="handle" title="Drag to reorder">${icon('i-grip')}</span>
+      <label class="row" style="gap:0.5rem;cursor:pointer"><input type="checkbox" ${p.on ? 'checked' : ''}><span>${icon(panelIcon(p.key), 'ico kind')}${esc(panelName(p.key))}${empty ? ' <span class="small">(empty)</span>' : ''}</span></label>
+      <select data-k="w" aria-label="Width in columns">${sizeOpts(6).map(n => `<option value="${n}" ${n == p.w ? 'selected' : ''}>${n} wide</option>`).join('')}</select>
+      <select data-k="h" aria-label="Height in rows">${sizeOpts(4).map(n => `<option value="${n}" ${n == p.h ? 'selected' : ''}>${n} tall</option>`).join('')}</select>
+      <span class="row nowrap" style="gap:0.15rem"><button class="btn sm" data-d="-1" aria-label="Move up">${icon('i-up')}</button><button class="btn sm" data-d="1" aria-label="Move down">${icon('i-down')}</button></span>
+    </div>`);
+    $('input', it).onchange = e => { p.on = e.target.checked; save(); render(); };
+    it.querySelectorAll('select').forEach(s => s.onchange = () => { p[s.dataset.k] = +s.value; save(); render(); });
+    it.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const j = i + +b.dataset.d; if (j < 0 || j >= L.panels.length) return; [L.panels[i], L.panels[j]] = [L.panels[j], L.panels[i]]; save(); render(); });
+    it.addEventListener('dragstart', e => { dragFrom = i; it.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    it.addEventListener('dragend', () => { it.classList.remove('dragging'); list.querySelectorAll('.over').forEach(x => x.classList.remove('over')); });
+    it.addEventListener('dragover', e => { e.preventDefault(); it.classList.add('over'); });
+    it.addEventListener('dragleave', () => it.classList.remove('over'));
+    it.addEventListener('drop', e => { e.preventDefault(); if (dragFrom == null || dragFrom === i) return; const [m] = L.panels.splice(dragFrom, 1); L.panels.splice(i, 0, m); save(); render(); });
+    list.append(it);
+  });
+  const pv = $('#prev', w); pv.style.gridTemplateColumns = `repeat(${L.cols},1fr)`;
+  L.panels.filter(p => p.on).forEach(p => { const d = document.createElement('div'); d.textContent = panelName(p.key); d.style.gridColumn = `span ${Math.min(p.w, L.cols)}`; d.style.gridRow = `span ${p.h}`; pv.append(d); });
+  return w;
+}
+function setupBackup() {
+  const w = el(`<div><p class="lead">Settings live in this browser only. Copy this text and paste it into the same box on another device to bring everything across, log included.</p>
+    <textarea id="bk" style="min-height:14rem"></textarea>
+    <div class="row" style="margin-top:0.6rem"><button class="btn sm" id="cp">${icon('i-copy')} Copy</button><button class="btn sm primary" id="ld">Load pasted settings</button><span class="spacer"></span><button class="btn sm danger" id="rs">Reset everything</button></div>
+    <div id="bkmsg" class="small" style="margin-top:0.6rem"></div></div>`);
+  const ta = $('#bk', w); const { view, ...rest } = S; ta.value = JSON.stringify(rest, null, 1);
+  $('#cp', w).onclick = async () => { try { await navigator.clipboard.writeText(ta.value); $('#bkmsg', w).textContent = 'Copied.'; } catch (e) { ta.select(); $('#bkmsg', w).textContent = 'Selected; copy it with the keyboard.'; } };
+  $('#ld', w).onclick = () => { try { const n = JSON.parse(ta.value); S = Object.assign(defaults(), n); S.bop = Object.assign(defaults().bop, S.bop || {}); syncLayout(); save(); $('#bkmsg', w).textContent = 'Loaded.'; setTimeout(render, 300); } catch (e) { $('#bkmsg', w).innerHTML = '<span class="err">That is not valid settings text.</span>'; } };
+  let armed = false; $('#rs', w).onclick = e => { if (!armed) { armed = true; e.target.textContent = 'Click again to confirm'; return; } S = defaults(); save(); render(); };
+  return w;
+}
+
+/* ---------- routing, clock, ambient ---------- */
+function go(v, sub) { if (sub) setupTab = sub; S.view = v; save(); if (location.hash !== '#' + v) history.replaceState(null, '', '#' + v); render(); }
+window.go = go;
+function render() {
+  clearTimers(); syncLayout();
+  document.querySelectorAll('#nav button').forEach(b => { if (b.dataset.v === S.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  const m = $('#main'); m.innerHTML = ''; m.append((views[S.view] || views.setup)());
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll('#nav button').forEach(b => b.onclick = () => go(b.dataset.v));
+window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (views[v] && v !== S.view) go(v); });
+function clock() {
+  const d = new Date();
+  const local = timeStr(d), et = timeStr(d, ET);
+  $('#clock').innerHTML = `<span><small>Local</small><b>${local}</b></span>` + (local !== et ? `<span><small>ET</small><b>${et}</b></span>` : '');
+}
+clock(); setInterval(clock, 1000);
+if (!reduced && matchMedia('(pointer:fine)').matches) {
+  const sp = $('.spotlight');
+  addEventListener('pointermove', e => { sp.style.setProperty('--mx', e.clientX + 'px'); sp.style.setProperty('--my', e.clientY + 'px'); }, { passive: true });
+}
+(function init() {
+  const h = location.hash.slice(1);
+  if (views[h]) S.view = h; else if (S.streams.some(s => s.code) || S.results.races.length) S.view = 'dashboard';
+  render();
+})();
+</script>
+</body>
+</html>
