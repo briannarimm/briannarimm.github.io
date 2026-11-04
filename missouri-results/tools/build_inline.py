@@ -11,6 +11,12 @@ tags.append('<script id="data-results" type="text/csv">'+open(os.path.join(D,'da
 html=html.replace('<script src="app.js" defer></script>','')
 html=html.replace('</body>', '\n'.join(tags)+'\n<script>\n'+js.replace('</script','<\\/script')+'\n</script>\n</body>')
 # absolute site paths -> fallbacks that work anywhere
+import base64
+site=os.path.join(D,'..')  # the site root, when run from inside the repository
+for name in ['bri-wordmark.svg','bri-wordmark-light.svg']:
+    p=os.path.join(site,'images',name)
+    if os.path.exists(p):
+        html=html.replace('src="/images/'+name+'"','src="data:image/svg+xml;base64,'+base64.b64encode(open(p,'rb').read()).decode()+'"')
 html=html.replace('href="/images/','href="https://www.briannaimm.com/images/').replace('src="/images/','src="https://www.briannaimm.com/images/').replace('href="/" aria-label','href="https://www.briannaimm.com/" aria-label')
 out=sys.argv[1] if len(sys.argv)>1 else os.path.join(D,'..','missouri-results-standalone.html')
 open(out,'w').write(html); print(out, len(html))
