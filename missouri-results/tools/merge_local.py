@@ -30,7 +30,7 @@ for fn in sorted(glob.glob(B+'local/*.json')):
         m['sources']=[u for u in (m.get('sources') or []) if str(u).startswith('http')]
         if not m['sources']: problems.append(f"{reg}: {m['jurisdiction']} {m['measure']} has no source")
         out['measures'].append({k:m.get(k) for k in ['county','jurisdiction','jurisdiction_type','measure','category','description','threshold','yes_votes','no_votes','yes_pct','result','result_note','sources']})
-    out['no_measures']+= [ck.get(norm(c),c) for c in d.get('counties_no_measures_found',[])]
+    out['no_measures']+= [ck.get(norm(re.sub(r'\s*\(.*$','',str(c))),str(c)) for c in d.get('counties_no_measures_found',[])]
     out['unchecked']+= [{'county':ck.get(norm(u.get('county','')),u.get('county')),'why':u.get('why','')} for u in d.get('counties_not_checked_or_inaccessible',[]) if isinstance(u,dict)]
     out['notes'][reg]=d.get('notes','')
 # duplicates
