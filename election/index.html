@@ -517,7 +517,16 @@ let S;
 try {
   const raw = localStorage.getItem(KEY) || localStorage.getItem(OLD_KEY);
   S = Object.assign(defaults(), raw ? JSON.parse(raw) : {});
-  if (!localStorage.getItem(KEY) && raw) { /* migrated from v2: keep their settings, add the new wire panel */ S.wire = defaults().wire; }
+  if (!localStorage.getItem(KEY) && raw) {
+    // Migrating from the earlier version: keep what was set up, fill anything empty with the new defaults.
+    const D = defaults();
+    S.wire = D.wire;
+    S.streams = (S.streams || []).map((s, i) => (s && s.code) ? s : (D.streams[i] || s));
+    if (!S.results || !S.results.races || !S.results.races.length) S.results = D.results;
+    if (!S.bop || Object.values(S.bop).every(c => !c || (!c.d && !c.r && !c.i))) S.bop = D.bop;
+    if (!S.browsers || S.browsers.every(b => !b.url)) S.browsers = D.browsers;
+    S.layout = D.layout; S.view = 'dashboard';
+  }
 } catch (e) { S = defaults(); }
 S.bop = Object.assign(defaults().bop, S.bop || {});
 S.wire = Object.assign(defaults().wire, S.wire || {});
