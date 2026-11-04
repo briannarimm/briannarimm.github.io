@@ -915,11 +915,16 @@ function resultsPanel() {
     if (busy || !R.races.length) return; busy = true;
     dot.className = 'dot busy'; st.textContent = 'updating…'; rb.classList.add('spin');
     let errs = 0;
-    await Promise.all(R.races.map(async r => {
-      const id = String(r.id);
-      try { const d = await fetchRace(id); const old = cards.get(id); const n = raceCard(d, r, old); if (old && old.isConnected) old.replaceWith(n); cards.set(id, n); }
-      catch (e) { errs++; const m = cards.get(id) && $('.meta', cards.get(id)); if (m && !C.races[id]) m.innerHTML = `<span class="err">Could not load (${esc(e.message)})</span>`; }
-    }));
+    // A few requests at a time: civicAPI drops connections when it gets two dozen at once.
+    const queue = R.races.slice();
+    const worker = async () => {
+      while (queue.length) {
+        const r = queue.shift(), id = String(r.id);
+        try { const d = await fetchRace(id); const old = cards.get(id); const n = raceCard(d, r, old); if (old && old.isConnected) old.replaceWith(n); cards.set(id, n); }
+        catch (e) { errs++; const m = cards.get(id) && $('.meta', cards.get(id)); if (m && !C.races[id]) m.innerHTML = `<span class="err">Could not load (${esc(e.message)})</span>`; }
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(4, queue.length) }, worker));
     p._reorder();
     const now = Date.now(); const ok = errs < R.races.length;
     if (ok) C.racesOk = now; C.racesCall = now; saveCache();
