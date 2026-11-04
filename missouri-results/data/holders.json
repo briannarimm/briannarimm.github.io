@@ -1,0 +1,828 @@
+{
+"house": {
+"1": {
+"name": "Jeff Farnan",
+"party": "R"
+},
+"2": {
+"name": "Mazzie Christensen",
+"party": "R"
+},
+"3": {
+"name": "Danny Busick",
+"party": "R"
+},
+"4": {
+"name": "Greg Sharpe",
+"party": "R"
+},
+"5": {
+"name": "Louis Riggs",
+"party": "R"
+},
+"6": {
+"name": "Ed Lewis",
+"party": "R"
+},
+"7": {
+"name": "Peggy McGaugh",
+"party": "R"
+},
+"8": {
+"name": "Josh Hurlbert",
+"party": "R"
+},
+"9": {
+"name": "Dean VanSchoiack",
+"party": "R"
+},
+"10": {
+"name": "Bill Falkner",
+"party": "R"
+},
+"11": {
+"name": "Brenda Shields",
+"party": "R"
+},
+"12": {
+"name": "Mike Jones",
+"party": "R"
+},
+"13": {
+"name": "Sean Pouche",
+"party": "R"
+},
+"14": {
+"name": "Ashley Aune",
+"party": "D"
+},
+"15": {
+"name": "Kenneth Jamison",
+"party": "D"
+},
+"16": {
+"name": "Chris Brown",
+"party": "R"
+},
+"17": {
+"name": "Bill Allen",
+"party": "R"
+},
+"18": {
+"name": "Eric Woods",
+"party": "D"
+},
+"19": {
+"name": "Wick Thomas",
+"party": "D"
+},
+"20": {
+"name": "Mike Steinmeyer",
+"party": "R"
+},
+"21": {
+"name": "Will Jobe",
+"party": "D"
+},
+"22": {
+"name": "Yolanda Young",
+"party": "D"
+},
+"23": {
+"name": "Michael Johnson",
+"party": "D"
+},
+"24": {
+"name": "Emily Weber",
+"party": "D"
+},
+"25": {
+"name": "Patricia Mansur",
+"party": "D"
+},
+"26": {
+"name": "Tiffany Price",
+"party": "D"
+},
+"27": {
+"name": "Melissa Douglas",
+"party": "D"
+},
+"28": {
+"name": "Donna Barnes",
+"party": "D"
+},
+"29": {
+"name": "Aaron Crossley",
+"party": "D"
+},
+"30": {
+"name": "Jon Patterson",
+"party": "R"
+},
+"31": {
+"name": "Ron Fowler",
+"party": "R"
+},
+"32": {
+"name": "Jeff Coleman",
+"party": "R"
+},
+"33": {
+"name": "Carolyn Caton",
+"party": "R"
+},
+"34": {
+"name": "Kemp Strickler",
+"party": "D"
+},
+"35": {
+"name": "Keri Ingle",
+"party": "D"
+},
+"36": {
+"name": "Anthony Ealy",
+"party": "D"
+},
+"37": {
+"name": "Mark Sharp",
+"party": "D"
+},
+"38": {
+"name": "Martin Jacobs",
+"party": "D"
+},
+"39": {
+"name": "Mark Meirath",
+"party": "R"
+},
+"40": {
+"name": "Chad Perkins",
+"party": "R"
+},
+"41": {
+"name": "Doyle Justus",
+"party": "R"
+},
+"42": {
+"name": "Jeff Myers",
+"party": "R"
+},
+"43": {
+"name": "Kent Haden",
+"party": "R"
+},
+"44": {
+"name": "John Martin",
+"party": "R"
+},
+"45": {
+"name": "Kathy Steinhoff",
+"party": "D"
+},
+"46": {
+"name": "David T. Smith",
+"party": "D"
+},
+"47": {
+"name": "Adrian Plank",
+"party": "D"
+},
+"48": {
+"name": "Tim Taylor",
+"party": "R"
+},
+"49": {
+"name": "Jim Schulte",
+"party": "R"
+},
+"50": {
+"name": "Gregg Bush",
+"party": "D"
+},
+"51": {
+"name": "Mark Nolte",
+"party": "R"
+},
+"52": {
+"name": "Bradley Pollitt",
+"party": "R"
+},
+"53": {
+"name": "Terry Thompson",
+"party": "R"
+},
+"54": {
+"name": "Brandon Phelps",
+"party": "R"
+},
+"55": {
+"name": "William Irwin",
+"party": "R"
+},
+"56": {
+"name": "Michael Davis",
+"party": "R"
+},
+"57": {
+"name": "Rodger Reedy",
+"party": "R"
+},
+"58": {
+"name": "Willard Haley",
+"party": "R"
+},
+"59": {
+"name": "Rudy Veit",
+"party": "R"
+},
+"60": {
+"name": "Dave Griffith",
+"party": "R"
+},
+"61": {
+"name": "Bruce Sassmann",
+"party": "R"
+},
+"62": {
+"name": "Sherri Gallick",
+"party": "R"
+},
+"63": {
+"name": "Tricia Byrnes",
+"party": "R"
+},
+"64": {
+"name": "Deanna Self",
+"party": "R"
+},
+"65": {
+"name": "Wendy Hausman",
+"party": "R"
+},
+"66": {
+"name": "Marlene Terry",
+"party": "D"
+},
+"67": {
+"name": "Tonya Rush",
+"party": "D"
+},
+"68": {
+"name": "Kem Smith",
+"party": "D"
+},
+"69": {
+"name": "Scott Miller",
+"party": "R"
+},
+"70": {
+"name": "Stephanie Boykin",
+"party": "D"
+},
+"71": {
+"name": "LaDonna Appelbaum",
+"party": "D"
+},
+"72": {
+"name": "Doug Clemens",
+"party": "D"
+},
+"73": {
+"name": "Raychel Proudie",
+"party": "D"
+},
+"74": {
+"name": "Marla Smith",
+"party": "D"
+},
+"75": {
+"name": "Chanel Mosley",
+"party": "D"
+},
+"76": {
+"name": "Marlon Anderson",
+"party": "D"
+},
+"77": {
+"name": "Kimberly-Ann Collins",
+"party": "D"
+},
+"78": {
+"name": "Marty Joe Murray",
+"party": "D"
+},
+"79": {
+"name": "LaKeySha Bosley",
+"party": "D"
+},
+"80": {
+"name": "Elizabeth Fuchs",
+"party": "D"
+},
+"81": {
+"name": "Steve Butz",
+"party": "D"
+},
+"82": {
+"name": "Nick Kimble",
+"party": "D"
+},
+"83": {
+"name": "Raymond Reed",
+"party": "D"
+},
+"84": {
+"name": "Del Taylor",
+"party": "D"
+},
+"85": {
+"name": "Yolonda Fountain Henderson",
+"party": "D"
+},
+"86": {
+"name": "Jeff Hales",
+"party": "D"
+},
+"87": {
+"name": "Connie Steinmetz",
+"party": "D"
+},
+"88": {
+"name": "Holly Jones",
+"party": "R"
+},
+"89": {
+"name": "George Hruza",
+"party": "R"
+},
+"90": {
+"name": "Mark Boyko",
+"party": "D"
+},
+"91": {
+"name": "Jo Doll",
+"party": "D"
+},
+"92": {
+"name": "Michael Burton",
+"party": "D"
+},
+"93": {
+"name": "Bridget Walsh Moore",
+"party": "D"
+},
+"94": {
+"name": "Jim Murphy",
+"party": "R"
+},
+"95": {
+"name": "Vacant (Michael O'Donnell)",
+"party": "R"
+},
+"96": {
+"name": "Brad Christ",
+"party": "R"
+},
+"97": {
+"name": "David Casteel",
+"party": "R"
+},
+"98": {
+"name": "Jaclyn Zimmermann",
+"party": "D"
+},
+"99": {
+"name": "Ian Mackey",
+"party": "D"
+},
+"100": {
+"name": "Philip Oehlerking",
+"party": "R"
+},
+"101": {
+"name": "Ben Keathley",
+"party": "R"
+},
+"102": {
+"name": "Richard West",
+"party": "R"
+},
+"103": {
+"name": "Dave Hinman",
+"party": "R"
+},
+"104": {
+"name": "Terri Violet",
+"party": "R"
+},
+"105": {
+"name": "Colin Wellenkamp",
+"party": "R"
+},
+"106": {
+"name": "Travis Wilson",
+"party": "R"
+},
+"107": {
+"name": "Mark Matthiesen",
+"party": "R"
+},
+"108": {
+"name": "Mike Costlow",
+"party": "R"
+},
+"109": {
+"name": "John Simmons",
+"party": "R"
+},
+"110": {
+"name": "Vacant (Justin Sparks)",
+"party": "R"
+},
+"111": {
+"name": "Cecelie Williams",
+"party": "R"
+},
+"112": {
+"name": "Renee Reuter",
+"party": "R"
+},
+"113": {
+"name": "Phil Amato",
+"party": "R"
+},
+"114": {
+"name": "Vacant (Ken Waller)",
+"party": "R"
+},
+"115": {
+"name": "Bill Lucas",
+"party": "R"
+},
+"116": {
+"name": "Dale Wright",
+"party": "R"
+},
+"117": {
+"name": "Becky Laubinger",
+"party": "R"
+},
+"118": {
+"name": "Mike McGirl",
+"party": "R"
+},
+"119": {
+"name": "Brad Banderman",
+"party": "R"
+},
+"120": {
+"name": "John Hewkin",
+"party": "R"
+},
+"121": {
+"name": "Bill Hardwick",
+"party": "R"
+},
+"122": {
+"name": "Tara Peters",
+"party": "R"
+},
+"123": {
+"name": "Jeff Vernetti",
+"party": "R"
+},
+"124": {
+"name": "Don Mayhew",
+"party": "R"
+},
+"125": {
+"name": "Dane Diehl",
+"party": "R"
+},
+"126": {
+"name": "Jim Kalberloh",
+"party": "R"
+},
+"127": {
+"name": "Ann Kelley",
+"party": "R"
+},
+"128": {
+"name": "Christopher Warwick",
+"party": "R"
+},
+"129": {
+"name": "John Black",
+"party": "R"
+},
+"130": {
+"name": "Bishop Davidson",
+"party": "R"
+},
+"131": {
+"name": "Bill Owen",
+"party": "R"
+},
+"132": {
+"name": "Jeremy Dean",
+"party": "D"
+},
+"133": {
+"name": "Melanie Stinnett",
+"party": "R"
+},
+"134": {
+"name": "Alex Riley",
+"party": "R"
+},
+"135": {
+"name": "Betsy Fogle",
+"party": "D"
+},
+"136": {
+"name": "Stephanie Hein",
+"party": "D"
+},
+"137": {
+"name": "Darin Chappell",
+"party": "R"
+},
+"138": {
+"name": "Burt Whaley",
+"party": "R"
+},
+"139": {
+"name": "Bob Titus",
+"party": "R"
+},
+"140": {
+"name": "Jamie Ray Gragg",
+"party": "R"
+},
+"141": {
+"name": "Melissa Schmidt",
+"party": "R"
+},
+"142": {
+"name": "Jeff Knight",
+"party": "R"
+},
+"143": {
+"name": "Bennie Cook",
+"party": "R"
+},
+"144": {
+"name": "Tony Harbison",
+"party": "R"
+},
+"145": {
+"name": "Bryant Wolfin",
+"party": "R"
+},
+"146": {
+"name": "Barry Hovis",
+"party": "R"
+},
+"147": {
+"name": "John Voss",
+"party": "R"
+},
+"148": {
+"name": "David A. Dolan",
+"party": "R"
+},
+"149": {
+"name": "Vacant (Donnie Brown)",
+"party": "R"
+},
+"150": {
+"name": "Cameron Bunting Parker",
+"party": "R"
+},
+"151": {
+"name": "Steven Jordan",
+"party": "R"
+},
+"152": {
+"name": "Hardy Billington",
+"party": "R"
+},
+"153": {
+"name": "Keith Elliott",
+"party": "R"
+},
+"154": {
+"name": "Lisa Durnell",
+"party": "R"
+},
+"155": {
+"name": "Matthew Overcast",
+"party": "R"
+},
+"156": {
+"name": "Brian Seitz",
+"party": "R"
+},
+"157": {
+"name": "Mitch Boggs",
+"party": "R"
+},
+"158": {
+"name": "Scott Cupps",
+"party": "R"
+},
+"159": {
+"name": "Dirk Deaton",
+"party": "R"
+},
+"160": {
+"name": "Vacant (Ben Baker)",
+"party": "R"
+},
+"161": {
+"name": "Lane Roberts",
+"party": "R"
+},
+"162": {
+"name": "Robert Bromley",
+"party": "R"
+},
+"163": {
+"name": "Cathy Loy",
+"party": "R"
+}
+},
+"senate": {
+"1": {
+"name": "Doug Beck",
+"party": "D"
+},
+"2": {
+"name": "Nick Schroer",
+"party": "R"
+},
+"3": {
+"name": "Mike Henderson",
+"party": "R"
+},
+"4": {
+"name": "Karla May",
+"party": "D"
+},
+"5": {
+"name": "Steve Roberts",
+"party": "D"
+},
+"6": {
+"name": "Mike Bernskoetter",
+"party": "R"
+},
+"7": {
+"name": "Patty Lewis",
+"party": "D"
+},
+"8": {
+"name": "Mike Cierpiot",
+"party": "R"
+},
+"9": {
+"name": "Barbara Anne Washington",
+"party": "D"
+},
+"10": {
+"name": "Vacant",
+"party": "R"
+},
+"11": {
+"name": "Joe Nicola",
+"party": "R"
+},
+"12": {
+"name": "Rusty Black",
+"party": "R"
+},
+"13": {
+"name": "Angela Mosley",
+"party": "D"
+},
+"14": {
+"name": "Brian Williams",
+"party": "D"
+},
+"15": {
+"name": "David Gregory",
+"party": "R"
+},
+"16": {
+"name": "Justin Brown",
+"party": "R"
+},
+"17": {
+"name": "Maggie Nurrenbern",
+"party": "D"
+},
+"18": {
+"name": "Cindy O'Laughlin",
+"party": "R"
+},
+"19": {
+"name": "Stephen Webber",
+"party": "D"
+},
+"20": {
+"name": "Curtis Trent",
+"party": "R"
+},
+"21": {
+"name": "Kurtis Gregory",
+"party": "R"
+},
+"22": {
+"name": "Mary Coleman",
+"party": "R"
+},
+"23": {
+"name": "Adam Schnelting",
+"party": "R"
+},
+"24": {
+"name": "Tracy McCreery",
+"party": "D"
+},
+"25": {
+"name": "Jason Bean",
+"party": "R"
+},
+"26": {
+"name": "Ben Brown",
+"party": "R"
+},
+"27": {
+"name": "Jamie Burger",
+"party": "R"
+},
+"28": {
+"name": "Sandy Crawford",
+"party": "R"
+},
+"29": {
+"name": "Mike Moon",
+"party": "R"
+},
+"30": {
+"name": "Lincoln Hough",
+"party": "R"
+},
+"31": {
+"name": "Rick Brattin",
+"party": "R"
+},
+"32": {
+"name": "Jill Carter",
+"party": "R"
+},
+"33": {
+"name": "Brad Hudson",
+"party": "R"
+},
+"34": {
+"name": "Tony Luetkemeyer",
+"party": "R"
+}
+},
+"congress": {
+"1": {
+"name": "Wesley Bell",
+"party": "D"
+},
+"2": {
+"name": "Ann Wagner",
+"party": "R"
+},
+"3": {
+"name": "Bob Onder",
+"party": "R"
+},
+"4": {
+"name": "Mark Alford",
+"party": "R"
+},
+"5": {
+"name": "Emanuel Cleaver II",
+"party": "D"
+},
+"6": {
+"name": "Sam Graves",
+"party": "R"
+},
+"7": {
+"name": "Eric Burlison",
+"party": "R"
+},
+"8": {
+"name": "Jason Smith",
+"party": "R"
+}
+}
+}

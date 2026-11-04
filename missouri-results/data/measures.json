@@ -1,0 +1,44 @@
+{
+ "State Auditor": {
+  "kicker": "Statewide office",
+  "text": "The only statewide office on the 2026 ballot. The auditor reviews how state agencies and many local governments spend public money. Republican Scott Fitzpatrick is the incumbent."
+ },
+ "Amendment 3": {
+  "kicker": "Constitutional amendment · Referred by the legislature (HJR 73)",
+  "text": "Abortion and gender transition care for minors.",
+  "yes": "Repeals the reproductive-rights amendment voters passed in 2024. Abortion would be allowed only for medical emergencies, fetal anomalies, and rape or incest up to 12 weeks. Requires parental or court consent for minors, and bans gender transition procedures for minors, with medical exceptions.",
+  "no": "Keeps the 2024 amendment, so abortion stays legal up to fetal viability. No new constitutional ban on gender transition care for minors."
+ },
+ "Amendment 6": {
+  "kicker": "Constitutional amendment · Citizen initiative",
+  "text": "Protecting the initiative and referendum process.",
+  "yes": "Makes initiative and referendum a fundamental right. The legislature could not change or repeal voter-passed initiatives unless 80% of each chamber sends the change back to voters. Lets courts revise unfair ballot summaries. Signature requirements and simple-majority approval stay the same.",
+  "no": "Leaves the current initiative and referendum rules unchanged."
+ },
+ "Amendment 7": {
+  "kicker": "Constitutional amendment · Referred by the legislature (SJR 95)",
+  "text": "“Show-Me Prosperity Fund.”",
+  "yes": "Creates a permanent public endowment meant to eventually replace state taxes. The legislature decides how to fund it, and nothing can be spent until the State Treasurer certifies enough earnings. Yearly withdrawals are capped at 3% of the fund’s five-year average value, and state taxes end once the fund can replace them.",
+  "no": "No endowment fund is created."
+ },
+ "Amendment 8": {
+  "kicker": "Constitutional amendment · Referred by the legislature (SJR 87)",
+  "text": "County sheriffs.",
+  "yes": "Requires every county to elect a sheriff every four years and moves sheriff duties from statute into the constitution. A sheriff could be removed only through a quo warranto action brought by the attorney general. Some St. Louis-area exceptions apply.",
+  "no": "No constitutional change. Current state law on sheriffs stays in place."
+ },
+ "Proposition A": {
+  "kicker": "Referendum · Forced onto the ballot by citizen petition",
+  "text": "The 2025 congressional map (HB 1).",
+  "yes": "Approves the congressional map lawmakers passed in 2025. It redraws Kansas City’s 5th District to lean Republican and would apply to future elections.",
+  "no": "Rejects the 2025 map and keeps the districts adopted in 2022.",
+  "note": "This election used the 2022 map either way. The Missouri Supreme Court held that HB 1 cannot take effect unless voters approve it."
+ },
+ "Supreme Court Retention": {
+  "kicker": "Judicial retention",
+  "text": "Whether Judge Paul C. Wilson stays on the Missouri Supreme Court.",
+  "yes": "Keeps Judge Wilson on the court.",
+  "no": "Removes him from the court. The governor would fill the seat through the nonpartisan court plan."
+ },
+ "_sources": "Sources: Missouri Secretary of State 2026 ballot measures page; KCUR voter guide (Oct. 27, 2026)."
+}

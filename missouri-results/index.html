@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<script>
+  // Apply a stored theme choice before first paint. Shares the "theme" key with the rest of the site.
+  (function () { try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Missouri Election Results, November 3, 2026 · Brianna Imm</title>
+<meta name="description" content="Unofficial results of Missouri's November 3, 2026 general election: the State Auditor race, five statewide ballot measures, every U.S. House, State Senate and State House seat, and local ballot questions, with county and district maps.">
+<meta name="theme-color" content="#0a0e13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)">
+<link rel="canonical" href="https://www.briannaimm.com/missouri-results/">
+<meta property="og:title" content="Missouri Election Results, November 3, 2026">
+<meta property="og:description" content="Unofficial results with county and district maps: State Auditor, Amendments 3, 6, 7 and 8, Proposition A, Congress, the General Assembly, and local ballot questions.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.briannaimm.com/missouri-results/">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="app.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--hatch)" stroke-width="2"/>
+    </pattern>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6l7 10H5z"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18L5 8h14z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></symbol>
+  </defs>
+</svg>
+<div class="aurora" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<div class="spotlight" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Brianna Imm, home"><img class="wm-dark" src="/images/bri-wordmark.svg" alt="" width="255" height="158"><img class="wm-light" src="/images/bri-wordmark-light.svg" alt="" width="255" height="158"><span class="title">Missouri Results</span></a>
+  <nav class="primary" id="viewTabs" role="tablist" aria-label="Results sections"></nav>
+  <div class="hdr-right">
+    <button class="iconbtn" id="theme" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg><span>Light</span></button>
+  </div>
+</header>
+
+<main><div class="wrap">
+  <div class="pagehead reveal">
+    <div>
+      <div class="kicker">General election · November 3, 2026</div>
+      <h1>Missouri Election Results</h1>
+    </div>
+    <span class="status"><span class="dot" aria-hidden="true"></span><span id="statusText">Loading results</span></span>
+  </div>
+
+  <div class="chips" id="raceChips" role="group" aria-label="Race"></div>
+
+  <div class="grid reveal">
+    <div class="card mapcard">
+      <div class="maptools">
+        <div class="seg" id="zoomPresets" role="group" aria-label="Zoom to region"></div>
+        <label class="toggle" id="ctyToggle"><input type="checkbox" id="ctyOverlay" checked> County lines</label>
+      </div>
+      <svg id="map" role="img" aria-label="Results map"></svg>
+      <div class="legend" id="legend"></div>
+      <div class="zoombox">
+        <button id="zin" type="button" aria-label="Zoom in"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg></button>
+        <button id="zout" type="button" aria-label="Zoom out"><svg class="ico" aria-hidden="true"><use href="#i-minus"/></svg></button>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="card panel" id="summary"><div class="kicker">Results</div><p class="detail-empty">Loading…</p></div>
+      <div class="card panel" id="detail"></div>
+    </div>
+  </div>
+
+  <section class="card chamber" id="chamber" hidden aria-label="Seat chart">
+    <div>
+      <svg id="hemi" role="img" aria-label="Seat chart"></svg>
+      <div class="hlegend" id="hemiLegend"></div>
+    </div>
+    <div class="cstats" id="chamberStats"></div>
+  </section>
+
+  <div class="card tablecard">
+    <div class="tablehead">
+      <h3 id="tableTitle">Results by county</h3>
+      <input id="tableSearch" type="search" placeholder="Filter" aria-label="Filter table">
+    </div>
+    <div class="tscroll"><table class="data" id="table"></table></div>
+  </div>
+
+  <div class="notes" id="foot"></div>
+</div></main>
+
+<footer><p>&copy; <span id="year">2026</span> Brianna R. Imm &middot; Not legal advice. Results are unofficial.</p></footer>
+
+<div id="tip" role="tooltip"></div>
+
+<noscript><p style="padding:2rem">This page needs JavaScript to draw the maps and tables.</p></noscript>
+</body>
+</html>

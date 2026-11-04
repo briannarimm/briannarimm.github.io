@@ -31,6 +31,8 @@ exclude:
   - LICENSE
   - LICENSE-CC-BY-4.0
   - editor/
+  - missouri-results/tools/
+  - missouri-results/README.md
   - CLAUDE.md
   - Gemfile
   - Gemfile.lock

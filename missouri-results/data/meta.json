@@ -1,0 +1,586 @@
+{
+ "statewide_asof": "11/3/2026 11:54:46 PM",
+ "counties": {
+  "Adair": {
+   "file": "adair.txt",
+   "asof": "11/4/2026 12:05:45 AM",
+   "races": 11
+  },
+  "Andrew": {
+   "file": "andrew.txt",
+   "asof": "11/4/2026 12:06:11 AM",
+   "races": 10
+  },
+  "Atchison": {
+   "file": "atchinson.txt",
+   "asof": "11/4/2026 12:06:23 AM",
+   "races": 10
+  },
+  "Audrain": {
+   "file": "audrain.txt",
+   "asof": "11/4/2026 12:06:37 AM",
+   "races": 10
+  },
+  "Barry": {
+   "file": "barry.txt",
+   "asof": "11/4/2026 12:07:20 AM",
+   "races": 9
+  },
+  "Barton": {
+   "file": "barton.txt",
+   "asof": "11/4/2026 12:07:36 AM",
+   "races": 10
+  },
+  "Bates": {
+   "file": "bates.txt",
+   "asof": "11/4/2026 12:07:44 AM",
+   "races": 10
+  },
+  "Benton": {
+   "file": "benton.txt",
+   "asof": "11/4/2026 12:07:51 AM",
+   "races": 11
+  },
+  "Bollinger": {
+   "file": "bollinger.txt",
+   "asof": "11/4/2026 12:08:39 AM",
+   "races": 10
+  },
+  "Boone": {
+   "file": "boone.txt",
+   "asof": "11/4/2026 12:08:49 AM",
+   "races": 14
+  },
+  "Buchanan": {
+   "file": "buchanan.txt",
+   "asof": "11/4/2026 12:08:58 AM",
+   "races": 13
+  },
+  "Butler": {
+   "file": "butler.txt",
+   "asof": "11/4/2026 12:09:05 AM",
+   "races": 10
+  },
+  "Caldwell": {
+   "file": "caldwell.txt",
+   "asof": "11/4/2026 12:33:44 AM",
+   "races": 10
+  },
+  "Callaway": {
+   "file": "callaway.txt",
+   "asof": "11/4/2026 12:09:20 AM",
+   "races": 11
+  },
+  "Camden": {
+   "file": "camden.txt",
+   "asof": "11/4/2026 12:09:29 AM",
+   "races": 12
+  },
+  "Cape Girardeau": {
+   "file": "cape-g.txt",
+   "asof": "11/4/2026 12:09:40 AM",
+   "races": 11
+  },
+  "Carroll": {
+   "file": "carroll.txt",
+   "asof": "11/4/2026 12:09:48 AM",
+   "races": 10
+  },
+  "Carter": {
+   "file": "carter.txt",
+   "asof": "11/4/2026 12:09:56 AM",
+   "races": 9
+  },
+  "Cass": {
+   "file": "cass.txt",
+   "asof": "11/4/2026 12:10:04 AM",
+   "races": 11
+  },
+  "Cedar": {
+   "file": "cedar.txt",
+   "asof": "11/4/2026 12:10:11 AM",
+   "races": 11
+  },
+  "Chariton": {
+   "file": "charlton.txt",
+   "asof": "11/4/2026 12:10:18 AM",
+   "races": 10
+  },
+  "Christian": {
+   "file": "christian.txt",
+   "asof": "11/4/2026 12:10:25 AM",
+   "races": 11
+  },
+  "Clark": {
+   "file": "clark.txt",
+   "asof": "11/4/2026 12:10:34 AM",
+   "races": 10
+  },
+  "Clay": {
+   "file": "clay.txt",
+   "asof": "11/4/2026 12:10:41 AM",
+   "races": 16
+  },
+  "Clinton": {
+   "file": "clinton.txt",
+   "asof": "11/4/2026 12:10:50 AM",
+   "races": 11
+  },
+  "Cole": {
+   "file": "cole.txt",
+   "asof": "11/4/2026 12:10:59 AM",
+   "races": 11
+  },
+  "Cooper": {
+   "file": "cooper.txt",
+   "asof": "11/4/2026 12:11:07 AM",
+   "races": 10
+  },
+  "Crawford": {
+   "file": "crawford.txt",
+   "asof": "11/4/2026 12:11:14 AM",
+   "races": 9
+  },
+  "Dade": {
+   "file": "dade.txt",
+   "asof": "11/4/2026 12:11:21 AM",
+   "races": 10
+  },
+  "Dallas": {
+   "file": "dallas.txt",
+   "asof": "11/4/2026 12:34:12 AM",
+   "races": 10
+  },
+  "Daviess": {
+   "file": "daviess.txt",
+   "asof": "11/4/2026 12:11:39 AM",
+   "races": 10
+  },
+  "De Kalb": {
+   "file": "de-kalb.txt",
+   "asof": "11/4/2026 12:11:50 AM",
+   "races": 10
+  },
+  "Dent": {
+   "file": "dent.txt",
+   "asof": "11/4/2026 12:11:59 AM",
+   "races": 10
+  },
+  "Douglas": {
+   "file": "douglas.txt",
+   "asof": "11/4/2026 12:12:07 AM",
+   "races": 10
+  },
+  "Dunklin": {
+   "file": "dunklin.txt",
+   "asof": "11/4/2026 12:12:15 AM",
+   "races": 9
+  },
+  "Franklin": {
+   "file": "franklin.txt",
+   "asof": "11/4/2026 12:12:23 AM",
+   "races": 12
+  },
+  "Gasconade": {
+   "file": "gasconade.txt",
+   "asof": "11/4/2026 12:12:32 AM",
+   "races": 10
+  },
+  "Gentry": {
+   "file": "gentry.txt",
+   "asof": "11/4/2026 12:12:39 AM",
+   "races": 10
+  },
+  "Greene": {
+   "file": "greene.txt",
+   "asof": "11/4/2026 12:12:47 AM",
+   "races": 18
+  },
+  "Grundy": {
+   "file": "grundy.txt",
+   "asof": "11/4/2026 12:12:56 AM",
+   "races": 10
+  },
+  "Harrison": {
+   "file": "harrison.txt",
+   "asof": "11/4/2026 12:18:36 AM",
+   "races": 10
+  },
+  "Henry": {
+   "file": "henry.txt",
+   "asof": "11/4/2026 12:18:44 AM",
+   "races": 10
+  },
+  "Hickory": {
+   "file": "hickory.txt",
+   "asof": "11/4/2026 12:18:52 AM",
+   "races": 11
+  },
+  "Holt": {
+   "file": "holt.txt",
+   "asof": "11/4/2026 12:18:59 AM",
+   "races": 10
+  },
+  "Howard": {
+   "file": "howard.txt",
+   "asof": "11/4/2026 12:19:05 AM",
+   "races": 9
+  },
+  "Howell": {
+   "file": "howell.txt",
+   "asof": "11/4/2026 12:19:12 AM",
+   "races": 10
+  },
+  "Iron": {
+   "file": "iron.txt",
+   "asof": "11/4/2026 12:19:18 AM",
+   "races": 9
+  },
+  "Jackson": {
+   "file": "jackson.txt",
+   "asof": "11/4/2026 12:19:24 AM",
+   "races": 24
+  },
+  "Jasper": {
+   "file": "jasper.txt",
+   "asof": "11/4/2026 12:19:31 AM",
+   "races": 13
+  },
+  "Jefferson": {
+   "file": "jefferson.txt",
+   "asof": "11/4/2026 12:19:37 AM",
+   "races": 16
+  },
+  "Johnson": {
+   "file": "johnson.txt",
+   "asof": "11/4/2026 12:19:45 AM",
+   "races": 10
+  },
+  "Kansas City": {
+   "file": "kansas-city.txt",
+   "asof": "11/4/2026 12:19:51 AM",
+   "races": 20
+  },
+  "Knox": {
+   "file": "knox.txt",
+   "asof": "11/4/2026 12:20:01 AM",
+   "races": 10
+  },
+  "Laclede": {
+   "file": "laclede.txt",
+   "asof": "11/4/2026 12:20:08 AM",
+   "races": 11
+  },
+  "Lafayette": {
+   "file": "lafayette.txt",
+   "asof": "11/4/2026 12:20:15 AM",
+   "races": 10
+  },
+  "Lawrence": {
+   "file": "lawrence.txt",
+   "asof": "11/4/2026 12:20:24 AM",
+   "races": 9
+  },
+  "Lewis": {
+   "file": "lewis.txt",
+   "asof": "11/4/2026 12:20:30 AM",
+   "races": 10
+  },
+  "Lincoln": {
+   "file": "lincoln.txt",
+   "asof": "11/4/2026 12:20:36 AM",
+   "races": 11
+  },
+  "Linn": {
+   "file": "linn.txt",
+   "asof": "11/4/2026 12:34:29 AM",
+   "races": 10
+  },
+  "Livingston": {
+   "file": "livingston.txt",
+   "asof": "11/4/2026 12:35:32 AM",
+   "races": 10
+  },
+  "Macon": {
+   "file": "macon.txt",
+   "asof": "11/4/2026 12:20:59 AM",
+   "races": 10
+  },
+  "Madison": {
+   "file": "madison.txt",
+   "asof": "11/4/2026 12:21:06 AM",
+   "races": 10
+  },
+  "Maries": {
+   "file": "maries.txt",
+   "asof": "11/4/2026 12:21:12 AM",
+   "races": 10
+  },
+  "Marion": {
+   "file": "marion.txt",
+   "asof": "11/4/2026 12:21:19 AM",
+   "races": 10
+  },
+  "McDonald": {
+   "file": "mcdonald.txt",
+   "asof": "11/4/2026 12:21:25 AM",
+   "races": 10
+  },
+  "Mercer": {
+   "file": "mercer.txt",
+   "asof": "11/4/2026 12:21:31 AM",
+   "races": 10
+  },
+  "Miller": {
+   "file": "miller.txt",
+   "asof": "11/4/2026 12:21:40 AM",
+   "races": 11
+  },
+  "Mississippi": {
+   "file": "mississippi.txt",
+   "asof": "11/4/2026 12:21:46 AM",
+   "races": 9
+  },
+  "Moniteau": {
+   "file": "moniteau.txt",
+   "asof": "11/4/2026 12:21:58 AM",
+   "races": 10
+  },
+  "Monroe": {
+   "file": "monroe.txt",
+   "asof": "11/4/2026 12:22:08 AM",
+   "races": 11
+  },
+  "Montgomery": {
+   "file": "montgomery.txt",
+   "asof": "11/4/2026 12:22:32 AM",
+   "races": 11
+  },
+  "Morgan": {
+   "file": "morgan.txt",
+   "asof": "11/4/2026 12:23:53 AM",
+   "races": 10
+  },
+  "New Madrid": {
+   "file": "new-madrid.txt",
+   "asof": "11/4/2026 12:24:01 AM",
+   "races": 9
+  },
+  "Newton": {
+   "file": "newton.txt",
+   "asof": "11/4/2026 12:24:08 AM",
+   "races": 11
+  },
+  "Nodaway": {
+   "file": "nodaway.txt",
+   "asof": "11/4/2026 12:24:14 AM",
+   "races": 10
+  },
+  "Oregon": {
+   "file": "oregon.txt",
+   "asof": "11/4/2026 12:24:21 AM",
+   "races": 9
+  },
+  "Osage": {
+   "file": "osage.txt",
+   "asof": "11/4/2026 12:24:27 AM",
+   "races": 10
+  },
+  "Ozark": {
+   "file": "ozark.txt",
+   "asof": "11/4/2026 12:24:34 AM",
+   "races": 9
+  },
+  "Pemiscot": {
+   "file": "pemiscot.txt",
+   "asof": "11/4/2026 12:24:40 AM",
+   "races": 10
+  },
+  "Perry": {
+   "file": "perry.txt",
+   "asof": "11/4/2026 12:24:48 AM",
+   "races": 9
+  },
+  "Pettis": {
+   "file": "pettis.txt",
+   "asof": "11/4/2026 12:24:54 AM",
+   "races": 11
+  },
+  "Phelps": {
+   "file": "phelps.txt",
+   "asof": "11/4/2026 12:25:01 AM",
+   "races": 11
+  },
+  "Pike": {
+   "file": "pike.txt",
+   "asof": "11/4/2026 12:25:07 AM",
+   "races": 10
+  },
+  "Platte": {
+   "file": "platte.txt",
+   "asof": "11/4/2026 12:25:13 AM",
+   "races": 12
+  },
+  "Polk": {
+   "file": "polk.txt",
+   "asof": "11/4/2026 12:25:18 AM",
+   "races": 10
+  },
+  "Pulaski": {
+   "file": "pulaski.txt",
+   "asof": "11/4/2026 12:25:44 AM",
+   "races": 11
+  },
+  "Putnam": {
+   "file": "putnam.txt",
+   "asof": "11/4/2026 12:25:52 AM",
+   "races": 10
+  },
+  "Ralls": {
+   "file": "ralls.txt",
+   "asof": "11/4/2026 12:26:00 AM",
+   "races": 10
+  },
+  "Randolph": {
+   "file": "randolph.txt",
+   "asof": "11/4/2026 12:26:07 AM",
+   "races": 11
+  },
+  "Ray": {
+   "file": "ray.txt",
+   "asof": "11/4/2026 12:26:15 AM",
+   "races": 10
+  },
+  "Reynolds": {
+   "file": "reynolds.txt",
+   "asof": "11/4/2026 12:26:21 AM",
+   "races": 9
+  },
+  "Ripley": {
+   "file": "ripley.txt",
+   "asof": "11/4/2026 12:26:28 AM",
+   "races": 9
+  },
+  "Saline": {
+   "file": "saline.txt",
+   "asof": "11/4/2026 12:26:34 AM",
+   "races": 9
+  },
+  "Schuyler": {
+   "file": "schuyler.txt",
+   "asof": "11/4/2026 12:26:40 AM",
+   "races": 10
+  },
+  "Scotland": {
+   "file": "scotland.txt",
+   "asof": "11/4/2026 12:26:47 AM",
+   "races": 10
+  },
+  "Scott": {
+   "file": "scott.txt",
+   "asof": "11/4/2026 12:26:53 AM",
+   "races": 9
+  },
+  "Shannon": {
+   "file": "shannon.txt",
+   "asof": "11/4/2026 12:26:59 AM",
+   "races": 10
+  },
+  "Shelby": {
+   "file": "shelby.txt",
+   "asof": "11/4/2026 12:27:05 AM",
+   "races": 10
+  },
+  "St. Charles": {
+   "file": "st-charles.txt",
+   "asof": "11/4/2026 12:27:11 AM",
+   "races": 22
+  },
+  "St. Clair": {
+   "file": "st-clair.txt",
+   "asof": "11/4/2026 12:27:19 AM",
+   "races": 10
+  },
+  "St. Francois": {
+   "file": "st-francois.txt",
+   "asof": "11/4/2026 12:27:25 AM",
+   "races": 10
+  },
+  "St. Louis": {
+   "file": "st-louis.txt",
+   "asof": "11/4/2026 12:27:33 AM",
+   "races": 40
+  },
+  "St. Louis City": {
+   "file": "st.louis-city.txt",
+   "asof": "11/4/2026 12:27:41 AM",
+   "races": 17
+  },
+  "Ste. Genevieve": {
+   "file": "ste-gen.txt",
+   "asof": "11/4/2026 12:27:53 AM",
+   "races": 9
+  },
+  "Stoddard": {
+   "file": "stoddard.txt",
+   "asof": "11/4/2026 12:28:06 AM",
+   "races": 9
+  },
+  "Stone": {
+   "file": "stone.txt",
+   "asof": "11/4/2026 12:28:13 AM",
+   "races": 10
+  },
+  "Sullivan": {
+   "file": "sullivan.txt",
+   "asof": "11/4/2026 12:28:20 AM",
+   "races": 10
+  },
+  "Taney": {
+   "file": "taney.txt",
+   "asof": "11/4/2026 12:28:28 AM",
+   "races": 10
+  },
+  "Texas": {
+   "file": "texas.txt",
+   "asof": "11/4/2026 12:28:35 AM",
+   "races": 10
+  },
+  "Vernon": {
+   "file": "vernon.txt",
+   "asof": "11/4/2026 12:28:41 AM",
+   "races": 10
+  },
+  "Warren": {
+   "file": "warren.txt",
+   "asof": "11/4/2026 12:29:11 AM",
+   "races": 11
+  },
+  "Washington": {
+   "file": "washington.txt",
+   "asof": "11/4/2026 12:29:18 AM",
+   "races": 10
+  },
+  "Wayne": {
+   "file": "wayne.txt",
+   "asof": "11/4/2026 12:29:24 AM",
+   "races": 10
+  },
+  "Webster": {
+   "file": "webster.txt",
+   "asof": "11/4/2026 12:29:31 AM",
+   "races": 12
+  },
+  "Worth": {
+   "file": "worth.txt",
+   "asof": "11/4/2026 12:29:38 AM",
+   "races": 10
+  },
+  "Wright": {
+   "file": "wright.txt",
+   "asof": "11/4/2026 12:29:46 AM",
+   "races": 10
+  }
+ },
+ "needs_redownload": []
+}
