@@ -54,7 +54,7 @@ The website turns off all motion for users who set their system to reduce motion
 | `_data/dublin_core.yml` | The 15 Dublin Core elements, in display order. |
 | `_config.yml` | The Jekyll settings. |
 | `editor/` | The Collection Editor application. Jekyll does not publish this folder. |
-| `election/index.html` | A personal election-night dashboard at `/election/`: video streams, browser panes, a live results feed, poll closings, a balance-of-power tally, and a call log. One self-contained file; settings stay in the browser. Not linked from the site and not indexed. |
+| `election/` | A personal election-night dashboard at `/election/`: video streams, browser panes, a live results feed, a Bluesky news wire, poll closings, a balance-of-power tally, and a call log. One self-contained page plus a small service worker; settings and caches stay in the browser. Not linked from the site and not indexed. |
 | `style.css` | The colors (dark and light themes), fonts, layout, and animations. |
 | `script.js` | The scroll effects, the mouse effects, the theme toggle, the filters, the carousel, and the rotating words. |
 | `images/` | The portrait photo in three sizes, the three "bri." wordmark files, and the favicon files. |

@@ -2,15 +2,23 @@
 <html lang="en" class="js">
 <head>
 <meta charset="utf-8">
+<script>
+  // Apply a stored theme choice before first paint. Shares the "theme" key with the rest of the site.
+  (function () { try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Election Night · Brianna Imm</title>
-<meta name="description" content="An all-in-one election-night dashboard: video streams, browser panes, live results, poll closings, balance of power, and a call log.">
+<meta name="description" content="An all-in-one election-night dashboard: video streams, browser panes, live results, a news wire, poll closings, balance of power, and a call log.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#0a0e13">
+<meta name="theme-color" content="#0a0e13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://civicapi.org">
+<link rel="preconnect" href="https://public.api.bsky.app">
+<link rel="preconnect" href="https://ntv.st">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
 <style>
 :root {
@@ -23,15 +31,40 @@
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   /* Election palette: the site's dusty pastels, tuned to blue, red, and purple. */
   --dem: #8fb4e3; --gop: #e39a97; --ind: #b3a3e6; --other: #9aa3ad;
+  --dem-fill: #8fb4e3; --gop-fill: #e39a97; --ind-fill: #b3a3e6;
   --accent: var(--dem); --accent-2: var(--gop); --c: var(--ind);
   --grad: linear-gradient(120deg, #8fb4e3, #b3a3e6 55%, #e39a97);
   --shadow-2: 0 20px 60px -24px rgba(179,163,230,0.5);
-  --well: #10151c;
+  --well: #10151c; --ink: #0a0e13; --track: rgba(255,255,255,0.08); --row: rgba(255,255,255,0.03);
+  --spot: rgba(255,255,255,0.06); --aurora-k: 1; --glass: rgba(10,14,19,0.9);
+  --next-row: rgba(143,180,227,0.1);
   color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f6f3ec; --fg: #15181d; --muted: #5d6670; --text-soft: #15181d;
+  --card: rgba(255,255,255,0.65); --border: rgba(21,24,29,0.10); --hover-line: rgba(21,24,29,0.3);
+  --card-fill: linear-gradient(160deg, rgba(21,24,29,0.07), rgba(21,24,29,0.02));
+  --dem: #365f86; --gop: #a0474d; --ind: #5a4a9e; --other: #5d6670;
+  --well: #eae6dd; --track: rgba(21,24,29,0.1); --row: rgba(21,24,29,0.03);
+  --spot: rgba(10,14,19,0.05); --aurora-k: 0.5; --glass: rgba(246,243,236,0.92);
+  --next-row: rgba(54,95,134,0.1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f6f3ec; --fg: #15181d; --muted: #5d6670; --text-soft: #15181d;
+    --card: rgba(255,255,255,0.65); --border: rgba(21,24,29,0.10); --hover-line: rgba(21,24,29,0.3);
+    --card-fill: linear-gradient(160deg, rgba(21,24,29,0.07), rgba(21,24,29,0.02));
+    --dem: #365f86; --gop: #a0474d; --ind: #5a4a9e; --other: #5d6670;
+    --well: #eae6dd; --track: rgba(21,24,29,0.1); --row: rgba(21,24,29,0.03);
+    --spot: rgba(10,14,19,0.05); --aurora-k: 0.5; --glass: rgba(246,243,236,0.92);
+    --next-row: rgba(54,95,134,0.1);
+    color-scheme: light;
+  }
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 0.95rem/1.55 var(--sans); overflow-x: clip; min-height: 100vh; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 0.95rem/1.55 var(--sans); overflow-x: clip; min-height: 100vh; transition: background 0.3s, color 0.3s; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--c); outline-offset: 2px; border-radius: 6px; }
@@ -39,62 +72,65 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 /* ---------- background ---------- */
 .aurora { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
-.blob { position: absolute; width: 55vmax; height: 55vmax; border-radius: 50%; filter: blur(90px); opacity: 0.34; animation: drift 24s ease-in-out infinite alternate; }
+.blob { position: absolute; width: 55vmax; height: 55vmax; border-radius: 50%; filter: blur(90px); opacity: calc(0.34 * var(--aurora-k)); animation: drift 24s ease-in-out infinite alternate; }
 .b1 { background: #3f5f94; top: -20vmax; left: -15vmax; }
-.b2 { background: #8f4a4e; bottom: -25vmax; right: -15vmax; animation-duration: 30s; animation-delay: -8s; opacity: 0.3; }
-.b3 { background: #5a4a9e; top: 30vh; left: 40vw; width: 38vmax; height: 38vmax; animation-duration: 36s; animation-delay: -15s; opacity: 0.22; }
+.b2 { background: #8f4a4e; bottom: -25vmax; right: -15vmax; animation-duration: 30s; animation-delay: -8s; opacity: calc(0.3 * var(--aurora-k)); }
+.b3 { background: #5a4a9e; top: 30vh; left: 40vw; width: 38vmax; height: 38vmax; animation-duration: 36s; animation-delay: -15s; opacity: calc(0.22 * var(--aurora-k)); }
 @keyframes drift { to { transform: translate(12vmax, 8vmax) scale(1.2) rotate(30deg); } }
-.spotlight { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 30%), rgba(255,255,255,0.06), transparent 60%); }
+.spotlight { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 30%), var(--spot), transparent 60%); }
 
 /* ---------- header ---------- */
-.site-header { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 1rem 1.4rem; flex-wrap: wrap; padding: 0.75rem max(1rem, 2vw); }
+.site-header { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 0.8rem 1.2rem; flex-wrap: wrap; padding: 0.7rem max(1rem, 2vw); }
 .site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(var(--bg) 40%, transparent); backdrop-filter: blur(8px); mask-image: linear-gradient(#000 60%, transparent); }
 .brand { display: flex; align-items: center; gap: 0.9rem; padding: 0.28rem; }
 .brand img { display: block; height: 1.35rem; width: auto; }
+:root[data-theme="light"] .brand .wm-dark, :root:not([data-theme]) .brand .wm-light { display: none; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .brand .wm-dark { display: none; } :root:not([data-theme="dark"]) .brand .wm-light { display: block; } }
+:root[data-theme="dark"] .brand .wm-light { display: none; } :root[data-theme="dark"] .brand .wm-dark { display: block; }
 .brand .title { font-family: var(--serif); font-weight: 400; font-size: 1.25rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
 .live { width: 8px; height: 8px; border-radius: 50%; background: var(--gop); box-shadow: 0 0 0 0 rgba(227,154,151,0.6); animation: pulse 2s infinite; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(227,154,151,0); } 100% { box-shadow: 0 0 0 0 rgba(227,154,151,0); } }
-nav.primary { display: flex; gap: 0.25rem; flex-wrap: wrap; }
-nav.primary button { background: none; border: 1px solid transparent; padding: 0.4rem 0.9rem; border-radius: 999px; color: var(--muted); cursor: pointer; font-weight: 500; font-size: 0.9rem; transition: color 0.2s, border-color 0.2s, background 0.2s; }
-nav.primary button:hover { color: var(--fg); }
+nav.primary { display: flex; gap: 0.15rem; flex-wrap: wrap; position: relative; }
+nav.primary button { position: relative; background: none; border: 1px solid transparent; padding: 0.38rem 0.85rem; border-radius: 999px; color: var(--muted); cursor: pointer; font-weight: 500; font-size: 0.88rem; transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s; }
+nav.primary button:hover { color: var(--fg); transform: translateY(-1px); }
 nav.primary button[aria-current="page"] { background: var(--card); border-color: var(--border); color: var(--fg); }
-.hdr-right { margin-left: auto; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+nav.primary button .badge { position: absolute; top: -2px; right: 2px; min-width: 1.1rem; height: 1.1rem; padding: 0 0.3rem; border-radius: 999px; background: var(--gop); color: var(--ink); font-size: 0.62rem; font-weight: 600; display: grid; place-items: center; animation: pop 0.4s ease; }
+@keyframes pop { from { transform: scale(0); } 60% { transform: scale(1.25); } to { transform: scale(1); } }
+.hdr-right { margin-left: auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .clock { display: flex; gap: 0.9rem; color: var(--muted); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
 .clock b { color: var(--fg); font-weight: 500; }
 .clock small { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.3rem; }
-.iconbtn { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; font-size: 0.82rem; font-weight: 500; color: var(--muted); padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); transition: color 0.2s, border-color 0.2s; }
-.iconbtn:hover { color: var(--fg); border-color: var(--hover-line); }
+.iconbtn { display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; font-size: 0.82rem; font-weight: 500; color: var(--muted); padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); transition: color 0.2s, border-color 0.2s, transform 0.2s; }
+.iconbtn:hover { color: var(--fg); border-color: var(--hover-line); transform: translateY(-1px); }
 .iconbtn[aria-pressed="true"] { color: var(--fg); border-color: var(--accent); }
 .ico { width: 1em; height: 1em; flex: none; vertical-align: -0.12em; }
 
-main { padding: 1rem max(1rem, 2vw) 3rem; }
-.wrap { width: min(100%, 90rem); margin-inline: auto; }
+main { padding: 0.9rem max(1rem, 2vw) 3rem; }
+.wrap { width: min(100%, 92rem); margin-inline: auto; }
 h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.6rem, 3.5vw, 2.1rem); letter-spacing: -0.02em; margin: 0.4rem 0 0.3rem; }
 h2 .num { font-family: var(--sans); font-size: 0.78rem; color: var(--accent); font-weight: 600; letter-spacing: 0.1em; vertical-align: super; margin-right: 0.6rem; }
 h3 { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; letter-spacing: -0.02em; margin: 0 0 0.6rem; }
-.lead { color: var(--muted); margin: 0 0 1.4rem; max-width: 52rem; }
-.lead a, .note a { color: var(--accent); }
+.lead { color: var(--muted); margin: 0 0 1.2rem; max-width: 54rem; }
+.lead a, .note a, .small a { color: var(--accent); }
 .tag { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-2); font-weight: 600; }
+.viewhead { display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.viewhead .lead { margin: 0; flex: 1 1 24rem; }
+.viewhead[hidden] { display: none; }
 
 /* ---------- controls ---------- */
 .btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.55rem 1.1rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; white-space: nowrap; }
 .btn:hover { transform: translateY(-2px); border-color: var(--hover-line); }
 .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
-.btn.primary { background: var(--grad); border-color: transparent; color: #0a0e13; box-shadow: var(--btn-depth); }
+.btn.primary { background: var(--grad); border-color: transparent; color: var(--ink); box-shadow: var(--btn-depth); }
 .btn.primary:hover { box-shadow: var(--btn-depth), var(--shadow-2); }
 .btn.sm { padding: 0.3rem 0.75rem; font-size: 0.8rem; }
 .btn.danger:hover { border-color: var(--gop); }
 .filter { font-size: 0.88rem; font-weight: 500; cursor: pointer; padding: 0.4rem 0.95rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); transition: color 0.2s, border-color 0.2s, background 0.2s; }
 .filter:hover { color: var(--fg); border-color: var(--hover-line); }
-.filter[aria-pressed="true"] { color: #0a0e13; background: var(--accent); border-color: transparent; }
+.filter[aria-pressed="true"] { color: var(--ink); background: var(--dem-fill); border-color: transparent; }
 .filters { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0 0 1.2rem; }
-.findlist { display: grid; gap: 0.35rem; margin-top: 0.6rem; max-height: 26rem; overflow: auto; }
-.findrow { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.7rem; border: 1px solid var(--border); border-radius: 0.8rem; background: rgba(255,255,255,0.03); }
-.findrow > div { flex: 1; min-width: 0; display: grid; gap: 0.1rem; }
-.findrow b { font-weight: 600; font-size: 0.88rem; }
-.findrow .small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-input[type=text], input[type=number], input[type=url], input[type=date], textarea, select { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 0.7rem; padding: 0.55rem 0.8rem; width: 100%; color: var(--fg); }
-input::placeholder, textarea::placeholder { color: rgba(154,163,173,0.7); }
+input[type=text], input[type=number], input[type=url], input[type=date], textarea, select { background: var(--card); border: 1px solid var(--border); border-radius: 0.7rem; padding: 0.55rem 0.8rem; width: 100%; color: var(--fg); }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.7; }
 textarea { resize: vertical; min-height: 4.4rem; font-size: 0.85rem; line-height: 1.5; }
 input:focus, textarea:focus, select:focus { outline: 2px solid var(--c); outline-offset: -1px; border-color: transparent; }
 label.f { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0.9rem 0 0.35rem; }
@@ -106,26 +142,47 @@ label.f:first-child { margin-top: 0; }
 .grid-forms { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1rem; }
 .note { font-size: 0.84rem; color: var(--muted); border: 1px dashed var(--border); border-radius: 0.9rem; padding: 0.7rem 0.95rem; margin-top: 1rem; }
 .note b { color: var(--text-soft); font-weight: 600; }
-code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-radius: 0.35rem; background: rgba(255,255,255,0.07); }
+code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-radius: 0.35rem; background: var(--track); }
 .err { color: var(--gop); }
-.ok { color: var(--dem); }
 .small { font-size: 0.8rem; color: var(--muted); }
+input[type=checkbox] { width: 1rem; height: 1rem; accent-color: #8fb4e3; }
+.findlist { display: grid; gap: 0.35rem; margin-top: 0.6rem; max-height: 26rem; overflow: auto; }
+.findrow { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.7rem; border: 1px solid var(--border); border-radius: 0.8rem; background: var(--row); }
+.findrow > div { flex: 1; min-width: 0; display: grid; gap: 0.1rem; }
+.findrow b { font-weight: 600; font-size: 0.88rem; }
+.findrow .small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* ---------- panels ---------- */
-.panel { display: flex; flex-direction: column; min-height: 0; background: var(--card-fill); border: 1px solid var(--border); border-radius: 1rem; box-shadow: var(--shadow-1); overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
-.panel:hover { border-color: rgba(255,255,255,0.16); }
-.ph { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.6rem 0.45rem 0.85rem; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.03); font-weight: 600; font-size: 0.85rem; cursor: default; }
+/* ---------- stage and panels ---------- */
+.stage { display: grid; gap: 0.75rem; grid-auto-flow: dense; }
+.stage[hidden] { display: none; }
+.stage.v-dashboard { grid-template-columns: repeat(var(--cols, 3), 1fr); grid-auto-rows: var(--rowh, 240px); }
+.stage.v-dashboard .panel { min-height: 0; }
+.stage.v-streams { grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr)); }
+.stage.v-streams .panel { aspect-ratio: 16 / 10; }
+.stage.v-browsers { grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); }
+.stage.v-browsers .panel { height: calc(100vh - 12rem); min-height: 28rem; }
+.stage.v-results .panel, .stage.v-wire .panel { min-height: calc(100vh - 12rem); }
+.stage.v-tools { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); align-items: start; }
+.stage.v-tools .panel { min-height: 24rem; height: calc(100vh - 12rem); }
+.panel { display: flex; flex-direction: column; min-height: 0; background: var(--card-fill); border: 1px solid var(--border); border-radius: 1rem; box-shadow: var(--shadow-1); overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s; }
+.panel[hidden] { display: none; }
+.panel:hover { border-color: var(--hover-line); }
+.panel.enter { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 60ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px) scale(0.985); } }
+.ph { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.6rem 0.45rem 0.85rem; border-bottom: 1px solid var(--border); background: var(--row); font-weight: 600; font-size: 0.85rem; cursor: default; }
 .ph .ico.kind { color: var(--accent); }
 .ph .t { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ph .acts { display: flex; gap: 0.1rem; }
-.ph .acts a, .ph .acts button { display: grid; place-items: center; width: 1.7rem; height: 1.7rem; color: var(--muted); background: none; border: 0; border-radius: 999px; cursor: pointer; transition: color 0.2s, background 0.2s; }
-.ph .acts a:hover, .ph .acts button:hover { color: var(--fg); background: rgba(255,255,255,0.08); }
+.ph .acts a, .ph .acts button { display: grid; place-items: center; width: 1.7rem; height: 1.7rem; color: var(--muted); background: none; border: 0; border-radius: 999px; cursor: pointer; transition: color 0.2s, background 0.2s, transform 0.2s; }
+.ph .acts a:hover, .ph .acts button:hover { color: var(--fg); background: var(--track); transform: scale(1.1); }
 .ph .acts button[aria-pressed="true"] { color: var(--accent); }
 .ph .acts button[hidden] { display: none; }
+.ph .acts button.spin .ico { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .pb { flex: 1; position: relative; min-height: 0; background: var(--well); }
 .pb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
 .pb.video iframe { background: #000; }
-.pb.scroll { overflow: auto; background: transparent; }
+.pb.scroll { overflow: auto; background: transparent; overscroll-behavior: contain; }
 .empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 0.86rem; text-align: center; padding: 1.4rem; line-height: 1.5; }
 .empty .btn { margin-top: 0.4rem; }
 .urlbar { display: flex; gap: 0.4rem; padding: 0.4rem; border-bottom: 1px solid var(--border); }
@@ -133,27 +190,39 @@ code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-rad
 .urlbar .btn { padding: 0.3rem 0.8rem; }
 .bookmarks { display: flex; gap: 0.35rem; padding: 0.35rem 0.5rem; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); }
 .bookmarks::-webkit-scrollbar { display: none; }
-.bookmarks button { flex: none; font-size: 0.74rem; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; }
-.bookmarks button:hover { color: var(--fg); border-color: var(--accent); }
-
-/* Focus mode: one panel fills the viewport. */
-.panel.focused { position: fixed; inset: 0; z-index: 40; border-radius: 0; }
+.bookmarks button { flex: none; font-size: 0.74rem; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.2s; }
+.bookmarks button:hover { color: var(--fg); border-color: var(--accent); transform: translateY(-1px); }
+.panel { position: relative; }
+.panel .rz { position: absolute; z-index: 3; display: none; touch-action: none; }
+.stage.v-dashboard .panel:not(.mini):not(.focused) .rz { display: block; }
+.rz-e { right: -4px; top: 0; bottom: 0; width: 9px; cursor: ew-resize; }
+.rz-s { bottom: -4px; left: 0; right: 0; height: 9px; cursor: ns-resize; }
+.rz-se { right: -4px; bottom: -4px; width: 16px; height: 16px; cursor: nwse-resize; z-index: 4; }
+.rz:hover, .rz.on { background: color-mix(in srgb, var(--accent) 35%, transparent); }
+.stage.v-dashboard .panel:not(.mini):not(.focused) .ph { cursor: grab; }
+.stage.dragging-any .pb, .stage.dragging-any .pb iframe, body.resizing .pb iframe, body.resizing .pb { pointer-events: none; }
+.stage.dragging-any .ph { cursor: grabbing !important; }
+.panel.dragging { opacity: 0.45; transform: scale(0.98); z-index: 5; }
+.panel.over-before { box-shadow: -4px 0 0 0 var(--accent), var(--shadow-1); }
+.panel.over-after { box-shadow: 4px 0 0 0 var(--accent), var(--shadow-1); }
+.panel.sizing { box-shadow: 0 0 0 2px var(--accent), var(--shadow-2); transition: none; }
+.panel.focused { position: fixed; inset: 0; z-index: 40; border-radius: 0; aspect-ratio: auto !important; height: auto !important; animation: zoomin 0.25s ease; }
+/* Miniplayer: one stream floats over every section. Position and size are inline. */
+.panel.mini { position: fixed; z-index: 45; left: var(--mx, auto); top: var(--my, auto); right: var(--mr, 1rem); bottom: var(--mb, 1rem); width: var(--mw, 26rem); height: var(--mh, 16rem); aspect-ratio: auto !important; box-shadow: 0 30px 80px -24px rgba(0,0,0,0.7), var(--shadow-1); animation: zoomin 0.25s ease; grid-column: auto !important; grid-row: auto !important; order: 0 !important; }
+.panel.mini .ph { cursor: grab; }
+.panel.mini.moving .ph { cursor: grabbing; }
+.panel.mini .rz { display: block; }
+.panel.mini .rz-e, .panel.mini .rz-s { display: none; }
+.panel.mini .acts [data-a=pop] { color: var(--accent); }
+.panel.mini.focused { left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: auto !important; height: auto !important; }
+@media (max-width: 48rem) { .panel.mini { --mw: 70vw !important; --mh: 11rem !important; } }
+@keyframes zoomin { from { transform: scale(0.97); opacity: 0.6; } }
 .panel.focused .ph { padding-top: 0.6rem; padding-bottom: 0.6rem; }
-
-/* ---------- views ---------- */
-.streams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr)); gap: 1rem; }
-.streams-grid .panel { aspect-ratio: 16 / 10; }
-.browsers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: 1rem; }
-.browsers-grid .panel { height: calc(100vh - 11rem); min-height: 28rem; }
-.dash { display: grid; gap: 0.75rem; grid-auto-flow: dense; grid-auto-rows: minmax(var(--rowh, 240px), auto); }
-.dash .panel { min-height: var(--rowh, 240px); }
-.tools-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); align-items: start; }
-.tools-grid .panel { min-height: 24rem; max-height: calc(100vh - 11rem); }
 @media (max-width: 48rem) {
-  .dash { grid-template-columns: 1fr !important; }
-  .dash .panel { grid-column: auto !important; grid-row: span 1 !important; min-height: 18rem; }
-  .dash .panel.tall { min-height: 26rem; }
-  .browsers-grid .panel { height: 72vh; }
+  .stage.v-dashboard { grid-template-columns: 1fr !important; grid-auto-rows: auto; }
+  .stage.v-dashboard .panel { grid-column: auto !important; grid-row: auto !important; min-height: 18rem; }
+  .stage.v-dashboard .panel.tall { min-height: 26rem; }
+  .stage.v-browsers .panel, .stage.v-tools .panel { height: 72vh; }
   main { padding-inline: 0.75rem; }
   .site-header { padding-inline: 0.75rem; }
   .clock { display: none; }
@@ -161,52 +230,84 @@ code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-rad
 
 /* ---------- results ---------- */
 .races { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 0.6rem; padding: 0.6rem; }
-.race { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 0.85rem; padding: 0.75rem 0.85rem; }
-.race.called { border-color: rgba(255,255,255,0.18); }
+.race { background: var(--row); border: 1px solid var(--border); border-radius: 0.85rem; padding: 0.75rem 0.85rem; transition: border-color 0.4s, box-shadow 0.4s; }
+.race.called { border-color: var(--hover-line); }
+.race.flash { animation: flash 1.6s ease; }
+@keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(179,163,230,0); } 20% { box-shadow: 0 0 0 3px rgba(179,163,230,0.5); } 100% { box-shadow: 0 0 0 0 rgba(179,163,230,0); } }
 .race h4 { font-family: var(--serif); font-weight: 600; font-size: 0.98rem; letter-spacing: -0.01em; margin: 0; display: flex; gap: 0.4rem; align-items: flex-start; line-height: 1.25; }
 .race h4 span { flex: 1; }
-.race h4 .star { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0; display: grid; }
+.race h4 .star { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0; display: grid; transition: transform 0.2s, color 0.2s; }
+.race h4 .star:hover { transform: scale(1.2); }
 .race h4 .star[aria-pressed="true"] { color: var(--accent-2); }
 .race .meta { font-size: 0.72rem; color: var(--muted); margin: 0.2rem 0 0.5rem; display: flex; gap: 0.7rem; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
 .race .meta b { color: var(--text-soft); font-weight: 600; }
-.rptbar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: -0.25rem 0 0.6rem; overflow: hidden; }
-.rptbar i { display: block; height: 100%; background: var(--ind); }
+.rptbar { height: 3px; background: var(--track); border-radius: 2px; margin: -0.25rem 0 0.6rem; overflow: hidden; }
+.rptbar i { display: block; height: 100%; background: var(--ind-fill); transition: width 0.8s ease; }
 .cand { margin: 0.35rem 0; }
 .cand .top { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.8rem; }
 .cand .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cand .nm small { color: var(--muted); font-weight: 400; }
 .cand .num { font-variant-numeric: tabular-nums; font-size: 0.76rem; color: var(--muted); white-space: nowrap; }
 .cand .num b { color: var(--fg); font-weight: 600; }
-.bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 0.2rem; }
-.bar i { display: block; height: 100%; border-radius: 3px; transition: width 0.8s ease; }
-.win { font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #0a0e13; background: var(--fg); border-radius: 999px; padding: 0.05rem 0.4rem; vertical-align: 0.1em; }
+.bar { height: 6px; background: var(--track); border-radius: 3px; overflow: hidden; margin-top: 0.2rem; }
+.bar i { display: block; height: 100%; border-radius: 3px; transition: width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.win { font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink); background: var(--fg); border-radius: 999px; padding: 0.05rem 0.4rem; vertical-align: 0.1em; }
+:root[data-theme="light"] .win { color: #fff; }
 .status { font-size: 0.74rem; color: var(--muted); padding: 0.4rem 0.85rem; border-top: 1px solid var(--border); display: flex; gap: 0.5rem; align-items: center; }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dem); flex: none; }
-.dot.busy { background: var(--ind); } .dot.err { background: var(--gop); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dem); flex: none; transition: background 0.3s; }
+.dot.busy { background: var(--ind); animation: pulse 1s infinite; } .dot.err { background: var(--gop); }
 .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
 .chip { display: inline-flex; gap: 0.4rem; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 0.2rem 0.3rem 0.2rem 0.75rem; font-size: 0.82rem; }
 .chip button { background: none; border: 0; color: var(--muted); cursor: pointer; display: grid; padding: 0.15rem; border-radius: 999px; }
 .chip button:hover { color: var(--gop); }
 
+/* ---------- wire ---------- */
+.wirebar { display: flex; gap: 0.4rem; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); align-items: center; overflow-x: auto; scrollbar-width: none; }
+.wirebar::-webkit-scrollbar { display: none; }
+.wirebar input { padding: 0.3rem 0.7rem; font-size: 0.8rem; border-radius: 999px; min-width: 8rem; flex: 1; }
+.wirebar .src { flex: none; font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; transition: all 0.2s; }
+.wirebar .src[aria-pressed="true"] { color: var(--fg); border-color: var(--accent); }
+.wirebar .src.off { opacity: 0.45; text-decoration: line-through; }
+.wire { list-style: none; margin: 0; padding: 0.3rem 0; position: relative; }
+.wire li { display: grid; grid-template-columns: 1fr; gap: 0.2rem; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border); font-size: 0.86rem; transition: background 0.6s; }
+.wire li:last-child { border-bottom: 0; }
+.wire li.new { animation: newitem 2.5s ease; }
+@keyframes newitem { 0% { background: var(--next-row); transform: translateX(-6px); opacity: 0; } 15% { opacity: 1; transform: none; } 100% { background: transparent; } }
+.wire .who { display: flex; gap: 0.5rem; align-items: baseline; font-size: 0.72rem; color: var(--muted); }
+.wire .who b { color: var(--accent); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.68rem; }
+.wire .who time { font-variant-numeric: tabular-nums; }
+.wire .who .rp { color: var(--ind); }
+.wire .txt { color: var(--text-soft); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.45; }
+.wire .txt a { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent); text-underline-offset: 0.15em; }
+.wire .ext { display: inline-block; margin-top: 0.15rem; }
+.wire .ext a { font-size: 0.74rem; color: var(--muted); }
+.wire .ext a:hover { color: var(--fg); }
+.wire .imgs { display: flex; gap: 0.3rem; margin-top: 0.3rem; }
+.wire .imgs img { height: 5rem; border-radius: 0.5rem; border: 1px solid var(--border); object-fit: cover; }
+.newpill { position: sticky; top: 0.4rem; z-index: 2; display: flex; justify-content: center; height: 0; overflow: visible; }
+.newpill button { transform: translateY(-0.2rem); background: var(--grad); color: var(--ink); border: 0; border-radius: 999px; padding: 0.25rem 0.8rem; font-size: 0.76rem; font-weight: 600; cursor: pointer; box-shadow: var(--btn-depth), var(--shadow-2); animation: pop 0.3s ease; }
+.newpill[hidden] { display: none; }
+
 /* ---------- poll closings ---------- */
 .closings { list-style: none; margin: 0; padding: 0.4rem 0; }
-.closings li { display: grid; grid-template-columns: 4.6rem 1fr auto; gap: 0.6rem; align-items: start; padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+.closings li { display: grid; grid-template-columns: 4.6rem 1fr auto; gap: 0.6rem; align-items: start; padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; transition: opacity 0.6s, background 0.6s; }
 .closings li:last-child { border-bottom: 0; }
 .closings .tm { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--fg); }
 .closings .st { color: var(--text-soft); line-height: 1.45; }
-.closings .st small { color: var(--muted); }
 .closings .cd { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 0.76rem; }
 .closings li.past { opacity: 0.45; }
-.closings li.next { background: rgba(143,180,227,0.08); }
+.closings li.next { background: var(--next-row); }
 .closings li.next .cd { color: var(--accent); font-weight: 600; }
+.closings li.soon .cd { animation: blink 1.2s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: 0.35; } }
 
 /* ---------- balance of power ---------- */
 .bop { padding: 0.6rem 0.85rem; display: grid; gap: 0.9rem; }
-.chamber { border: 1px solid var(--border); border-radius: 0.85rem; padding: 0.7rem 0.8rem; background: rgba(255,255,255,0.03); }
+.chamber { border: 1px solid var(--border); border-radius: 0.85rem; padding: 0.7rem 0.8rem; background: var(--row); }
 .chamber h4 { margin: 0 0 0.45rem; font-family: var(--serif); font-weight: 600; font-size: 0.98rem; display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
 .chamber h4 small { font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-.bopbar { position: relative; height: 14px; border-radius: 7px; background: rgba(255,255,255,0.08); overflow: hidden; display: flex; }
-.bopbar i { display: block; height: 100%; transition: width 0.6s ease; }
+.bopbar { position: relative; height: 14px; border-radius: 7px; background: var(--track); overflow: hidden; display: flex; }
+.bopbar i { display: block; height: 100%; transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .bopbar .d { background: var(--dem); } .bopbar .r { background: var(--gop); margin-left: auto; } .bopbar .i { background: var(--ind); }
 .bopbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 2px; background: var(--fg); opacity: 0.7; }
 .counts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-top: 0.55rem; }
@@ -214,18 +315,22 @@ code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-rad
 .counts label { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
 .counts .dl { color: var(--dem); } .counts .rl { color: var(--gop); } .counts .il { color: var(--ind); }
 .counts .n { display: flex; align-items: center; justify-content: center; gap: 0.2rem; }
-.counts .n b { font-family: var(--serif); font-weight: 600; font-size: 1.35rem; min-width: 2.2rem; font-variant-numeric: tabular-nums; }
-.counts .n button { width: 1.5rem; height: 1.5rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; display: grid; place-items: center; padding: 0; }
-.counts .n button:hover { color: var(--fg); border-color: var(--hover-line); }
+.counts .n b { font-family: var(--serif); font-weight: 600; font-size: 1.35rem; min-width: 2.2rem; font-variant-numeric: tabular-nums; display: inline-block; }
+.counts .n b.bump { animation: bump 0.35s ease; }
+@keyframes bump { 40% { transform: scale(1.3); } }
+.counts .n button { width: 1.5rem; height: 1.5rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; display: grid; place-items: center; padding: 0; transition: all 0.15s; }
+.counts .n button:hover { color: var(--fg); border-color: var(--hover-line); transform: scale(1.1); }
 .majority { font-size: 0.72rem; color: var(--muted); margin-top: 0.45rem; display: flex; justify-content: space-between; }
 .majority b { font-weight: 600; }
 .majority .has { color: var(--fg); }
+.chamber.won-d { border-color: var(--dem); } .chamber.won-r { border-color: var(--gop); }
 
 /* ---------- call log ---------- */
 .logform { display: flex; gap: 0.4rem; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
 .logform input { border-radius: 999px; padding: 0.4rem 0.8rem; font-size: 0.85rem; }
 .log { list-style: none; margin: 0; padding: 0.3rem 0; }
 .log li { display: grid; grid-template-columns: 4.6rem 1fr auto; gap: 0.5rem; align-items: start; padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--border); font-size: 0.84rem; }
+.log li.new { animation: newitem 1.5s ease; }
 .log li:last-child { border-bottom: 0; }
 .log time { color: var(--accent-2); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
 .log .txt { color: var(--text-soft); overflow-wrap: anywhere; }
@@ -235,7 +340,7 @@ code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-rad
 
 /* ---------- layout editor ---------- */
 .lay-list { display: flex; flex-direction: column; gap: 0.4rem; }
-.lay-item { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 0.6rem; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 0.8rem; padding: 0.45rem 0.65rem; font-size: 0.88rem; }
+.lay-item { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 0.6rem; align-items: center; background: var(--row); border: 1px solid var(--border); border-radius: 0.8rem; padding: 0.45rem 0.65rem; font-size: 0.88rem; transition: border-color 0.2s, opacity 0.2s; }
 .lay-item.off { opacity: 0.45; }
 .lay-item.dragging { opacity: 0.3; }
 .lay-item.over { border-color: var(--accent); }
@@ -243,19 +348,21 @@ code { font-family: inherit; font-size: 0.9em; padding: 0.05em 0.4em; border-rad
 .lay-item select { width: auto; padding: 0.25rem 0.4rem; font-size: 0.8rem; border-radius: 0.5rem; }
 .lay-item .ico.kind { color: var(--accent); margin-right: 0.3rem; }
 .preview { display: grid; gap: 0.3rem; grid-auto-flow: dense; grid-auto-rows: 2.1rem; margin-top: 0.8rem; }
-.preview div { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 0.4rem; font-size: 0.68rem; color: var(--muted); display: grid; place-items: center; overflow: hidden; white-space: nowrap; padding: 0 0.3rem; }
+.preview div { background: var(--track); border: 1px solid var(--border); border-radius: 0.4rem; font-size: 0.68rem; color: var(--muted); display: grid; place-items: center; overflow: hidden; white-space: nowrap; padding: 0 0.3rem; }
 .two { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.2rem; align-items: start; }
 @media (max-width: 56rem) { .two { grid-template-columns: 1fr; } }
-input[type=checkbox] { width: 1rem; height: 1rem; accent-color: #8fb4e3; }
 
 /* ---------- toasts ---------- */
 .toasts { position: fixed; right: 1rem; bottom: 1rem; z-index: 60; display: grid; gap: 0.5rem; max-width: min(24rem, calc(100% - 2rem)); }
-.toast { background: rgba(10,14,19,0.9); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0.8rem; padding: 0.7rem 0.9rem; font-size: 0.86rem; box-shadow: var(--shadow-1); backdrop-filter: blur(8px); animation: rise 0.4s ease; }
+.toast { background: var(--glass); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0.8rem; padding: 0.7rem 0.9rem; font-size: 0.86rem; box-shadow: var(--shadow-1); backdrop-filter: blur(8px); animation: toastin 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.toast.call { border-left-color: var(--gop); }
 .toast b { display: block; font-family: var(--serif); font-weight: 600; }
-@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+.toast.out { animation: toastout 0.4s ease forwards; }
+@keyframes toastin { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
+@keyframes toastout { to { opacity: 0; transform: translateX(20px); } }
 .kbd { font-size: 0.72rem; color: var(--muted); border: 1px solid var(--border); border-radius: 0.35rem; padding: 0 0.35rem; }
 
-footer { width: min(100%, 90rem); margin: 0 auto; padding: 1.5rem max(1rem, 2vw) 2.5rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); display: flex; gap: 1rem 2rem; flex-wrap: wrap; justify-content: space-between; }
+footer { width: min(100%, 92rem); margin: 0 auto; padding: 1.5rem max(1rem, 2vw) 2.5rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); display: flex; gap: 1rem 2rem; flex-wrap: wrap; justify-content: space-between; }
 footer a { color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
@@ -269,6 +376,7 @@ footer a { color: var(--accent); }
     <symbol id="i-tv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
     <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
     <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 20h16M7 16V9M12 16V5M17 16v-6"/></symbol>
+    <symbol id="i-wire" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/><circle cx="19" cy="17" r="2"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
     <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 20h14M4 8h16M6 8l-3 7a3 3 0 0 0 6 0L6 8zM18 8l-3 7a3 3 0 0 0 6 0l-3-7z"/></symbol>
     <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16v4zM13 7l4 4"/></symbol>
@@ -284,6 +392,9 @@ footer a { color: var(--accent); }
     <symbol id="i-grip" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></symbol>
     <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2zM10 20a2 2 0 0 0 4 0"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+    <symbol id="i-pip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="11" y="11" width="8" height="6" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></symbol>
     <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12h12"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
@@ -295,52 +406,88 @@ footer a { color: var(--accent); }
 <div class="spotlight" aria-hidden="true"></div>
 
 <header class="site-header">
-  <a class="brand" href="/" aria-label="Brianna Imm, home"><img src="/images/bri-wordmark.svg" alt="" width="255" height="158"><span class="title"><span class="live" aria-hidden="true"></span>Election Night</span></a>
+  <a class="brand" href="/" aria-label="Brianna Imm, home"><img class="wm-dark" src="/images/bri-wordmark.svg" alt="" width="255" height="158"><img class="wm-light" src="/images/bri-wordmark-light.svg" alt="" width="255" height="158"><span class="title"><span class="live" aria-hidden="true"></span>Election Night</span></a>
   <nav class="primary" id="nav" aria-label="Dashboard sections">
     <button data-v="dashboard">Dashboard</button>
     <button data-v="streams">Streams</button>
     <button data-v="browsers">Browsers</button>
     <button data-v="results">Results</button>
+    <button data-v="wire">Wire</button>
     <button data-v="tools">Tracker</button>
     <button data-v="setup">Setup</button>
   </nav>
   <div class="hdr-right">
     <div class="clock" id="clock" aria-live="off"></div>
     <button class="iconbtn" id="alerts" aria-pressed="false" title="Play a chime and show a notice when a race gets called"><svg class="ico"><use href="#i-bell"/></svg><span>Alerts</span></button>
-    <button class="iconbtn" id="wake" aria-pressed="false" title="Keep the screen awake while this page is open" hidden><svg class="ico"><use href="#i-sun"/></svg><span>Stay awake</span></button>
+    <button class="iconbtn" id="wake" aria-pressed="false" title="Keep the screen awake while this page is open" hidden><svg class="ico"><use href="#i-eye"/></svg><span>Stay awake</span></button>
+    <button class="iconbtn" id="theme" type="button"><svg class="ico"><use href="#i-sun"/></svg><span>Light</span></button>
   </div>
 </header>
-<main><div class="wrap" id="main"></div></main>
+<main><div class="wrap">
+  <div class="viewhead" id="viewhead" hidden><div><h2 id="vh-title"></h2></div><p class="lead" id="vh-lead"></p></div>
+  <div class="stage" id="stage"></div>
+  <div id="page" hidden></div>
+</div></main>
 <footer>
-  <span>Settings live in this browser. Use Setup → Backup to copy them to another device.</span>
-  <span>Keyboard: <span class="kbd">1</span>–<span class="kbd">6</span> switch sections · <span class="kbd">Esc</span> leaves focus mode</span>
+  <span>Settings and caches live in this browser. Setup → Backup copies them to another device.</span>
+  <span>Keyboard: <span class="kbd">1</span>–<span class="kbd">7</span> switch sections · <span class="kbd">Esc</span> leaves focus mode</span>
 </footer>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
 <script>
 /* ================================================================
    Election Night dashboard. One file, no build step, no server.
-   State is kept in localStorage under KEY.
+   Panels are built once and kept alive on a single "stage"; switching
+   sections only shows, hides, and re-places them, so streams never reload.
    ================================================================ */
-const KEY = 'electionNight.v2';
+const KEY = 'electionNight.v3', OLD_KEY = 'electionNight.v2', CACHE_KEY = 'electionNight.cache';
 const MAX_STREAMS = 6, MAX_BROWSERS = 4;
 const CIVIC = 'https://civicapi.org/api/v2';
+const BSKY = 'https://public.api.bsky.app/xrpc';
+const ET = 'America/New_York';
 const ELECTION_DAY = '2026-11-03';
 const STATES = { AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming' };
-const ET = 'America/New_York';
 
-const DEFAULT_BOOKMARKS = [
-  { label: 'DDHQ', url: 'https://decisiondeskhq.com' },
-  { label: 'AP', url: 'https://apnews.com' },
-  { label: 'Ballotpedia', url: 'https://ballotpedia.org/Elections' },
-  { label: 'Cook', url: 'https://www.cookpolitical.com' },
-  { label: 'MO SOS', url: 'https://www.sos.mo.gov/elections' },
-  { label: 'KS SOS', url: 'https://sos.ks.gov/elections' },
-  { label: 'Wikipedia 2026', url: 'https://en.wikipedia.org/wiki/2026_United_States_elections' }
+const NTV = t => `<iframe src="https://ntv.st/embed?t=${t}" width="100%" height="450" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+const DEFAULT_STREAMS = [
+  { label: 'Fox News', code: NTV('TVhpbmcyU0I1MVc3V3RtQm9STU1JRnllbnVSbkttVUtvZFcyNlNNSDJ3VnVMWjU4V3hHeDc3Mk5Nc2J5bjhLbytWZkFhMXZzQnphc2huYWViNjduL3N2K2V2c3plSnBaQUVKRDlFa3FyQmVudGVCTWVzaURJNktrd3RTTXYzRGIyS3d2aE9DNFErL3NHTzQ0dlcrRkpBPT0~') },
+  { label: 'ABC', code: NTV('TVhpbmcyU0I1MVc3V3RtQm9STU1JRnllbnVSbkttVUtvZFcyNlNNSDJ3VnVMWjU4V3hHeDc3Mk5Nc2J5bjhLb0RiVHNST2xRT1p0SGdlSVV6cGtJeVZuUHZZSHJLeExiTVVKeWNYdk5Ra2Vxa20zdGtuVSt6QllYdG1YUnJvUXQ~') },
+  { label: 'NBC', code: NTV('TVhpbmcyU0I1MVc3V3RtQm9STU1JRnllbnVSbkttVUtvZFcyNlNNSDJ3VnVMWjU4V3hHeDc3Mk5Nc2J5bjhLb3RLQVY2RFNPS2VWcDJSWW0wcnViQkZZTDdOeFhxa2tqc0g5K051cEk5ekhGQnpYaFJpVlRjRzhETUdtdkcreTE~') },
+  { label: 'CNN', code: NTV('dmJGMTViZ0Z1eWRhYlRaRGJzbTZYN09wOUlTVEt1RndGYVJXejNidWM1UnVvSXFYWlhjREIyVXV3MStjdjRqcg~~') },
+  { label: 'MS Now', code: NTV('dmJGMTViZ0Z1eWRhYlRaRGJzbTZYNkdQWFRvOGszMVE4RmZLVG0vTUVmdVVOWmREK2lzTE9pUjA1ZUwvNFNBaQ~~') },
+  { label: 'CBS', code: NTV('dmJGMTViZ0Z1eWRhYlRaRGJzbTZYK2xLTnNtZCtYZ1R1U25UcHcxQURrUjRLUSt6SU1EaytyQWlGektuRldDeg~~') }
 ];
+const DEFAULT_BROWSERS = [{ label: 'Decision Desk', url: 'https://votes.decisiondeskhq.com/' }, { label: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/2026_United_States_elections' }];
+const DEFAULT_BOOKMARKS = [
+  { label: 'DDHQ', url: 'https://decisiondeskhq.com' }, { label: 'AP', url: 'https://apnews.com' },
+  { label: 'Ballotpedia', url: 'https://ballotpedia.org/Elections' }, { label: 'Cook', url: 'https://www.cookpolitical.com' },
+  { label: 'MO SOS', url: 'https://www.sos.mo.gov/elections' }, { label: 'KS SOS', url: 'https://sos.ks.gov/elections' },
+  { label: 'Wikipedia 2026', url: 'https://en.wikipedia.org/wiki/2026_United_States_elections' }, { label: 'Silver Bulletin', url: 'https://natesilver.net' }
+];
+const DEFAULT_RACES = [
+  { id: '87243', label: 'Missouri Amendment 3', pin: true }, { id: '159541', label: 'Missouri State House', pin: true }, { id: '159542', label: 'Missouri State Senate', pin: true },
+  { id: '87139', label: 'Indiana US House 5', pin: true }, { id: '87235', label: 'Missouri US House 2' },
+  { id: '87283', label: 'New Hampshire US Senate' }, { id: '87068', label: 'Florida US Senate Special' }, { id: '87087', label: 'Georgia US Senate' },
+  { id: '87174', label: 'Kentucky US Senate' }, { id: '87472', label: 'Virginia US Senate' }, { id: '87409', label: 'South Carolina US Senate' },
+  { id: '87527', label: 'Ohio US Senate Special' }, { id: '87346', label: 'North Carolina US Senate' }, { id: '87162', label: 'Kansas US Senate' },
+  { id: '87188', label: 'Maine US Senate' }, { id: '87151', label: 'Iowa US Senate' }, { id: '87247', label: 'Montana US Senate' },
+  { id: '86916', label: 'Alaska US Senate' }, { id: '87438', label: 'Texas US Senate' }, { id: '87254', label: 'Nebraska US Senate' },
+  { id: '87183', label: 'Louisiana US Senate' }, { id: '87214', label: 'Michigan US Senate' },
+  { id: '55857', label: 'Texas Governor' }, { id: '87069', label: 'Florida Governor' }, { id: '87163', label: 'Kansas Governor' }
+];
+const DEFAULT_WIRE = [
+  { type: 'bsky', handle: 'decisiondeskhq.bsky.social', name: 'DDHQ' }, { type: 'bsky', handle: 'thehill.com', name: 'The Hill' },
+  { type: 'bsky', handle: 'apnews.com', name: 'AP' }, { type: 'bsky', handle: 'nytimes.com', name: 'NYT' },
+  { type: 'bsky', handle: 'politico.com', name: 'Politico' }, { type: 'bsky', handle: 'washingtonpost.com', name: 'WaPo' }
+];
+const DEFAULT_LAYOUT = { cols: 3, rowh: 240, panels: [
+  { key: 'stream-2', on: true, w: 3, h: 2 }, { key: 'stream-0', on: true, w: 1, h: 1 }, { key: 'stream-1', on: true, w: 1, h: 1 },
+  { key: 'stream-3', on: true, w: 1, h: 1 }, { key: 'stream-4', on: true, w: 1, h: 1 }, { key: 'stream-5', on: true, w: 1, h: 1 },
+  { key: 'browser-0', on: true, w: 1, h: 2 }, { key: 'wire', on: true, w: 1, h: 2 }, { key: 'results', on: true, w: 1, h: 2 },
+  { key: 'closings', on: true, w: 1, h: 2 }, { key: 'balance', on: true, w: 1, h: 1 }, { key: 'log', on: true, w: 1, h: 1 }, { key: 'browser-1', on: false, w: 1, h: 2 }
+] };
 
-/* Standard poll-closing times for a November general election, in Eastern time.
-   Split states list the portion that closes at each time. Verify with the state before relying on one. */
+/* Standard poll-closing times for a November general election, in Eastern time. */
 const CLOSINGS = [
   ['18:00', 'Indiana (eastern)', 'Kentucky (eastern)'],
   ['19:00', 'Georgia', 'South Carolina', 'Vermont', 'Virginia', 'Florida (most)', 'Indiana (rest)', 'Kentucky (rest)'],
@@ -355,51 +502,35 @@ const CLOSINGS = [
 ];
 
 const defaults = () => ({
-  streams: Array.from({ length: MAX_STREAMS }, (_, i) => ({ label: 'Stream ' + (i + 1), code: '' })),
-  browsers: [{ label: 'Browser 1', url: '' }, { label: 'Browser 2', url: '' }],
-  bookmarks: DEFAULT_BOOKMARKS.slice(),
-  results: { mode: 'civic', races: [], interval: 60, embed: '', url: '' },
-  bop: {
-    senate: { d: 0, r: 0, i: 0 }, house: { d: 0, r: 0, i: 0 }, gov: { d: 0, r: 0, i: 0 }
-  },
+  streams: DEFAULT_STREAMS.map(s => ({ ...s })),
+  browsers: DEFAULT_BROWSERS.map(b => ({ ...b })),
+  bookmarks: DEFAULT_BOOKMARKS.map(b => ({ ...b })),
+  results: { mode: 'civic', races: DEFAULT_RACES.map(r => ({ ...r })), interval: 60, embed: '', url: '' },
+  wire: { sources: DEFAULT_WIRE.map(s => ({ ...s })), interval: 90, reposts: false, off: [] },
+  bop: { senate: { d: 32, r: 31, i: 2 }, house: { d: 186, r: 156, i: 0 }, gov: { d: 6, r: 8, i: 0 } },
   log: [],
-  layout: { cols: 3, rowh: 240, panels: [] },
-  view: 'setup'
+  layout: { cols: DEFAULT_LAYOUT.cols, rowh: DEFAULT_LAYOUT.rowh, panels: DEFAULT_LAYOUT.panels.map(p => ({ ...p })) },
+  finderState: 'MO', finderDate: ELECTION_DAY, finderLocal: false,
+  view: 'dashboard'
 });
 let S;
-try { S = Object.assign(defaults(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { S = defaults(); }
+try {
+  const raw = localStorage.getItem(KEY) || localStorage.getItem(OLD_KEY);
+  S = Object.assign(defaults(), raw ? JSON.parse(raw) : {});
+  if (!localStorage.getItem(KEY) && raw) { /* migrated from v2: keep their settings, add the new wire panel */ S.wire = defaults().wire; }
+} catch (e) { S = defaults(); }
 S.bop = Object.assign(defaults().bop, S.bop || {});
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+S.wire = Object.assign(defaults().wire, S.wire || {});
+S.results = Object.assign(defaults().results, S.results || {});
+let saveT = null;
+function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }, 150); }
 
-/* ---------- panel registry ---------- */
-const EXTRA_PANELS = ['results', 'closings', 'balance', 'log'];
-function allPanelKeys() {
-  const k = [];
-  S.streams.forEach((s, i) => k.push('stream-' + i));
-  S.browsers.forEach((b, i) => k.push('browser-' + i));
-  return k.concat(EXTRA_PANELS);
-}
-function syncLayout() {
-  const keys = allPanelKeys(), have = new Map(S.layout.panels.map(p => [p.key, p]));
-  const out = S.layout.panels.filter(p => keys.includes(p.key));
-  keys.forEach(k => {
-    if (have.has(k)) return;
-    const stream = k.startsWith('stream-'), browser = k.startsWith('browser-');
-    const on = k === 'results' || k === 'closings' || browser || (stream && !!S.streams[+k.split('-')[1]].code);
-    out.push({ key: k, on, w: 1, h: (k === 'results' || k === 'closings' || browser) ? 2 : 1 });
-  });
-  S.layout.panels = out;
-}
-const PANEL_META = {
-  results: ['Results feed', 'i-chart'], closings: ['Poll closings', 'i-clock'],
-  balance: ['Balance of power', 'i-scale'], log: ['Call log', 'i-pen']
-};
-function panelName(k) {
-  if (PANEL_META[k]) return PANEL_META[k][0];
-  const [t, i] = k.split('-');
-  return t === 'stream' ? (S.streams[i].label || 'Stream ' + (+i + 1)) : (S.browsers[i].label || 'Browser ' + (+i + 1));
-}
-function panelIcon(k) { return PANEL_META[k] ? PANEL_META[k][1] : k.startsWith('stream') ? 'i-tv' : 'i-globe'; }
+/* Cache store: last API payloads so panels paint instantly on load. */
+let C = {};
+try { C = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch (e) { C = {}; }
+C.races = C.races || {}; C.ballots = C.ballots || {}; C.wire = C.wire || [];
+let cacheT = null;
+function saveCache() { clearTimeout(cacheT); cacheT = setTimeout(() => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(C)); } catch (e) { C.wire = C.wire.slice(0, 60); C.ballots = {}; try { localStorage.setItem(CACHE_KEY, JSON.stringify(C)); } catch (e2) {} } }, 400); }
 
 /* ---------- helpers ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -408,19 +539,31 @@ function el(html) { const t = document.createElement('template'); t.innerHTML = 
 const fmt = n => (n == null || n === '') ? '' : Number(n).toLocaleString();
 const icon = (id, cls = 'ico') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
 const timeStr = (d, tz) => d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', timeZone: tz });
-let timers = [];
-function clearTimers() { timers.forEach(clearInterval); timers = []; }
-function toast(title, body) {
-  const t = el(`<div class="toast"><b>${esc(title)}</b>${esc(body || '')}</div>`);
-  $('#toasts').append(t); setTimeout(() => t.remove(), 9000);
-}
+const ago = d => { const s = Math.max(0, (Date.now() - d) / 1000); return s < 60 ? 'now' : s < 3600 ? Math.floor(s / 60) + 'm' : s < 86400 ? Math.floor(s / 3600) + 'h' : Math.floor(s / 86400) + 'd'; };
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function toast(title, body, cls = '') {
+  const t = el(`<div class="toast ${cls}"><b>${esc(title)}</b>${esc(body || '')}</div>`);
+  $('#toasts').append(t); setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, 9000);
+}
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+async function fetchJSON(url, ms = 25000) {
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms);
+  try { const res = await fetch(url, { cache: 'no-store', signal: ctl.signal }); if (!res.ok) throw new Error('HTTP ' + res.status); return await res.json(); }
+  finally { clearTimeout(t); }
+}
 
-/* Alerts: a chime on race calls, only after the user turns it on (browsers require a click first). */
+/* ---------- theme ---------- */
+const themeBtn = $('#theme');
+function currentTheme() { const t = document.documentElement.getAttribute('data-theme'); return t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); }
+function paintTheme() { const dark = currentTheme() === 'dark'; $('use', themeBtn).setAttribute('href', dark ? '#i-sun' : '#i-moon'); $('span', themeBtn).textContent = dark ? 'Light' : 'Dark'; }
+themeBtn.onclick = () => { const next = currentTheme() === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', next); try { localStorage.setItem('theme', next); } catch (e) {} paintTheme(); };
+paintTheme();
+
+/* ---------- alerts (chime after the user turns it on) ---------- */
 let alertsOn = false, audioCtx = null;
 $('#alerts').onclick = () => {
   alertsOn = !alertsOn; $('#alerts').setAttribute('aria-pressed', alertsOn);
-  if (alertsOn) { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); chime(); } catch (e) {} toast('Alerts on', 'You will get a chime and a notice when a tracked race gets a winner.'); }
+  if (alertsOn) { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); chime(); } catch (e) {} toast('Alerts on', 'A chime and a notice whenever a tracked race gets a winner.'); }
 };
 function chime() {
   if (!alertsOn || !audioCtx) return;
@@ -435,7 +578,7 @@ function chime() {
   } catch (e) {}
 }
 
-/* Wake lock: keep a wall display from sleeping. */
+/* ---------- wake lock ---------- */
 let wakeLock = null;
 if ('wakeLock' in navigator) {
   const wb = $('#wake'); wb.hidden = false;
@@ -456,14 +599,10 @@ function resolveEmbed(code) {
   if (/^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(code)) return { src: normalizeUrl('https://' + code) };
   const doc = new DOMParser().parseFromString(code, 'text/html');
   const frames = doc.querySelectorAll('iframe'), others = doc.body.querySelectorAll('script,blockquote,video,div');
-  if (frames.length === 1 && !others.length && frames[0].getAttribute('src')) {
-    return { src: normalizeUrl(frames[0].getAttribute('src')), allow: frames[0].getAttribute('allow') };
-  }
+  if (frames.length === 1 && !others.length && frames[0].getAttribute('src')) return { src: normalizeUrl(frames[0].getAttribute('src')), allow: frames[0].getAttribute('allow') };
   return { srcdoc: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:sans-serif}body>*{max-width:100%}body>div,body>div>div{height:100%}iframe,video{width:100%!important;height:100%!important;max-height:100%!important;border:0;display:block}</style></head><body>${code}</body></html>` };
 }
-function ytEmbed(id, extra = '') {
-  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}${extra}`;
-}
+const ytEmbed = (id, extra = '') => `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}${extra}`;
 function normalizeUrl(u) {
   try {
     const x = new URL(u, location.href), h = x.hostname.replace(/^www\.|^m\./, '');
@@ -471,10 +610,7 @@ function normalizeUrl(u) {
     if (h === 'youtu.be') id = x.pathname.slice(1);
     else if (h === 'youtube.com' || h === 'youtube-nocookie.com') {
       if (x.pathname === '/watch') id = x.searchParams.get('v');
-      else {
-        const m = x.pathname.match(/^\/(live|shorts|embed)\/([\w-]+)/); if (m) id = m[2];
-        const c = x.pathname.match(/^\/channel\/(UC[\w-]+)\/live/); if (c) return ytEmbed('live_stream', '&channel=' + c[1]);
-      }
+      else { const m = x.pathname.match(/^\/(live|shorts|embed)\/([\w-]+)/); if (m) id = m[2]; const c = x.pathname.match(/^\/channel\/(UC[\w-]+)\/live/); if (c) return ytEmbed('live_stream', '&channel=' + c[1]); }
       if (id === 'live_stream' && x.searchParams.get('channel')) return ytEmbed('live_stream', '&channel=' + x.searchParams.get('channel'));
     }
     if (id && id !== 'live_stream') return ytEmbed(id);
@@ -486,8 +622,7 @@ function frameFor(code) {
   const r = resolveEmbed(code); if (!r) return null;
   const f = document.createElement('iframe');
   f.setAttribute('allow', r.allow || 'autoplay; encrypted-media; fullscreen; picture-in-picture');
-  f.setAttribute('allowfullscreen', '');
-  f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+  f.setAttribute('allowfullscreen', ''); f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin'); f.setAttribute('loading', 'eager');
   if (r.src) f.src = r.src; else f.srcdoc = r.srcdoc;
   return f;
 }
@@ -495,32 +630,139 @@ const isYouTube = f => f && f.src && /youtube(-nocookie)?\.com\/embed/.test(f.sr
 function ytCommand(f, func, args) { try { f.contentWindow.postMessage(JSON.stringify({ event: 'command', func, args: args || [] }), '*'); } catch (e) {} }
 function reloadFrame(f) { if (!f) return; if (f.srcdoc) f.srcdoc = f.srcdoc; else f.src = f.src; }
 
-/* ---------- panel chrome ---------- */
+/* ================================================================
+   Stage: every panel is built once and lives in #stage.
+   ================================================================ */
+const stage = $('#stage'), page = $('#page');
+const panels = new Map();           // key -> element
+const EXTRA = ['results', 'wire', 'closings', 'balance', 'log'];
+const META = { results: ['Results feed', 'i-chart'], wire: ['News wire', 'i-wire'], closings: ['Poll closings', 'i-clock'], balance: ['Balance of power', 'i-scale'], log: ['Call log', 'i-pen'] };
+function allPanelKeys() { const k = []; S.streams.forEach((s, i) => k.push('stream-' + i)); S.browsers.forEach((b, i) => k.push('browser-' + i)); return k.concat(EXTRA); }
+function syncLayout() {
+  const keys = allPanelKeys(), have = new Set(S.layout.panels.map(p => p.key));
+  S.layout.panels = S.layout.panels.filter(p => keys.includes(p.key));
+  keys.forEach(k => { if (!have.has(k)) S.layout.panels.push({ key: k, on: k !== 'log' && !k.startsWith('browser-1'), w: 1, h: (k === 'results' || k === 'closings' || k === 'wire' || k.startsWith('browser')) ? 2 : 1 }); });
+}
+function panelName(k) { if (META[k]) return META[k][0]; const [t, i] = k.split('-'); return t === 'stream' ? (S.streams[i]?.label || 'Stream ' + (+i + 1)) : (S.browsers[i]?.label || 'Browser ' + (+i + 1)); }
+function panelIcon(k) { return META[k] ? META[k][1] : k.startsWith('stream') ? 'i-tv' : 'i-globe'; }
 function panelShell(key, { kind, title, extraActions = '' }) {
-  const p = el(`<div class="panel" data-key="${key}">
+  const p = el(`<div class="panel" data-key="${key}" hidden>
     <div class="ph">${icon(kind, 'ico kind')}<span class="t">${esc(title)}</span>
-      <div class="acts">${extraActions}<button data-a="focus" title="Focus this panel">${icon('i-expand')}</button></div></div></div>`);
+      <div class="acts">${extraActions}<button data-a="focus" title="Focus this panel">${icon('i-expand')}</button></div></div>
+    <span class="rz rz-e" aria-hidden="true"></span><span class="rz rz-s" aria-hidden="true"></span><span class="rz rz-se" aria-hidden="true"></span></div>`);
   $('[data-a=focus]', p).onclick = () => toggleFocus(p);
+  wireDrag(p); wireResize(p);
+  if (S.mini === key) applyMini(p, true);
   return p;
 }
+
+/* ---------- dashboard editing by mouse: drag to reorder, drag edges to resize (snaps to the grid) ---------- */
+function layoutEntry(key) { return S.layout.panels.find(p => p.key === key); }
+function wireDrag(p) {
+  const h = $('.ph', p);
+  h.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || e.target.closest('button, a, input')) return;
+    const isMini = p.classList.contains('mini');
+    if (!isMini && (S.view !== 'dashboard' || p.classList.contains('focused'))) return;
+    const sx = e.clientX, sy = e.clientY; let started = false, target = null, before = false;
+    const r0 = p.getBoundingClientRect();
+    const move = ev => {
+      if (!started) { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return; started = true; h.setPointerCapture(e.pointerId); if (isMini) p.classList.add('moving'); else { p.classList.add('dragging'); stage.classList.add('dragging-any'); } }
+      if (isMini) {
+        const x = Math.max(0, Math.min(innerWidth - 80, r0.left + ev.clientX - sx)), y = Math.max(0, Math.min(innerHeight - 40, r0.top + ev.clientY - sy));
+        p.style.setProperty('--mx', x + 'px'); p.style.setProperty('--my', y + 'px'); p.style.setProperty('--mr', 'auto'); p.style.setProperty('--mb', 'auto');
+        return;
+      }
+      const under = document.elementsFromPoint(ev.clientX, ev.clientY).find(x => x.classList && x.classList.contains('panel') && x !== p && !x.hidden && !x.classList.contains('mini'));
+      if (target && target !== under) target.classList.remove('over-before', 'over-after');
+      target = under || null;
+      if (target) { const r = target.getBoundingClientRect(); before = ev.clientX < r.left + r.width / 2; target.classList.toggle('over-before', before); target.classList.toggle('over-after', !before); }
+    };
+    const up = () => {
+      h.removeEventListener('pointermove', move); h.removeEventListener('pointerup', up); h.removeEventListener('pointercancel', up);
+      if (!started) return;
+      if (isMini) { p.classList.remove('moving'); S.miniPos = { x: p.style.getPropertyValue('--mx'), y: p.style.getPropertyValue('--my') }; save(); return; }
+      p.classList.remove('dragging'); stage.classList.remove('dragging-any');
+      if (target) {
+        target.classList.remove('over-before', 'over-after');
+        const L = S.layout.panels, from = L.findIndex(x => x.key === p.dataset.key); const [mv] = L.splice(from, 1);
+        let to = L.findIndex(x => x.key === target.dataset.key); if (!before) to++;
+        L.splice(to, 0, mv); save(); applyView();
+      }
+    };
+    h.addEventListener('pointermove', move); h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
+  });
+}
+function wireResize(p) {
+  p.querySelectorAll('.rz').forEach(hd => hd.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return; e.preventDefault(); e.stopPropagation();
+    const isMini = p.classList.contains('mini');
+    const L = S.layout, ent = layoutEntry(p.dataset.key); if (!isMini && !ent) return;
+    const r0 = p.getBoundingClientRect(); const gap = parseFloat(getComputedStyle(stage).gap) || 12;
+    const colW = (stage.getBoundingClientRect().width - gap * (L.cols - 1)) / L.cols, rowH = L.rowh;
+    const doW = hd.classList.contains('rz-e') || hd.classList.contains('rz-se'), doH = hd.classList.contains('rz-s') || hd.classList.contains('rz-se');
+    hd.setPointerCapture(e.pointerId); hd.classList.add('on'); p.classList.add('sizing'); document.body.classList.add('resizing');
+    let w = ent?.w, hgt = ent?.h;
+    const move = ev => {
+      if (isMini) { p.style.setProperty('--mw', Math.max(220, r0.width + ev.clientX - e.clientX) + 'px'); p.style.setProperty('--mh', Math.max(140, r0.height + ev.clientY - e.clientY) + 'px'); return; }
+      if (doW) { w = Math.max(1, Math.min(L.cols, Math.round((ev.clientX - r0.left + gap / 2) / (colW + gap)))); p.style.gridColumn = `span ${w}`; }
+      if (doH) { hgt = Math.max(1, Math.min(4, Math.round((ev.clientY - r0.top + gap / 2) / (rowH + gap)))); p.style.gridRow = `span ${hgt}`; }
+    };
+    const up = () => {
+      hd.removeEventListener('pointermove', move); hd.removeEventListener('pointerup', up); hd.removeEventListener('pointercancel', up);
+      hd.classList.remove('on'); p.classList.remove('sizing'); document.body.classList.remove('resizing');
+      if (isMini) { S.miniSize = { w: p.style.getPropertyValue('--mw'), h: p.style.getPropertyValue('--mh') }; save(); return; }
+      if (ent.w !== w || ent.h !== hgt) { ent.w = w; ent.h = hgt; p.classList.toggle('tall', hgt > 1); save(); }
+    };
+    hd.addEventListener('pointermove', move); hd.addEventListener('pointerup', up); hd.addEventListener('pointercancel', up);
+  }));
+}
+
+/* ---------- miniplayer: one stream floats over everything ---------- */
+function applyMini(p, on) {
+  if (on) {
+    panels.forEach(n => { if (n !== p && n.classList.contains('mini')) applyMini(n, false); });
+    p.classList.add('mini'); p.classList.remove('focused'); p.hidden = false;
+    if (S.miniPos && S.miniPos.x) { p.style.setProperty('--mx', S.miniPos.x); p.style.setProperty('--my', S.miniPos.y); p.style.setProperty('--mr', 'auto'); p.style.setProperty('--mb', 'auto'); }
+    if (S.miniSize && S.miniSize.w) { p.style.setProperty('--mw', S.miniSize.w); p.style.setProperty('--mh', S.miniSize.h); }
+    S.mini = p.dataset.key; const b = $('[data-a=pop]', p); if (b) b.title = 'Put it back';
+  } else {
+    p.classList.remove('mini'); ['--mx', '--my', '--mr', '--mb', '--mw', '--mh'].forEach(v => p.style.removeProperty(v));
+    if (S.mini === p.dataset.key) S.mini = null; const b = $('[data-a=pop]', p); if (b) b.title = 'Pop out as a miniplayer';
+  }
+  save();
+}
+function toggleMini(p) { applyMini(p, !p.classList.contains('mini')); applyView(); }
 function toggleFocus(p) {
   const on = !p.classList.contains('focused');
   document.querySelectorAll('.panel.focused').forEach(x => { x.classList.remove('focused'); $('[data-a=focus] use', x).setAttribute('href', '#i-expand'); });
   if (on) { p.classList.add('focused'); $('[data-a=focus] use', p).setAttribute('href', '#i-shrink'); }
 }
-document.addEventListener('keydown', e => {
-  if (e.target.matches('input,textarea,select')) return;
-  if (e.key === 'Escape') { const f = $('.panel.focused'); if (f) toggleFocus(f); }
-  const views = ['dashboard', 'streams', 'browsers', 'results', 'tools', 'setup'];
-  if (/^[1-6]$/.test(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) go(views[+e.key - 1]);
-});
+function ensurePanel(key) {
+  if (panels.has(key)) return panels.get(key);
+  const node = build(key); panels.set(key, node); stage.append(node); return node;
+}
+function rebuildPanel(key) {
+  const old = panels.get(key); const node = build(key); panels.set(key, node);
+  if (old) { node.hidden = old.hidden; node.style.cssText = old.style.cssText; node.classList.toggle('tall', old.classList.contains('tall')); old.replaceWith(node); } else stage.append(node);
+  if (!node.hidden) { node.classList.add('enter'); node.addEventListener('animationend', () => node.classList.remove('enter'), { once: true }); }
+}
+function build(key) {
+  if (key === 'results') return resultsPanel();
+  if (key === 'wire') return wirePanel();
+  if (key === 'closings') return closingsPanel();
+  if (key === 'balance') return balancePanel();
+  if (key === 'log') return logPanel();
+  const [t, i] = key.split('-'); return t === 'stream' ? streamPanel(+i) : browserPanel(+i);
+}
 
 /* ---------- stream panel ---------- */
 function streamPanel(i) {
   const s = S.streams[i];
   const p = panelShell('stream-' + i, { kind: 'i-tv', title: s.label || 'Stream ' + (i + 1),
-    extraActions: `<button data-a="listen" title="Listen to this stream (mutes the others)" hidden>${icon('i-mute')}</button><button data-a="reload" title="Reload">${icon('i-refresh')}</button>` });
-  const body = el('<div class="pb video"></div>'); p.append(body);
+    extraActions: `<button data-a="listen" title="Listen to this stream (mutes the other YouTube streams)" hidden>${icon('i-mute')}</button><button data-a="pop" title="Pop out as a miniplayer">${icon('i-pip')}</button><button data-a="reload" title="Reload">${icon('i-refresh')}</button>` });
+  const body = el('<div class="pb video"></div>'); p.insertBefore(body, $('.rz', p));
+  $('[data-a=pop]', p).onclick = () => toggleMini(p);
   const f = frameFor(s.code);
   if (f) body.append(f);
   else body.append(el(`<div class="empty"><div>No embed yet.<br><button class="btn sm" onclick="go('setup','streams')">Add a stream</button></div></div>`));
@@ -539,24 +781,28 @@ function streamPanel(i) {
 }
 
 /* ---------- browser panel ---------- */
+function bookmarkRow(b, input, load) {
+  const marks = el('<div class="bookmarks"></div>');
+  S.bookmarks.forEach(m => { const bt = el(`<button type="button">${esc(m.label)}</button>`); bt.onclick = () => { b.url = m.url; input.value = m.url; save(); load(); }; marks.append(bt); });
+  return marks;
+}
 function browserPanel(i) {
   const b = S.browsers[i];
   const p = panelShell('browser-' + i, { kind: 'i-globe', title: b.label || 'Browser ' + (i + 1),
     extraActions: `<button data-a="reload" title="Reload">${icon('i-refresh')}</button><a target="_blank" rel="noopener" title="Open in a new tab">${icon('i-ext')}</a>` });
-  const bar = el(`<form class="urlbar"><input type="text" placeholder="Address, e.g. results.sos.state.xx.us" value="${esc(b.url)}" aria-label="Address"><button class="btn sm">Go</button></form>`);
-  const marks = el('<div class="bookmarks"></div>');
-  S.bookmarks.forEach(m => { const bt = el(`<button type="button">${esc(m.label)}</button>`); bt.onclick = () => { b.url = m.url; input.value = m.url; save(); load(); }; marks.append(bt); });
+  const bar = el(`<form class="urlbar"><input type="text" placeholder="Address" value="${esc(b.url)}" aria-label="Address"><button class="btn sm">Go</button></form>`);
   const body = el('<div class="pb"></div>');
-  p.append(bar, marks, body);
-  const a = $('a', p), input = $('input', bar);
+  const input = $('input', bar), a = $('a', p);
   function load() {
     body.innerHTML = '';
-    if (!b.url) { body.append(el(`<div class="empty"><div>Type an address above or tap a bookmark.<br><span class="small">Big outlets (AP, CNN, NYT, DDHQ) refuse to load inside other pages. State election offices, Ballotpedia, and Wikipedia usually work. The arrow opens any site in a new tab.</span></div></div>`)); a.removeAttribute('href'); return; }
+    if (!b.url) { body.append(el(`<div class="empty"><div>Type an address above or tap a bookmark.<br><span class="small">Big outlets (AP, CNN, NYT) refuse to load inside other pages; the arrow opens any site in a new tab.</span></div></div>`)); a.removeAttribute('href'); return; }
     const u = /^https?:/i.test(b.url) ? b.url : 'https://' + b.url;
     a.href = u;
     const f = document.createElement('iframe'); f.src = u; f.setAttribute('referrerpolicy', 'no-referrer-when-downgrade'); f.setAttribute('allow', 'fullscreen');
     body.append(f);
   }
+  p.append(bar, bookmarkRow(b, input, load), body);
+  p._refreshBookmarks = () => $('.bookmarks', p).replaceWith(bookmarkRow(b, input, load));
   bar.onsubmit = e => { e.preventDefault(); b.url = input.value.trim(); save(); load(); };
   $('[data-a=reload]', p).onclick = load;
   load();
@@ -564,47 +810,48 @@ function browserPanel(i) {
 }
 
 /* ---------- results panel ---------- */
-const lastWinners = new Map();
+const lastWinners = new Map(), lastVotes = new Map();
 function partyColor(party) {
   const p = String(party || '').toLowerCase();
   if (/^d|democrat/.test(p)) return 'var(--dem)';
   if (/^r|republican|gop/.test(p)) return 'var(--gop)';
-  if (/green|libert|indep|^i\b|^ind/.test(p)) return 'var(--ind)';
+  if (/green|libert|indep|^i\b|^ind|yes/.test(p)) return 'var(--ind)';
   return 'var(--other)';
 }
 async function fetchRace(id) {
-  const res = await fetch(`${CIVIC}/race/${encodeURIComponent(id)}?light`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const j = await res.json();
+  const j = await fetchJSON(`${CIVIC}/race/${encodeURIComponent(id)}?light`);
   let d = j.data ?? j; if (Array.isArray(d)) d = d[0];
   if (!d || !d.candidates) throw new Error('empty response');
+  C.races[id] = { t: Date.now(), d }; saveCache();
   return d;
 }
-/* Search by state and date. The service times out on name-only queries, so the name filter is applied here, after the fetch. */
 async function searchRaces(state, date, includeLocal) {
+  const ck = `${state}|${date}|${includeLocal ? 1 : 0}`;
+  if (C.ballots[ck] && Date.now() - C.ballots[ck].t < 6 * 3600e3) return C.ballots[ck].races;
   const one = async (type, limit) => {
     const q = new URLSearchParams({ country: 'US', province: state, start_date: date, end_date: date, election_type: type, limit: String(limit) });
-    const res = await fetch(`${CIVIC}/race/search?${q}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const j = await res.json();
-    return (j.races || []).map(r => ({ ...r, _tier: type === 'General' ? 0 : type === 'Statewide' ? 1 : 2 }));
+    const j = await fetchJSON(`${CIVIC}/race/search?${q}`, 60000);
+    return (j.races || []).filter(r => String(r.election_date || '').startsWith(date)).map(r => ({ id: r.id, type: r.type, election_name: r.election_name, district: r.district, candidates: (r.candidates || []).slice(0, 4).map(c => ({ name: c.name, party: c.party })), _tier: type === 'General' ? 0 : type === 'Statewide' ? 1 : 2 }));
   };
-  const jobs = [one('General', 400), one('Statewide', 400)];
-  if (includeLocal) jobs.push(one('Local', 3000));
+  const jobs = [one('General', 1000), one('Statewide', 1000)];
+  if (includeLocal) jobs.push(one('Local', 4000));
   const parts = await Promise.all(jobs);
-  const seen = new Set();
-  return parts.flat().filter(r => !seen.has(r.id) && seen.add(r.id));
+  const seen = new Set(); const races = parts.flat().filter(r => !seen.has(r.id) && seen.add(r.id));
+  C.ballots[ck] = { t: Date.now(), races }; saveCache();
+  return races;
 }
-function renderRace(d, r) {
+function raceCard(d, r, prevEl) {
   const name = r.label || d.election_name?.en_US || d.election_name || 'Race ' + r.id;
   const cands = (d.candidates || []).filter(c => !c.dropped_out).sort((a, b) => (b.votes || 0) - (a.votes || 0));
   const total = cands.reduce((s, c) => s + (+c.votes || 0), 0);
   const pr = d.percent_reporting != null ? Math.max(0, Math.min(100, +d.percent_reporting)) : null;
   const upd = d.last_updated ? new Date(d.last_updated) : null;
   const winner = cands.find(c => c.winner);
-  const c = el(`<div class="race ${winner ? 'called' : ''}">
+  const changed = lastVotes.has(r.id) && lastVotes.get(r.id) !== total;
+  lastVotes.set(r.id, total);
+  const c = el(`<div class="race ${winner ? 'called' : ''} ${changed && !reduced ? 'flash' : ''}">
     <h4><span>${esc(name)}</span><button class="star" aria-pressed="${!!r.pin}" title="Pin to top">${icon(r.pin ? 'i-star-f' : 'i-star')}</button></h4>
-    <div class="meta">${pr != null ? `<b>${pr.toFixed(pr % 1 ? 1 : 0)}% in</b>` : ''}${total ? `<span>${fmt(total)} votes</span>` : ''}${upd && !isNaN(upd) ? `<span>src ${timeStr(upd)}</span>` : ''}</div>
+    <div class="meta">${pr != null ? `<b>${pr.toFixed(pr % 1 ? 1 : 0)}% in</b>` : ''}${total ? `<span>${fmt(total)} votes</span>` : ''}${upd && !isNaN(upd) ? `<span title="When the source last updated this race">src ${timeStr(upd)}</span>` : ''}${C.races[r.id] ? `<span title="When these numbers were fetched">got ${timeStr(new Date(C.races[r.id].t))}</span>` : ''}</div>
     ${pr != null ? `<div class="rptbar"><i style="width:${pr}%"></i></div>` : ''}
     ${cands.slice(0, 6).map(x => {
       const pct = x.percent != null ? +x.percent : (total ? 100 * (+x.votes || 0) / total : 0);
@@ -616,12 +863,16 @@ function renderRace(d, r) {
     }).join('')}
     ${!cands.length ? '<div class="meta">No candidate data yet.</div>' : ''}
   </div>`);
-  $('.star', c).onclick = () => { r.pin = !r.pin; save(); render(); };
+  $('.star', c).onclick = () => { r.pin = !r.pin; save(); $('.star', c).setAttribute('aria-pressed', !!r.pin); $('.star use', c).setAttribute('href', r.pin ? '#i-star-f' : '#i-star'); panels.get('results')?._reorder(); };
   if (winner) {
     const prev = lastWinners.get(r.id);
-    if (prev !== undefined && prev !== winner.name) { toast('Race called', `${name}: ${winner.name}`); chime(); addLog(`${name}: ${winner.name} (civicAPI)`, true); }
+    if (prev !== undefined && prev !== winner.name) { toast('Race called', `${name}: ${winner.name}`, 'call'); chime(); addLog(`${name}: ${winner.name} (civicAPI)`, true); }
     lastWinners.set(r.id, winner.name);
   } else if (!lastWinners.has(r.id)) lastWinners.set(r.id, null);
+  if (prevEl && !reduced) { // animate bars from their previous widths
+    const oldBars = prevEl.querySelectorAll('.bar i, .rptbar i'), newBars = c.querySelectorAll('.bar i, .rptbar i');
+    newBars.forEach((b, i) => { if (oldBars[i]) { const target = b.style.width; b.style.width = oldBars[i].style.width; requestAnimationFrame(() => requestAnimationFrame(() => b.style.width = target)); } });
+  }
   return c;
 }
 function resultsPanel() {
@@ -631,40 +882,155 @@ function resultsPanel() {
   if (R.mode === 'embed' || R.mode === 'url') {
     body.classList.remove('scroll');
     const f = frameFor(R.mode === 'embed' ? R.embed : R.url);
-    if (f) {
-      body.append(f);
-      $('[data-a=r]', p).onclick = () => reloadFrame(f);
-      if (R.mode === 'url' && R.interval > 0) timers.push(setInterval(() => reloadFrame($('iframe', body)), R.interval * 1000));
-    } else body.append(el(`<div class="empty"><div>Nothing configured yet.<br><button class="btn sm" onclick="go('setup','results')">Set up results</button></div></div>`));
+    if (f) { body.append(f); $('[data-a=r]', p).onclick = () => reloadFrame(f); if (R.mode === 'url' && R.interval > 0) p._timer = setInterval(() => reloadFrame($('iframe', body)), R.interval * 1000); }
+    else body.append(el(`<div class="empty"><div>Nothing configured yet.<br><button class="btn sm" onclick="go('setup','results')">Set up results</button></div></div>`));
+    p._refresh = () => {}; p._reorder = () => {};
     return p;
   }
   const status = el(`<div class="status"><span class="dot"></span><span class="st">idle</span></div>`); p.append(status);
-  const dot = $('.dot', status), st = $('.st', status);
-  if (!R.races.length) { body.append(el(`<div class="empty"><div>No races added yet.<br><button class="btn sm" onclick="go('setup','results')">Add races</button></div></div>`)); return p; }
+  const dot = $('.dot', status), st = $('.st', status), rb = $('[data-a=r]', p);
   const wrap = el('<div class="races"></div>'); body.append(wrap);
-  const ordered = R.races.slice().sort((a, b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0));
-  const cards = ordered.map(r => { const c = el(`<div class="race"><h4><span>${esc(r.label || 'Race ' + r.id)}</span></h4><div class="meta">loading…</div></div>`); wrap.append(c); return c; });
-  async function refresh() {
-    dot.className = 'dot busy'; st.textContent = 'updating…';
+  const cards = new Map(); // id -> element
+  function order() { return R.races.slice().sort((a, b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0)); }
+  function placeholder(r) { return el(`<div class="race"><h4><span>${esc(r.label || 'Race ' + r.id)}</span></h4><div class="meta">${C.races[r.id] ? 'cached' : 'loading…'}</div></div>`); }
+  p._reorder = () => {
+    if (!R.races.length) { wrap.innerHTML = ''; wrap.append(el(`<div class="empty" style="position:static;padding:2rem"><div>No races added yet.<br><button class="btn sm" onclick="go('setup','results')">Add races</button></div></div>`)); return; }
+    const want = order().map(r => String(r.id));
+    [...cards.keys()].forEach(id => { if (!want.includes(id)) { cards.get(id).remove(); cards.delete(id); } });
+    want.forEach(id => { if (!cards.has(id)) { const r = R.races.find(x => String(x.id) === id); const c = C.races[id] ? raceCard(C.races[id].d, r) : placeholder(r); cards.set(id, c); } });
+    const emptyNode = $('.empty', wrap); if (emptyNode) emptyNode.remove();
+    want.forEach(id => wrap.append(cards.get(id)));
+  };
+  let busy = false;
+  p._refresh = async () => {
+    if (busy || !R.races.length) return; busy = true;
+    dot.className = 'dot busy'; st.textContent = 'updating…'; rb.classList.add('spin');
     let errs = 0;
-    await Promise.all(ordered.map(async (r, i) => {
-      try { const n = renderRace(await fetchRace(r.id), r); cards[i].replaceWith(n); cards[i] = n; }
-      catch (e) { errs++; const m = $('.meta', cards[i]); if (m) m.innerHTML = `<span class="err">Could not load (${esc(e.message)})</span>`; }
+    await Promise.all(R.races.map(async r => {
+      const id = String(r.id);
+      try { const d = await fetchRace(id); const old = cards.get(id); const n = raceCard(d, r, old); if (old && old.isConnected) old.replaceWith(n); cards.set(id, n); }
+      catch (e) { errs++; const m = cards.get(id) && $('.meta', cards.get(id)); if (m && !C.races[id]) m.innerHTML = `<span class="err">Could not load (${esc(e.message)})</span>`; }
     }));
-    dot.className = 'dot' + (errs ? ' err' : '');
-    st.textContent = `civicAPI · updated ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })} · every ${R.interval}s${errs ? ` · ${errs} failed` : ''}`;
+    p._reorder();
+    const now = Date.now(); const ok = errs < R.races.length;
+    if (ok) C.racesOk = now; C.racesCall = now; saveCache();
+    dot.className = 'dot' + (errs ? ' err' : ''); rb.classList.remove('spin');
+    paintStatus(errs);
+    busy = false;
+  };
+  const tfull = t => new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+  function paintStatus(errs) {
+    const call = C.racesCall ? `last call ${tfull(C.racesCall)}` : 'no call yet';
+    const data = C.racesOk ? `data as of ${tfull(C.racesOk)}` : 'no data yet';
+    const bad = errs == null ? '' : errs === 0 ? ' · all good' : errs >= R.races.length ? ' · failed, showing last good numbers' : ` · ${errs} of ${R.races.length} failed, kept their last numbers`;
+    st.textContent = `${call}${bad} · ${data} · every ${R.interval}s`;
   }
-  $('[data-a=r]', p).onclick = refresh;
-  refresh(); if (R.interval > 0) timers.push(setInterval(refresh, R.interval * 1000));
+  rb.onclick = p._refresh;
+  p._reorder();
+  if (R.races.length && C.racesOk) { paintStatus(); st.textContent += ' · refreshing…'; }
+  p._refresh();
+  if (R.interval > 0) p._timer = setInterval(p._refresh, R.interval * 1000);
   return p;
 }
 
-/* ---------- poll closings panel ---------- */
-function etParts(d) {
-  const f = new Intl.DateTimeFormat('en-US', { timeZone: ET, hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  const o = {}; f.formatToParts(d).forEach(x => o[x.type] = x.value);
-  return o;
+/* ---------- news wire ---------- */
+function linkify(text, facets) {
+  // Bluesky facets carry byte offsets; convert via UTF-8 so links stay aligned.
+  if (!facets || !facets.length) return esc(text);
+  const enc = new TextEncoder(), bytes = enc.encode(text), dec = new TextDecoder();
+  let out = '', pos = 0;
+  facets.slice().sort((a, b) => a.index.byteStart - b.index.byteStart).forEach(f => {
+    const link = (f.features || []).find(x => x.$type === 'app.bsky.richtext.facet#link');
+    const s = f.index.byteStart, e = f.index.byteEnd; if (s < pos) return;
+    out += esc(dec.decode(bytes.slice(pos, s)));
+    const seg = dec.decode(bytes.slice(s, e));
+    out += link ? `<a href="${esc(link.uri)}" target="_blank" rel="noopener">${esc(seg)}</a>` : esc(seg);
+    pos = e;
+  });
+  return out + esc(dec.decode(bytes.slice(pos)));
 }
+async function fetchBsky(src, reposts) {
+  const q = new URLSearchParams({ actor: src.handle, limit: '30', filter: 'posts_no_replies' });
+  const j = await fetchJSON(`${BSKY}/app.bsky.feed.getAuthorFeed?${q}`, 20000);
+  return (j.feed || []).filter(it => reposts || !it.reason).map(it => {
+    const post = it.post, rec = post.record || {};
+    const rkey = post.uri.split('/').pop(), author = post.author || {};
+    const imgs = (post.embed?.images || post.embed?.media?.images || []).map(im => im.thumb).filter(Boolean).slice(0, 3);
+    const ext = post.embed?.external || post.embed?.media?.external;
+    return { id: post.uri, src: src.name || author.displayName || src.handle, srcKey: src.handle, text: rec.text || '', html: linkify(rec.text || '', rec.facets), t: Date.parse(it.reason ? (it.reason.indexedAt || rec.createdAt) : rec.createdAt) || Date.now(), url: `https://bsky.app/profile/${author.handle || src.handle}/post/${rkey}`, repost: it.reason ? (author.displayName || author.handle) : null, imgs, ext: ext ? { title: ext.title, uri: ext.uri } : null };
+  });
+}
+async function fetchRss(src) {
+  const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(src.url)}`;
+  const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 20000);
+  const res = await fetch(url, { signal: ctl.signal }).finally(() => clearTimeout(tm));
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const doc = new DOMParser().parseFromString(await res.text(), 'text/xml');
+  const items = [...doc.querySelectorAll('item, entry')].slice(0, 30);
+  return items.map(it => {
+    const g = s => it.querySelector(s)?.textContent?.trim() || '';
+    const link = g('link') || it.querySelector('link')?.getAttribute('href') || '';
+    const t = Date.parse(g('pubDate') || g('published') || g('updated') || g('dc\\:date')) || Date.now();
+    return { id: g('guid') || link || g('title'), src: src.name || src.url, srcKey: src.url, text: g('title'), html: esc(g('title')), t, url: link, ext: null, imgs: [] };
+  });
+}
+function wirePanel() {
+  const W = S.wire;
+  const p = panelShell('wire', { kind: 'i-wire', title: 'News wire', extraActions: `<button data-a="r" title="Refresh now">${icon('i-refresh')}</button>` });
+  const bar = el(`<div class="wirebar"><input type="text" placeholder="Filter…" aria-label="Filter the wire"></div>`);
+  W.sources.forEach(s => { const k = s.handle || s.url; const b = el(`<button type="button" class="src ${W.off.includes(k) ? 'off' : ''}" title="Show or hide ${esc(s.name || k)}">${esc(s.name || k)}</button>`); b.onclick = () => { const i = W.off.indexOf(k); if (i >= 0) W.off.splice(i, 1); else W.off.push(k); b.classList.toggle('off', W.off.includes(k)); save(); draw(); }; bar.append(b); });
+  const body = el('<div class="pb scroll"></div>');
+  const pill = el('<div class="newpill" hidden><button type="button">New posts</button></div>');
+  const list = el('<ul class="wire"></ul>');
+  const status = el(`<div class="status"><span class="dot"></span><span class="st">idle</span></div>`);
+  body.append(pill, list); p.append(bar, body, status);
+  const dot = $('.dot', status), st = $('.st', status), filt = $('input', bar), rb = $('[data-a=r]', p);
+  let items = C.wire.slice(), seen = new Set(items.map(i => i.id)), pending = 0, firstDraw = true;
+  pill.querySelector('button').onclick = () => { body.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); pill.hidden = true; pending = 0; };
+  body.addEventListener('scroll', () => { if (body.scrollTop < 30) { pill.hidden = true; pending = 0; } }, { passive: true });
+  function draw(newIds = new Set()) {
+    const needle = filt.value.trim().toLowerCase();
+    const rows = items.filter(i => !W.off.includes(i.srcKey)).filter(i => !needle || `${i.src} ${i.text}`.toLowerCase().includes(needle)).slice(0, 150);
+    const keepScroll = body.scrollTop > 30, prevH = list.scrollHeight;
+    list.innerHTML = '';
+    if (!rows.length) { list.append(el(`<li><span class="txt auto small">${items.length ? 'Nothing matches.' : 'Loading the wire…'}</span></li>`)); return; }
+    rows.forEach(i => {
+      const li = el(`<li class="${newIds.has(i.id) && !firstDraw && !reduced ? 'new' : ''}">
+        <div class="who"><b>${esc(i.src)}</b>${i.repost ? `<span class="rp">reposted ${esc(i.repost)}</span>` : ''}<time datetime="${new Date(i.t).toISOString()}" title="${new Date(i.t).toLocaleString()}">${ago(i.t)}</time><span class="spacer"></span><a href="${esc(i.url)}" target="_blank" rel="noopener" title="Open post">${icon('i-ext')}</a></div>
+        <div class="txt">${i.html}</div>
+        ${i.ext ? `<span class="ext"><a href="${esc(i.ext.uri)}" target="_blank" rel="noopener">${icon('i-ext')} ${esc(i.ext.title || i.ext.uri)}</a></span>` : ''}
+        ${i.imgs.length ? `<div class="imgs">${i.imgs.map(u => `<img src="${esc(u)}" alt="" loading="lazy">`).join('')}</div>` : ''}</li>`);
+      list.append(li);
+    });
+    if (keepScroll) body.scrollTop += list.scrollHeight - prevH;
+    firstDraw = false;
+  }
+  let busy = false;
+  p._refresh = async () => {
+    if (busy) return; busy = true; dot.className = 'dot busy'; rb.classList.add('spin'); st.textContent = 'fetching…';
+    const results = await Promise.allSettled(W.sources.map(s => s.type === 'rss' ? fetchRss(s) : fetchBsky(s, W.reposts)));
+    const fresh = results.flatMap(r => r.status === 'fulfilled' ? r.value : []), errs = results.filter(r => r.status === 'rejected').length;
+    const newIds = new Set();
+    fresh.forEach(i => { if (!seen.has(i.id)) { seen.add(i.id); items.push(i); newIds.add(i.id); } });
+    items.sort((a, b) => b.t - a.t); items = items.slice(0, 300);
+    C.wire = items.slice(0, 120); saveCache();
+    const wasDown = body.scrollTop > 30;
+    draw(newIds);
+    if (newIds.size && wasDown) { pending += newIds.size; pill.querySelector('button').textContent = `${pending} new post${pending > 1 ? 's' : ''}`; pill.hidden = false; }
+    if (newIds.size && !firstDraw) { const nb = $('#nav [data-v=wire]'); if (S.view !== 'wire' && nb) { let b = $('.badge', nb); if (!b) { b = el('<span class="badge"></span>'); nb.append(b); } b.textContent = Math.min(99, (+b.textContent || 0) + newIds.size); } }
+    dot.className = 'dot' + (errs ? ' err' : ''); rb.classList.remove('spin');
+    st.textContent = `${W.sources.length - errs} of ${W.sources.length} sources · ${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} · every ${W.interval}s`;
+    busy = false;
+  };
+  rb.onclick = p._refresh; filt.oninput = debounce(() => draw(), 120);
+  draw(); p._refresh();
+  p._timer = setInterval(p._refresh, Math.max(30, W.interval) * 1000);
+  p._tick = setInterval(() => list.querySelectorAll('time').forEach(t => t.textContent = ago(Date.parse(t.dateTime))), 30000);
+  return p;
+}
+
+/* ---------- poll closings ---------- */
+function etParts(d) { const f = new Intl.DateTimeFormat('en-US', { timeZone: ET, hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }); const o = {}; f.formatToParts(d).forEach(x => o[x.type] = x.value); return o; }
 function closingsPanel() {
   const p = panelShell('closings', { kind: 'i-clock', title: 'Poll closings (ET)' });
   const body = el('<div class="pb scroll"></div>'); p.append(body);
@@ -673,63 +1039,70 @@ function closingsPanel() {
     const [h, m] = t.split(':').map(Number);
     const label = `${((h % 24) % 12) || 12}:${String(m).padStart(2, '0')} ${h % 24 < 12 ? 'AM' : 'PM'}`;
     const li = el(`<li><span class="tm">${label}</span><span class="st">${states.map(esc).join(', ')}</span><span class="cd"></span></li>`);
-    list.append(li); return { h, m, li };
+    list.append(li); return { h, m, li, cd: $('.cd', li) };
   });
   function tick() {
-    const o = etParts(new Date());
-    const nowMin = +o.hour * 60 + +o.minute; const sec = +o.second;
+    const o = etParts(new Date()); const nowMin = (+o.hour % 24) * 60 + +o.minute; const sec = +o.second;
     let nextSet = false;
     items.forEach(it => {
       const diff = (it.h * 60 + it.m) - nowMin;
-      it.li.classList.remove('past', 'next');
-      if (diff <= 0) { it.li.classList.add('past'); it.li.querySelector('.cd').textContent = 'closed'; }
+      it.li.classList.remove('past', 'next', 'soon');
+      if (diff <= 0) { it.li.classList.add('past'); it.cd.textContent = 'closed'; }
       else {
         const total = diff * 60 - sec, hh = Math.floor(total / 3600), mm = Math.floor((total % 3600) / 60), ss = total % 60;
-        it.li.querySelector('.cd').textContent = hh ? `${hh}h ${String(mm).padStart(2, '0')}m` : `${mm}m ${String(ss).padStart(2, '0')}s`;
-        if (!nextSet) { it.li.classList.add('next'); nextSet = true; }
+        it.cd.textContent = hh ? `${hh}h ${String(mm).padStart(2, '0')}m` : `${mm}m ${String(ss).padStart(2, '0')}s`;
+        if (!nextSet) { it.li.classList.add('next'); if (total < 300) it.li.classList.add('soon'); nextSet = true; }
       }
     });
   }
-  tick(); timers.push(setInterval(tick, 1000));
+  tick(); p._timer = setInterval(tick, 1000);
   body.append(el('<p class="small" style="padding:0.5rem 0.85rem 0.8rem;margin:0">Standard general-election closing times. Split states show the part that closes at each time. Confirm with the state office if a call depends on it.</p>'));
   return p;
 }
 
-/* ---------- balance of power panel ---------- */
+/* ---------- balance of power ---------- */
 const CHAMBERS = [['senate', 'Senate', 100, 51], ['house', 'House', 435, 218], ['gov', 'Governors', 50, 26]];
 function balancePanel() {
-  const p = panelShell('balance', { kind: 'i-scale', title: 'Balance of power', extraActions: `<button data-a="reset" title="Reset all counts to zero">${icon('i-refresh')}</button>` });
+  const p = panelShell('balance', { kind: 'i-scale', title: 'Balance of power', extraActions: `<button data-a="reset" title="Reset counts to the starting values">${icon('i-refresh')}</button>` });
   const body = el('<div class="pb scroll"><div class="bop"></div></div>'); p.append(body);
   const bop = $('.bop', body);
-  function draw() {
-    bop.innerHTML = '';
+  const boxes = {};
+  CHAMBERS.forEach(([k, name, seats, maj]) => {
+    const box = el(`<div class="chamber"><h4>${name}<small></small></h4>
+      <div class="bopbar"><i class="d"></i><i class="i"></i><i class="r"></i></div>
+      <div class="counts">
+        <div><label class="dl">Dem</label><div class="n"><button data-k="d" data-d="-1" aria-label="Fewer Democrats">${icon('i-minus')}</button><b></b><button data-k="d" data-d="1" aria-label="More Democrats">${icon('i-plus')}</button></div></div>
+        <div><label class="il">Other</label><div class="n"><button data-k="i" data-d="-1" aria-label="Fewer independents">${icon('i-minus')}</button><b></b><button data-k="i" data-d="1" aria-label="More independents">${icon('i-plus')}</button></div></div>
+        <div><label class="rl">Rep</label><div class="n"><button data-k="r" data-d="-1" aria-label="Fewer Republicans">${icon('i-minus')}</button><b></b><button data-k="r" data-d="1" aria-label="More Republicans">${icon('i-plus')}</button></div></div>
+      </div>
+      <div class="majority"><span class="dn">D needs <b></b> more</span><span>majority ${maj}</span><span class="rn">R needs <b></b> more</span></div></div>`);
+    box.querySelectorAll('button[data-k]').forEach(b => b.onclick = () => { const c = S.bop[k], nk = b.dataset.k; c[nk] = Math.max(0, Math.min(seats, (+c[nk] || 0) + +b.dataset.d)); save(); draw(k, nk); });
+    bop.append(box); boxes[k] = box;
+  });
+  function draw(only, bumpKey) {
     CHAMBERS.forEach(([k, name, seats, maj]) => {
-      const c = S.bop[k], d = +c.d || 0, r = +c.r || 0, i = +c.i || 0;
+      if (only && only !== k) return;
+      const box = boxes[k], c = S.bop[k], d = +c.d || 0, r = +c.r || 0, i = +c.i || 0;
       const w = n => (100 * n / seats).toFixed(2) + '%';
-      const box = el(`<div class="chamber"><h4>${name}<small>${d + r + i} of ${seats} called</small></h4>
-        <div class="bopbar"><i class="d" style="width:${w(d)}"></i><i class="i" style="width:${w(i)}"></i><i class="r" style="width:${w(r)}"></i></div>
-        <div class="counts">
-          <div><label class="dl">Dem</label><div class="n"><button data-k="d" data-d="-1" aria-label="Fewer Democrats">${icon('i-minus')}</button><b>${d}</b><button data-k="d" data-d="1" aria-label="More Democrats">${icon('i-plus')}</button></div></div>
-          <div><label class="il">Other</label><div class="n"><button data-k="i" data-d="-1" aria-label="Fewer independents">${icon('i-minus')}</button><b>${i}</b><button data-k="i" data-d="1" aria-label="More independents">${icon('i-plus')}</button></div></div>
-          <div><label class="rl">Rep</label><div class="n"><button data-k="r" data-d="-1" aria-label="Fewer Republicans">${icon('i-minus')}</button><b>${r}</b><button data-k="r" data-d="1" aria-label="More Republicans">${icon('i-plus')}</button></div></div>
-        </div>
-        <div class="majority"><span class="${d >= maj ? 'has' : ''}">D needs <b>${Math.max(0, maj - d)}</b> more</span><span>majority ${maj}</span><span class="${r >= maj ? 'has' : ''}">R needs <b>${Math.max(0, maj - r)}</b> more</span></div></div>`);
-      box.querySelectorAll('button[data-k]').forEach(b => b.onclick = () => {
-        const nk = b.dataset.k; c[nk] = Math.max(0, Math.min(seats, (+c[nk] || 0) + +b.dataset.d)); save(); draw();
-      });
-      bop.append(box);
+      $('h4 small', box).textContent = `${d + r + i} of ${seats} called`;
+      $('.bopbar .d', box).style.width = w(d); $('.bopbar .i', box).style.width = w(i); $('.bopbar .r', box).style.width = w(r);
+      const nums = box.querySelectorAll('.n b'); [d, i, r].forEach((v, idx) => { nums[idx].textContent = v; });
+      if (bumpKey) { const b = $(`.n button[data-k=${bumpKey}]`, box).parentElement.querySelector('b'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
+      $('.dn b', box).textContent = Math.max(0, maj - d); $('.rn b', box).textContent = Math.max(0, maj - r);
+      $('.dn', box).classList.toggle('has', d >= maj); $('.rn', box).classList.toggle('has', r >= maj);
+      box.classList.toggle('won-d', d >= maj); box.classList.toggle('won-r', r >= maj);
     });
   }
   $('[data-a=reset]', p).onclick = () => { S.bop = defaults().bop; save(); draw(); };
   draw();
-  body.append(el('<p class="small" style="padding:0 0.85rem 0.8rem;margin:0">Hand-tallied, so count seats as they get called. Set the seats not on the ballot first so the bar reflects the real picture.</p>'));
+  body.append(el('<p class="small" style="padding:0 0.85rem 0.8rem;margin:0">Hand-tallied. The starting numbers are seats not on the ballot this year; add seats as they get called.</p>'));
   return p;
 }
 
-/* ---------- call log panel ---------- */
+/* ---------- call log ---------- */
 function addLog(text, auto) {
   S.log.unshift({ t: Date.now(), text, auto: !!auto }); if (S.log.length > 400) S.log.length = 400; save();
-  document.querySelectorAll('.panel[data-key=log]').forEach(p => p._redraw && p._redraw());
+  const p = panels.get('log'); if (p) p._draw(true);
 }
 function logPanel() {
   const p = panelShell('log', { kind: 'i-pen', title: 'Call log', extraActions: `<button data-a="copy" title="Copy the whole log">${icon('i-copy')}</button>` });
@@ -737,94 +1110,111 @@ function logPanel() {
   const body = el('<div class="pb scroll"><ul class="log"></ul></div>');
   p.append(form, body);
   const list = $('.log', body);
-  function draw() {
+  p._draw = (animateFirst) => {
     list.innerHTML = '';
-    if (!S.log.length) { list.append(el('<li><span></span><span class="txt auto">Nothing logged yet. Entries are stamped with the time you add them; race calls from the results feed land here too.</span><span></span></li>')); return; }
+    if (!S.log.length) { list.append(el('<li><span></span><span class="txt auto">Nothing logged yet. Entries are stamped when you add them; race calls from the results feed land here too.</span><span></span></li>')); return; }
     S.log.forEach((e, i) => {
-      const li = el(`<li><time datetime="${new Date(e.t).toISOString()}">${timeStr(new Date(e.t))}</time><span class="txt ${e.auto ? 'auto' : ''}">${esc(e.text)}</span><button title="Delete">${icon('i-x')}</button></li>`);
-      $('button', li).onclick = () => { S.log.splice(i, 1); save(); draw(); };
+      const li = el(`<li class="${animateFirst && i === 0 && !reduced ? 'new' : ''}"><time datetime="${new Date(e.t).toISOString()}">${timeStr(new Date(e.t))}</time><span class="txt ${e.auto ? 'auto' : ''}">${esc(e.text)}</span><button title="Delete">${icon('i-x')}</button></li>`);
+      $('button', li).onclick = () => { S.log.splice(i, 1); save(); p._draw(); };
       list.append(li);
     });
-  }
-  p._redraw = draw;
+  };
   form.onsubmit = e => { e.preventDefault(); const v = $('input', form).value.trim(); if (!v) return; $('input', form).value = ''; addLog(v); };
   $('[data-a=copy]', p).onclick = async () => {
     const txt = S.log.slice().reverse().map(e => `${new Date(e.t).toLocaleString()} — ${e.text}`).join('\n');
     try { await navigator.clipboard.writeText(txt); toast('Copied', `${S.log.length} entries copied as text.`); } catch (e) { toast('Copy failed', 'Your browser blocked clipboard access.'); }
   };
-  draw();
+  p._draw();
   return p;
 }
 
-/* ---------- views ---------- */
-function build(key) {
-  if (key === 'results') return resultsPanel();
-  if (key === 'closings') return closingsPanel();
-  if (key === 'balance') return balancePanel();
-  if (key === 'log') return logPanel();
-  const [t, i] = key.split('-'); return t === 'stream' ? streamPanel(+i) : browserPanel(+i);
-}
-const views = {
-  dashboard() {
-    syncLayout();
-    const L = S.layout, on = L.panels.filter(p => p.on);
-    if (!on.length) return el(`<div class="card"><h2>Your dashboard is empty</h2><p class="lead">Pick panels in Setup → Layout.</p><button class="btn primary" onclick="go('setup','layout')">Set up the layout</button></div>`);
-    const g = el(`<div class="dash" style="grid-template-columns:repeat(${L.cols},1fr);--rowh:${L.rowh}px"></div>`);
-    on.forEach(p => {
-      const node = build(p.key);
-      node.style.gridColumn = `span ${Math.min(p.w, L.cols)}`; node.style.gridRow = `span ${p.h}`;
-      if (p.h > 1) node.classList.add('tall');
-      g.append(node);
-    });
-    return g;
-  },
-  streams() {
-    const wrap = el(`<div><h2><span class="num">01</span>Streams</h2><p class="lead">Every configured stream. Each player has its own volume; YouTube players also get a speaker button that unmutes one and silences the rest.</p><div class="streams-grid"></div></div>`);
-    const g = $('.streams-grid', wrap);
-    const any = S.streams.some(s => s.code);
-    S.streams.forEach((s, i) => { if (s.code) g.append(streamPanel(i)); });
-    if (!any) g.append(el(`<div class="card">No streams yet. <button class="btn primary sm" onclick="go('setup','streams')">Add streams</button></div>`));
-    return wrap;
-  },
-  browsers() {
-    const wrap = el(`<div><h2><span class="num">02</span>Browsers</h2><p class="lead">Type any address, or tap a bookmark. If a pane stays blank, that site refuses to be framed; the arrow opens it in a new tab.</p><div class="browsers-grid"></div></div>`);
-    S.browsers.forEach((b, i) => $('.browsers-grid', wrap).append(browserPanel(i)));
-    return wrap;
-  },
-  results() {
-    const wrap = el(`<div><h2><span class="num">03</span>Results</h2><p class="lead">Refreshes on its own. Pin the races you care most about and they stay at the top.</p></div>`);
-    const p = resultsPanel(); p.style.minHeight = '72vh'; wrap.append(p); return wrap;
-  },
-  tools() {
-    const wrap = el(`<div><h2><span class="num">04</span>Tracker</h2><p class="lead">Poll closings with countdowns, a hand-tallied balance of power, and a timestamped call log. Each of these can also sit on the dashboard.</p><div class="tools-grid"></div></div>`);
-    const g = $('.tools-grid', wrap); g.append(closingsPanel(), balancePanel(), logPanel());
-    return wrap;
-  },
-  setup() { return setupView(); }
+/* ================================================================
+   Views: which panels show, and how they are placed.
+   ================================================================ */
+const VIEWS = {
+  dashboard: { title: 'Dashboard', lead: '' },
+  streams: { title: 'Streams', lead: 'Every configured stream. Each player keeps its own volume; YouTube players also get a speaker button.' },
+  browsers: { title: 'Browsers', lead: 'Type any address or tap a bookmark. If a pane stays blank, that site refuses to be framed; the arrow opens it in a new tab.' },
+  results: { title: 'Results', lead: 'Refreshes on its own. Pin the races you care most about and they stay at the top.' },
+  wire: { title: 'Wire', lead: 'Live posts from election desks and newsrooms on Bluesky, newest first. Tap a source to hide or show it.' },
+  tools: { title: 'Tracker', lead: 'Poll closings with countdowns, a hand-tallied balance of power, and a timestamped call log.' },
+  setup: { title: 'Setup', lead: '' }
 };
+function visibleFor(view) {
+  syncLayout();
+  if (view === 'dashboard') return S.layout.panels.filter(p => p.on).map(p => ({ key: p.key, w: p.w, h: p.h }));
+  if (view === 'streams') return S.streams.map((s, i) => s.code ? { key: 'stream-' + i } : null).filter(Boolean);
+  if (view === 'browsers') return S.browsers.map((b, i) => ({ key: 'browser-' + i }));
+  if (view === 'results') return [{ key: 'results' }];
+  if (view === 'wire') return [{ key: 'wire' }];
+  if (view === 'tools') return [{ key: 'closings' }, { key: 'balance' }, { key: 'log' }];
+  return [];
+}
+function applyView() {
+  const v = S.view, L = S.layout;
+  document.querySelectorAll('#nav button').forEach(b => { if (b.dataset.v === v) { b.setAttribute('aria-current', 'page'); const bd = $('.badge', b); if (bd) bd.remove(); } else b.removeAttribute('aria-current'); });
+  const vh = $('#viewhead'); const num = ['streams', 'browsers', 'results', 'wire', 'tools', 'setup'].indexOf(v) + 1;
+  vh.hidden = v === 'dashboard'; $('#vh-title').innerHTML = `<span class="num">0${num}</span>${VIEWS[v].title}`; $('#vh-lead').textContent = VIEWS[v].lead;
+  const mini = S.mini ? panels.get(S.mini) : null;
+  if (v === 'setup') {
+    // The stage stays in the document (so a miniplayer keeps floating); its panels just hide.
+    panels.forEach(node => { if (node !== mini) node.hidden = true; });
+    stage.className = 'stage v-setup'; page.hidden = false; page.innerHTML = ''; page.append(setupView()); return;
+  }
+  page.hidden = true;
+  stage.className = 'stage v-' + v; stage.style.setProperty('--cols', L.cols); stage.style.setProperty('--rowh', L.rowh + 'px');
+  const show = visibleFor(v).filter(s => s.key !== S.mini); const showKeys = new Set(show.map(s => s.key));
+  // Hide panels first (keeps iframes alive), then place and reveal the ones this view uses.
+  panels.forEach((node, key) => { if (!showKeys.has(key) && node !== mini) { node.hidden = true; node.style.order = ''; } });
+  if (mini) mini.hidden = false;
+  show.forEach((s, i) => {
+    const node = ensurePanel(s.key);
+    const wasHidden = node.hidden;
+    node.hidden = false; node.style.order = i;
+    if (v === 'dashboard') { node.style.gridColumn = `span ${Math.min(s.w, L.cols)}`; node.style.gridRow = `span ${s.h}`; node.classList.toggle('tall', s.h > 1); }
+    else { node.style.gridColumn = ''; node.style.gridRow = ''; node.classList.remove('tall'); }
+    if (wasHidden && !reduced) { node.style.setProperty('--i', i); node.classList.add('enter'); node.addEventListener('animationend', () => node.classList.remove('enter'), { once: true }); }
+  });
+  if (v === 'dashboard' && !show.length && !mini) { page.hidden = false; page.innerHTML = ''; page.append(el(`<div class="card"><h3>Your dashboard is empty</h3><p class="lead">Pick panels in Setup → Layout.</p><button class="btn primary" onclick="go('setup','layout')">Set up the layout</button></div>`)); }
+}
+function go(v, sub) { if (sub) setupTab = sub; if (!VIEWS[v]) v = 'dashboard'; S.view = v; save(); if (location.hash !== '#' + v) history.replaceState(null, '', '#' + v); applyView(); window.scrollTo({ top: 0 }); }
+window.go = go;
+document.querySelectorAll('#nav button').forEach(b => b.onclick = () => go(b.dataset.v));
+window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (VIEWS[v] && v !== S.view) go(v); });
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea,select')) return;
+  if (e.key === 'Escape') { const f = $('.panel.focused'); if (f) toggleFocus(f); }
+  const vs = ['dashboard', 'streams', 'browsers', 'results', 'wire', 'tools', 'setup'];
+  if (/^[1-7]$/.test(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) go(vs[+e.key - 1]);
+});
 
-/* ---------- setup ---------- */
+/* Keep the always-on panels alive even if the first view does not show them, so data is ready when you switch. */
+function warmUp() { ['results', 'wire', 'closings', 'balance', 'log'].forEach(ensurePanel); if (S.mini && !panels.has(S.mini)) { ensurePanel(S.mini); } }
+
+/* ================================================================
+   Setup (rebuilt on demand; it holds no iframes).
+   ================================================================ */
 let setupTab = 'streams';
 function setupView() {
-  const tabs = [['streams', 'Streams'], ['browsers', 'Browsers'], ['results', 'Results'], ['layout', 'Layout'], ['backup', 'Backup']];
-  const w = el(`<div><h2><span class="num">05</span>Setup</h2>
-    <div class="filters" role="tablist">${tabs.map(([k, n]) => `<button class="filter" role="tab" aria-pressed="${k === setupTab}" data-t="${k}">${n}</button>`).join('')}</div>
-    <div id="setupBody"></div></div>`);
-  w.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { setupTab = b.dataset.t; render(); });
-  $('#setupBody', w).append(({ streams: setupStreams, browsers: setupBrowsers, results: setupResults, layout: setupLayout, backup: setupBackup })[setupTab]());
+  const tabs = [['streams', 'Streams'], ['browsers', 'Browsers'], ['wire', 'Wire'], ['results', 'Results'], ['layout', 'Layout'], ['backup', 'Backup']];
+  const w = el(`<div><div class="filters" role="tablist">${tabs.map(([k, n]) => `<button class="filter" role="tab" aria-pressed="${k === setupTab}" data-t="${k}">${n}</button>`).join('')}</div><div id="setupBody"></div></div>`);
+  w.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { setupTab = b.dataset.t; applyView(); });
+  $('#setupBody', w).append(({ streams: setupStreams, browsers: setupBrowsers, wire: setupWire, results: setupResults, layout: setupLayout, backup: setupBackup })[setupTab]());
   return w;
 }
 function setupStreams() {
-  const w = el(`<div><p class="lead">Up to six. Paste the embed code a network or streaming site gives you (an <code>&lt;iframe&gt;</code> or a <code>&lt;script&gt;</code> snippet) and it runs as-is in its own frame; each player keeps its own volume controls. A plain link works too, and YouTube and Twitch links turn into muted players with a speaker button for switching audio.</p><div class="grid-forms"></div></div>`);
+  const w = el(`<div><p class="lead">Up to six. Paste the embed code a network or streaming site gives you (an <code>&lt;iframe&gt;</code> or a <code>&lt;script&gt;</code> snippet) and it runs as-is in its own frame. A plain link works too; YouTube and Twitch links turn into muted players. Changes apply to that one stream only, without touching the others.</p><div class="grid-forms"></div></div>`);
   S.streams.forEach((s, i) => {
     const c = el(`<div class="card"><label class="f">Label</label><input type="text" value="${esc(s.label)}" data-k="label" maxlength="40">
-      <label class="f">Embed code or link</label><textarea data-k="code" placeholder="https://www.youtube.com/watch?v=…  or an <iframe> embed code">${esc(s.code)}</textarea>
-      <div class="row" style="margin-top:0.7rem"><button class="btn sm" data-a="clear">Clear</button><span class="spacer"></span><span class="small">${s.code ? 'set' : 'empty'}</span></div></div>`);
-    c.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { s[inp.dataset.k] = inp.value; if (inp.dataset.k === 'code') { syncLayout(); const lp = S.layout.panels.find(p => p.key === 'stream-' + i); if (lp && inp.value.trim()) lp.on = true; } save(); });
-    $('[data-a=clear]', c).onclick = () => { s.code = ''; save(); render(); };
+      <label class="f">Embed code or link</label><textarea data-k="code" placeholder="<iframe src=…></iframe>  or  https://…">${esc(s.code)}</textarea>
+      <div class="row" style="margin-top:0.7rem"><button class="btn sm" data-a="clear">Clear</button><button class="btn sm" data-a="reset">Default</button><span class="spacer"></span><span class="small st">${s.code ? 'set' : 'empty'}</span></div></div>`);
+    const applyCode = debounce(() => { syncLayout(); const lp = S.layout.panels.find(p => p.key === 'stream-' + i); if (lp && s.code.trim()) lp.on = true; rebuildPanel('stream-' + i); $('.st', c).textContent = s.code ? 'set' : 'empty'; }, 700);
+    c.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { s[inp.dataset.k] = inp.value; save(); if (inp.dataset.k === 'label') { const node = panels.get('stream-' + i); if (node) $('.ph .t', node).textContent = s.label || 'Stream ' + (i + 1); } else applyCode(); });
+    $('[data-a=clear]', c).onclick = () => { s.code = ''; $('textarea', c).value = ''; save(); rebuildPanel('stream-' + i); $('.st', c).textContent = 'empty'; };
+    $('[data-a=reset]', c).onclick = () => { if (!DEFAULT_STREAMS[i]) return; s.code = DEFAULT_STREAMS[i].code; s.label = DEFAULT_STREAMS[i].label; save(); applyView(); };
     $('.grid-forms', w).append(c);
   });
-  w.append(el(`<div class="note"><b>Tips.</b> If an embed stays black, open the stream's own page once in a browser pane or a new tab; some players refuse to run until you have visited the site, and a few only allow certain host sites. Streams only run in the section you are looking at, so the dashboard and the Streams section never double up.</div>`));
+  w.append(el(`<div class="note"><b>Tips.</b> If an embed stays black, open the stream's own page once in a browser pane or a new tab; some players refuse to run until you have visited the site. Streams keep running in the background when you switch sections, so audio you started keeps playing.</div>`));
   return w;
 }
 function setupBrowsers() {
@@ -833,46 +1223,66 @@ function setupBrowsers() {
     <div class="row" style="margin-top:0.8rem"><button class="btn sm" data-a="add">${icon('i-plus')} Add pane</button><button class="btn sm" data-a="rm">${icon('i-minus')} Remove last</button></div>
     <h3 style="margin-top:1.6rem">Bookmarks</h3><div class="chips" id="bm"></div>
     <form class="row" id="bmf" style="margin-top:0.7rem"><input type="text" placeholder="Label" style="max-width:10rem" required><input type="text" placeholder="https://…" required style="flex:1;min-width:12rem"><button class="btn sm primary">Add</button><button type="button" class="btn sm" id="bmreset">Restore defaults</button></form>
-    <div class="note"><b>About framing.</b> Sites decide for themselves whether they can be shown inside another page. Most big outlets say no, so those panes come up blank; that is their rule, not a bug here. Things that usually do work: state and county election-results pages, Ballotpedia, Wikipedia, Google Sheets published to the web, and most smaller trackers and blogs.</div></div>`);
+    <div class="note"><b>About framing.</b> Sites decide for themselves whether they can be shown inside another page. Most big outlets say no, so those panes come up blank; that is their rule, not a bug here. DDHQ's Votes site, state and county results pages, Ballotpedia, Wikipedia, and most smaller trackers do work.</div></div>`);
   S.browsers.forEach((b, i) => {
     const c = el(`<div class="card"><label class="f">Label</label><input type="text" data-k="label" value="${esc(b.label)}" maxlength="40"><label class="f">Starting address</label><input type="text" data-k="url" value="${esc(b.url)}" placeholder="https://…"></div>`);
-    c.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { b[inp.dataset.k] = inp.value.trim(); save(); });
+    const applyUrl = debounce(() => { const node = panels.get('browser-' + i); if (node) { $('.urlbar input', node).value = b.url; $('[data-a=reload]', node).click(); } }, 900);
+    c.querySelectorAll('[data-k]').forEach(inp => inp.oninput = () => { b[inp.dataset.k] = inp.value.trim(); save(); if (inp.dataset.k === 'label') { const node = panels.get('browser-' + i); if (node) $('.ph .t', node).textContent = b.label || 'Browser ' + (i + 1); } else applyUrl(); });
     $('.grid-forms', w).append(c);
   });
   $('[data-a=add]', w).disabled = S.browsers.length >= MAX_BROWSERS;
   $('[data-a=rm]', w).disabled = S.browsers.length <= 1;
-  $('[data-a=add]', w).onclick = () => { if (S.browsers.length < MAX_BROWSERS) { S.browsers.push({ label: 'Browser ' + (S.browsers.length + 1), url: '' }); syncLayout(); save(); render(); } };
-  $('[data-a=rm]', w).onclick = () => { if (S.browsers.length > 1) { S.browsers.pop(); syncLayout(); save(); render(); } };
+  $('[data-a=add]', w).onclick = () => { if (S.browsers.length < MAX_BROWSERS) { S.browsers.push({ label: 'Browser ' + (S.browsers.length + 1), url: '' }); syncLayout(); save(); applyView(); } };
+  $('[data-a=rm]', w).onclick = () => { if (S.browsers.length > 1) { const k = 'browser-' + (S.browsers.length - 1); S.browsers.pop(); const n = panels.get(k); if (n) { n.remove(); panels.delete(k); } syncLayout(); save(); applyView(); } };
   const bm = $('#bm', w);
-  S.bookmarks.forEach((m, i) => { const ch = el(`<span class="chip">${esc(m.label)}<button title="Remove">${icon('i-x')}</button></span>`); $('button', ch).onclick = () => { S.bookmarks.splice(i, 1); save(); render(); }; bm.append(ch); });
-  $('#bmf', w).onsubmit = e => { e.preventDefault(); const [l, u] = $('#bmf', w).querySelectorAll('input'); S.bookmarks.push({ label: l.value.trim(), url: u.value.trim() }); save(); render(); };
-  $('#bmreset', w).onclick = () => { S.bookmarks = DEFAULT_BOOKMARKS.slice(); save(); render(); };
+  const refreshMarks = () => panels.forEach(n => n._refreshBookmarks && n._refreshBookmarks());
+  S.bookmarks.forEach((m, i) => { const ch = el(`<span class="chip">${esc(m.label)}<button title="Remove">${icon('i-x')}</button></span>`); $('button', ch).onclick = () => { S.bookmarks.splice(i, 1); save(); refreshMarks(); applyView(); }; bm.append(ch); });
+  $('#bmf', w).onsubmit = e => { e.preventDefault(); const [l, u] = $('#bmf', w).querySelectorAll('input'); S.bookmarks.push({ label: l.value.trim(), url: u.value.trim() }); save(); refreshMarks(); applyView(); };
+  $('#bmreset', w).onclick = () => { S.bookmarks = DEFAULT_BOOKMARKS.map(b => ({ ...b })); save(); refreshMarks(); applyView(); };
+  return w;
+}
+function setupWire() {
+  const W = S.wire;
+  const w = el(`<div><p class="lead">The wire pulls public posts from Bluesky accounts (no login needed) and, optionally, RSS feeds through a relay. Decision Desk HQ posts its race calls and updates there, so that one is the backbone.</p>
+    <h3>Sources</h3><div class="chips" id="srcs"></div>
+    <form class="row" id="addb" style="margin-top:0.7rem"><input type="text" placeholder="Bluesky handle, e.g. decisiondeskhq.bsky.social" required style="flex:1;min-width:14rem"><input type="text" placeholder="Short name (optional)" style="max-width:11rem"><button class="btn sm primary">Add account</button></form>
+    <form class="row" id="addr" style="margin-top:0.5rem"><input type="text" placeholder="RSS feed address, e.g. https://feeds.npr.org/1014/rss.xml" required style="flex:1;min-width:14rem"><input type="text" placeholder="Short name (optional)" style="max-width:11rem"><button class="btn sm">Add feed</button></form>
+    <div class="row" style="margin-top:1rem;gap:1.2rem">
+      <label class="row" style="gap:0.4rem;font-size:0.88rem"><input type="checkbox" id="rp" ${W.reposts ? 'checked' : ''}> Include reposts</label>
+      <label class="row" style="gap:0.4rem;font-size:0.88rem">Refresh every <input type="number" id="wiv" min="30" step="15" value="${W.interval}" style="width:5.5rem"> seconds</label>
+      <button class="btn sm" id="wreset">Restore defaults</button>
+    </div>
+    <div class="note">RSS goes through a public relay (allorigins.win) because feeds rarely allow browsers to read them directly, so a feed can be slower or occasionally miss a refresh. Bluesky is direct and fast.</div></div>`);
+  const chips = $('#srcs', w);
+  W.sources.forEach((s, i) => { const ch = el(`<span class="chip">${esc(s.name || s.handle || s.url)} <span class="small">${s.type === 'rss' ? 'rss' : 'bsky'}</span><button title="Remove">${icon('i-x')}</button></span>`); $('button', ch).onclick = () => { W.sources.splice(i, 1); save(); rebuildPanel('wire'); applyView(); }; chips.append(ch); });
+  $('#addb', w).onsubmit = e => { e.preventDefault(); const [h, n] = e.target.querySelectorAll('input'); const handle = h.value.trim().replace(/^@/, '').replace(/^https?:\/\/bsky\.app\/profile\//, ''); W.sources.push({ type: 'bsky', handle, name: n.value.trim() || handle.replace(/\.bsky\.social$/, '') }); save(); rebuildPanel('wire'); applyView(); };
+  $('#addr', w).onsubmit = e => { e.preventDefault(); const [u, n] = e.target.querySelectorAll('input'); W.sources.push({ type: 'rss', url: u.value.trim(), name: n.value.trim() || new URL(u.value.trim()).hostname }); save(); rebuildPanel('wire'); applyView(); };
+  $('#rp', w).onchange = e => { W.reposts = e.target.checked; save(); rebuildPanel('wire'); };
+  $('#wiv', w).onchange = e => { W.interval = Math.max(30, +e.target.value || 90); save(); rebuildPanel('wire'); };
+  $('#wreset', w).onclick = () => { S.wire = defaults().wire; save(); rebuildPanel('wire'); applyView(); };
   return w;
 }
 function setupResults() {
   const R = S.results;
-  const w = el(`<div class="two">
-   <div>
-    <p class="lead">Decision Desk HQ and AP sell their feeds to newsrooms, so the free default is <b>civicAPI</b>: no key, live vote counts, winner flags. You can also drop in an embed code or a results web page.</p>
+  const w = el(`<div>
+    <p class="lead">Decision Desk HQ and AP sell their feeds to newsrooms, so the live data here comes from <b>civicAPI</b>: free, no key, with vote counts and winner flags. Key Senate, governor, and House races are tracked out of the box; add or remove any you like.</p>
     <div class="filters">
       <button class="filter" aria-pressed="${R.mode === 'civic'}" data-m="civic">civicAPI (live data)</button>
       <button class="filter" aria-pressed="${R.mode === 'embed'}" data-m="embed">Embed code</button>
       <button class="filter" aria-pressed="${R.mode === 'url'}" data-m="url">Web page</button>
     </div>
     <div id="mode"></div>
-    <label class="f">Refresh every (seconds)</label>
-    <input type="number" min="15" step="5" value="${R.interval}" id="iv" style="max-width:9rem">
-   </div>
-   <div class="card"><span class="tag">Preview</span><div id="pv" style="height:30rem;display:flex;margin-top:0.6rem"></div></div>
+    <div class="row" style="margin-top:1rem;gap:1.2rem"><label class="row" style="gap:0.4rem;font-size:0.88rem">Refresh every <input type="number" min="15" step="5" value="${R.interval}" id="iv" style="width:5.5rem"> seconds</label><button class="btn sm" onclick="go('results')">Open the results section</button></div>
   </div>`);
-  w.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { R.mode = b.dataset.m; save(); render(); });
-  $('#iv', w).onchange = e => { R.interval = Math.max(15, +e.target.value || 60); save(); render(); };
+  w.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { R.mode = b.dataset.m; save(); rebuildPanel('results'); applyView(); });
+  $('#iv', w).onchange = e => { R.interval = Math.max(15, +e.target.value || 60); save(); rebuildPanel('results'); };
   const m = $('#mode', w);
   if (R.mode === 'civic') {
     const stateOpts = Object.entries(STATES).map(([k, n]) => `<option value="${k}" ${k === (S.finderState || 'MO') ? 'selected' : ''}>${n}</option>`).join('');
     m.append(el(`<div>
-      <h3 style="margin-top:0.4rem">Tracked races</h3>
-      <div class="chips">${R.races.map((r, i) => `<span class="chip">${esc(r.label || r.id)}<button data-i="${i}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="small">No races yet. Find some below.</span>'}</div>
+      <h3 style="margin-top:0.4rem">Tracked races <span class="small" id="rcount"></span></h3>
+      <div class="chips" id="tracked"></div>
+      <div class="row" style="margin-top:0.5rem"><button class="btn sm" id="rdef">Restore the default list</button><button class="btn sm danger" id="rclear">Clear all</button></div>
       <h3 style="margin-top:1.4rem">Find races</h3>
       <form class="row" id="findf">
         <select id="fstate" aria-label="State" style="width:auto;min-width:11rem">${stateOpts}</select>
@@ -887,46 +1297,47 @@ function setupResults() {
       <details style="margin-top:0.8rem"><summary class="small" style="cursor:pointer">Add by race ID instead</summary>
         <form class="row" id="addf" style="margin-top:0.5rem"><input type="text" id="rid" placeholder="civicAPI race ID or API link" style="flex:1;min-width:10rem"><input type="text" id="rlabel" placeholder="Label (optional)" style="flex:1;min-width:8rem"><button class="btn sm">Add</button></form>
         <div id="addmsg" class="small" style="margin-top:0.4rem"></div></details>
-      <div class="note">Results come from <a href="https://civicapi.org" target="_blank" rel="noopener">civicAPI</a>, a small free service, so coverage and speed will not match a newsroom feed; keep a network stream up for the calls. Statewide party totals (for example "Missouri State House") show seats rather than votes until counts come in.</div>
+      <div class="note">civicAPI is a small free service and slows down on election night; the feed shows the last good numbers while it waits. Statewide party totals ("Missouri State House") show seats rather than votes until counts come in. Ballots you load are cached for six hours.</div>
     </div>`));
     const list = $('#findlist', m), fmsg = $('#findmsg', m), ffilter = $('#ffilter', m);
     let found = [];
     const added = () => new Set(R.races.map(r => String(r.id)));
+    function refreshChips() {
+      const c = $('#tracked', m); $('#rcount', m).textContent = R.races.length ? `(${R.races.length})` : '';
+      c.innerHTML = R.races.map((r, i) => `<span class="chip">${r.pin ? icon('i-star-f') + ' ' : ''}${esc(r.label || r.id)}<button data-i="${i}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="small">No races yet. Find some below.</span>';
+      c.querySelectorAll('[data-i]').forEach(b => b.onclick = () => { R.races.splice(+b.dataset.i, 1); save(); refreshChips(); drawFound(); panels.get('results')?._reorder(); });
+    }
     function drawFound() {
-      const needle = ffilter.value.trim().toLowerCase();
-      const have = added();
+      const needle = ffilter.value.trim().toLowerCase(); const have = added();
       const rows = found.filter(r => !needle || `${r.election_name} ${r.type} ${r.district || ''}`.toLowerCase().includes(needle));
       list.innerHTML = '';
       if (!found.length) return;
       if (!rows.length) { list.append(el('<p class="small" style="padding:0.5rem 0">Nothing matches that filter.</p>')); return; }
       rows.slice(0, 150).forEach(r => {
         const on = have.has(String(r.id));
-        const cands = (r.candidates || []).slice(0, 4).map(c => esc(c.name) + (c.party ? ` <span style="color:${partyColor(c.party)}">(${esc(String(c.party).slice(0, 3))})</span>` : '')).join(', ');
+        const cands = (r.candidates || []).map(c => esc(c.name) + (c.party ? ` <span style="color:${partyColor(c.party)}">(${esc(String(c.party).slice(0, 3))})</span>` : '')).join(', ');
         const row = el(`<div class="findrow"><div><b>${esc(r.election_name)}</b><span class="small">${esc(r.type || '')}${r.district ? ' · ' + esc(r.district) : ''}${cands ? ' · ' + cands : ''}</span></div><button class="btn sm ${on ? '' : 'primary'}" ${on ? 'disabled' : ''}>${on ? 'Added' : 'Add'}</button></div>`);
-        $('button', row).onclick = () => { R.races.push({ id: String(r.id), label: r.election_name }); save(); drawFound(); refreshChips(); };
+        $('button', row).onclick = () => { R.races.push({ id: String(r.id), label: r.election_name }); save(); drawFound(); refreshChips(); const rp = panels.get('results'); if (rp) { rp._reorder(); rp._refresh(); } };
         list.append(row);
       });
       if (rows.length > 150) list.append(el(`<p class="small">Showing 150 of ${rows.length}. Narrow the filter to see the rest.</p>`));
     }
-    function refreshChips() {
-      const c = $('.chips', m); c.innerHTML = R.races.map((r, i) => `<span class="chip">${esc(r.label || r.id)}<button data-i="${i}" title="Remove">${icon('i-x')}</button></span>`).join('') || '<span class="small">No races yet. Find some below.</span>';
-      c.querySelectorAll('[data-i]').forEach(b => b.onclick = () => { R.races.splice(+b.dataset.i, 1); save(); refreshChips(); drawFound(); $('#pv', w).innerHTML = ''; const pv = resultsPanel(); pv.style.flex = '1'; $('#pv', w).append(pv); });
-    }
     refreshChips();
+    $('#rdef', m).onclick = () => { const have = added(); DEFAULT_RACES.forEach(r => { if (!have.has(r.id)) R.races.push({ ...r }); }); save(); refreshChips(); drawFound(); const rp = panels.get('results'); if (rp) { rp._reorder(); rp._refresh(); } };
+    $('#rclear', m).onclick = () => { R.races = []; save(); refreshChips(); drawFound(); panels.get('results')?._reorder(); };
     $('#findf', m).onsubmit = async e => {
       e.preventDefault();
       const st = $('#fstate', m).value, dt = $('#fdate', m).value || ELECTION_DAY, loc = $('#flocal', m).checked;
       S.finderState = st; S.finderDate = dt; S.finderLocal = loc; save();
-      fmsg.textContent = loc ? 'Loading… local races can take half a minute.' : 'Loading…'; list.innerHTML = ''; found = [];
+      fmsg.textContent = loc ? 'Loading… local races can take a minute.' : 'Loading… (the service is slow on election night; this can take 20–30 seconds)'; list.innerHTML = ''; found = [];
       try {
         found = await searchRaces(st, dt, loc);
         const typeRank = t => /US Senate|^Senate$/i.test(t) ? 0 : /Governor/i.test(t) ? 1 : /US House|House of Rep/i.test(t) ? 2 : 5;
         found.sort((a, b) => a._tier - b._tier || typeRank(a.type) - typeRank(b.type) || String(a.type).localeCompare(String(b.type)) || String(a.election_name).localeCompare(String(b.election_name), undefined, { numeric: true }));
-        const tiers = [found.filter(r => r._tier === 0).length, found.filter(r => r._tier === 1).length, found.filter(r => r._tier === 2).length];
+        const tiers = [0, 1, 2].map(t => found.filter(r => r._tier === t).length);
         fmsg.textContent = `${STATES[st]}, ${dt}: ${tiers[0]} federal, ${tiers[1]} statewide${loc ? `, ${tiers[2]} local` : ''} races.${loc ? '' : ' Tick the box to add local races.'}`;
         drawFound();
-      }
-      catch (err) { fmsg.innerHTML = `<span class="err">Could not load (${esc(err.message)}). Try again in a moment.</span>`; }
+      } catch (err) { fmsg.innerHTML = `<span class="err">Could not load (${esc(err.message)}). Try again in a moment.</span>`; }
     };
     ffilter.oninput = drawFound;
     m.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { ffilter.value = b.dataset.q; drawFound(); });
@@ -937,54 +1348,47 @@ function setupResults() {
       let label = $('#rlabel', m).value.trim();
       try { const d = await fetchRace(id); label = label || d.election_name?.en_US || d.election_name || ''; msg.textContent = 'Added ' + (label || id) + '.'; }
       catch (err) { msg.innerHTML = `<span class="err">Could not fetch that race yet (${esc(err.message)}). Added anyway; it will retry on each refresh.</span>`; }
-      R.races.push({ id, label }); save(); setTimeout(render, 700);
+      R.races.push({ id, label }); save(); refreshChips(); const rp = panels.get('results'); if (rp) { rp._reorder(); rp._refresh(); }
     };
   } else if (R.mode === 'embed') {
     m.append(el(`<div><label class="f">Results embed code</label><textarea id="emb" style="min-height:9rem" placeholder="Paste the widget code an outlet gives you">${esc(R.embed)}</textarea>
-      <div class="row" style="margin-top:0.6rem"><button class="btn primary sm" id="saveEmb">Save</button></div>
-      <div class="note">Embeds update themselves, so the refresh interval does not apply here.</div></div>`));
-    $('#saveEmb', m).onclick = () => { R.embed = $('#emb', m).value; save(); render(); };
+      <div class="row" style="margin-top:0.6rem"><button class="btn primary sm" id="saveEmb">Save</button></div></div>`));
+    $('#saveEmb', m).onclick = () => { R.embed = $('#emb', m).value; save(); rebuildPanel('results'); toast('Saved', 'The results panel now shows your embed.'); };
   } else {
-    m.append(el(`<div><label class="f">Results page address (reloads on the interval)</label><form class="row" id="uf"><input type="text" id="url" value="${esc(R.url)}" placeholder="https://…" style="flex:1;min-width:12rem"><button class="btn primary sm">Save</button></form>
-      <div class="note">Good for state election-office results pages, many of which allow framing.</div></div>`));
-    $('#uf', m).onsubmit = e => { e.preventDefault(); R.url = $('#url', m).value.trim(); save(); render(); };
+    m.append(el(`<div><label class="f">Results page address (reloads on the interval)</label><form class="row" id="uf"><input type="text" id="url" value="${esc(R.url)}" placeholder="https://…" style="flex:1;min-width:12rem"><button class="btn primary sm">Save</button></form></div>`));
+    $('#uf', m).onsubmit = e => { e.preventDefault(); R.url = $('#url', m).value.trim(); save(); rebuildPanel('results'); toast('Saved', 'The results panel now shows that page.'); };
   }
-  const pv = resultsPanel(); pv.style.flex = '1'; $('#pv', w).append(pv);
   return w;
 }
 function setupLayout() {
   syncLayout();
   const L = S.layout;
   const w = el(`<div class="two"><div>
-    <p class="lead">Turn panels on, size them in columns and rows, and drag to reorder. On a phone the dashboard stacks into one column.</p>
+    <p class="lead">Turn panels on, size them in columns and rows, and drag to reorder. Changes apply the next time you open the dashboard; nothing reloads.</p>
     <div class="row" style="margin-bottom:0.8rem">
       <label class="row" style="gap:0.4rem;font-size:0.85rem">Columns <select id="cols">${[1, 2, 3, 4, 5, 6].map(n => `<option ${n == L.cols ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
       <label class="row" style="gap:0.4rem;font-size:0.85rem">Row height <select id="rowh">${[180, 220, 240, 280, 320, 380].map(n => `<option value="${n}" ${n == L.rowh ? 'selected' : ''}>${n}px</option>`).join('')}</select></label>
     </div>
-    <div class="row" style="margin-bottom:0.8rem"><span class="small">Presets:</span><button class="btn sm" data-p="streams">Streams first</button><button class="btn sm" data-p="results">Results first</button><button class="btn sm" data-p="browsers">Browsers first</button></div>
+    <div class="row" style="margin-bottom:0.8rem"><span class="small">Presets:</span><button class="btn sm" data-p="default">Default</button><button class="btn sm" data-p="streams">Streams first</button><button class="btn sm" data-p="results">Results first</button><button class="btn sm" data-p="browsers">Browsers first</button></div>
     <div class="lay-list"></div>
     <div class="row" style="margin-top:0.9rem"><button class="btn primary" onclick="go('dashboard')">Open the dashboard</button></div>
    </div>
    <div class="card"><span class="tag">Preview</span><div class="preview" id="prev"></div></div></div>`);
-  $('#cols', w).onchange = e => { L.cols = +e.target.value; save(); render(); };
-  $('#rowh', w).onchange = e => { L.rowh = +e.target.value; save(); render(); };
+  $('#cols', w).onchange = e => { L.cols = +e.target.value; save(); applyView(); };
+  $('#rowh', w).onchange = e => { L.rowh = +e.target.value; save(); applyView(); };
   w.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
-    const by = k => L.panels.filter(p => p.key.startsWith(k));
-    const one = k => L.panels.filter(p => p.key === k);
-    const streams = by('stream-').map(p => ({ ...p, w: 1, h: 1 }));
-    const browsers = by('browser-').map(p => ({ ...p, w: Math.max(1, Math.floor(L.cols / 2)), h: 2 }));
-    const results = one('results').map(p => ({ ...p, w: 1, h: 2, on: true }));
-    const closings = one('closings').map(p => ({ ...p, w: 1, h: 2 }));
-    const balance = one('balance').map(p => ({ ...p, w: 1, h: 2 }));
-    const log = one('log').map(p => ({ ...p, w: 1, h: 1 }));
-    const order = { streams: [...streams, ...results, ...closings, ...balance, ...log, ...browsers], results: [...results, ...balance, ...closings, ...streams, ...log, ...browsers], browsers: [...browsers, ...results, ...streams, ...closings, ...balance, ...log] }[b.dataset.p];
-    L.panels = order; save(); render();
+    if (b.dataset.p === 'default') { L.cols = DEFAULT_LAYOUT.cols; L.rowh = DEFAULT_LAYOUT.rowh; L.panels = DEFAULT_LAYOUT.panels.map(p => ({ ...p })); syncLayout(); save(); applyView(); return; }
+    const by = k => L.panels.filter(p => p.key.startsWith(k)); const one = k => L.panels.filter(p => p.key === k);
+    const streams = by('stream-').map(p => ({ ...p, w: 1, h: 1 })), browsers = by('browser-').map(p => ({ ...p, w: Math.max(1, Math.floor(L.cols / 2)), h: 2 }));
+    const results = one('results').map(p => ({ ...p, w: 1, h: 2, on: true })), wire = one('wire').map(p => ({ ...p, w: 1, h: 2, on: true })), closings = one('closings').map(p => ({ ...p, w: 1, h: 2 })), balance = one('balance').map(p => ({ ...p, w: 1, h: 2 })), log = one('log').map(p => ({ ...p, w: 1, h: 1 }));
+    L.panels = { streams: [...streams, ...results, ...wire, ...closings, ...balance, ...log, ...browsers], results: [...results, ...wire, ...balance, ...closings, ...streams, ...log, ...browsers], browsers: [...browsers, ...results, ...wire, ...streams, ...closings, ...balance, ...log] }[b.dataset.p];
+    save(); applyView();
   });
   const list = $('.lay-list', w);
   let dragFrom = null;
   L.panels.forEach((p, i) => {
     const sizeOpts = max => Array.from({ length: max }, (_, n) => n + 1);
-    const empty = p.key.startsWith('stream') && !S.streams[+p.key.split('-')[1]].code;
+    const empty = p.key.startsWith('stream') && !S.streams[+p.key.split('-')[1]]?.code;
     const it = el(`<div class="lay-item ${p.on ? '' : 'off'}" draggable="true">
       <span class="handle" title="Drag to reorder">${icon('i-grip')}</span>
       <label class="row" style="gap:0.5rem;cursor:pointer"><input type="checkbox" ${p.on ? 'checked' : ''}><span>${icon(panelIcon(p.key), 'ico kind')}${esc(panelName(p.key))}${empty ? ' <span class="small">(empty)</span>' : ''}</span></label>
@@ -992,14 +1396,14 @@ function setupLayout() {
       <select data-k="h" aria-label="Height in rows">${sizeOpts(4).map(n => `<option value="${n}" ${n == p.h ? 'selected' : ''}>${n} tall</option>`).join('')}</select>
       <span class="row nowrap" style="gap:0.15rem"><button class="btn sm" data-d="-1" aria-label="Move up">${icon('i-up')}</button><button class="btn sm" data-d="1" aria-label="Move down">${icon('i-down')}</button></span>
     </div>`);
-    $('input', it).onchange = e => { p.on = e.target.checked; save(); render(); };
-    it.querySelectorAll('select').forEach(s => s.onchange = () => { p[s.dataset.k] = +s.value; save(); render(); });
-    it.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const j = i + +b.dataset.d; if (j < 0 || j >= L.panels.length) return; [L.panels[i], L.panels[j]] = [L.panels[j], L.panels[i]]; save(); render(); });
+    $('input', it).onchange = e => { p.on = e.target.checked; save(); applyView(); };
+    it.querySelectorAll('select').forEach(s => s.onchange = () => { p[s.dataset.k] = +s.value; save(); applyView(); });
+    it.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const j = i + +b.dataset.d; if (j < 0 || j >= L.panels.length) return; [L.panels[i], L.panels[j]] = [L.panels[j], L.panels[i]]; save(); applyView(); });
     it.addEventListener('dragstart', e => { dragFrom = i; it.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
     it.addEventListener('dragend', () => { it.classList.remove('dragging'); list.querySelectorAll('.over').forEach(x => x.classList.remove('over')); });
     it.addEventListener('dragover', e => { e.preventDefault(); it.classList.add('over'); });
     it.addEventListener('dragleave', () => it.classList.remove('over'));
-    it.addEventListener('drop', e => { e.preventDefault(); if (dragFrom == null || dragFrom === i) return; const [m] = L.panels.splice(dragFrom, 1); L.panels.splice(i, 0, m); save(); render(); });
+    it.addEventListener('drop', e => { e.preventDefault(); if (dragFrom == null || dragFrom === i) return; const [mv] = L.panels.splice(dragFrom, 1); L.panels.splice(i, 0, mv); save(); applyView(); });
     list.append(it);
   });
   const pv = $('#prev', w); pv.style.gridTemplateColumns = `repeat(${L.cols},1fr)`;
@@ -1009,40 +1413,29 @@ function setupLayout() {
 function setupBackup() {
   const w = el(`<div><p class="lead">Settings live in this browser only. Copy this text and paste it into the same box on another device to bring everything across, log included.</p>
     <textarea id="bk" style="min-height:14rem"></textarea>
-    <div class="row" style="margin-top:0.6rem"><button class="btn sm" id="cp">${icon('i-copy')} Copy</button><button class="btn sm primary" id="ld">Load pasted settings</button><span class="spacer"></span><button class="btn sm danger" id="rs">Reset everything</button></div>
+    <div class="row" style="margin-top:0.6rem"><button class="btn sm" id="cp">${icon('i-copy')} Copy</button><button class="btn sm primary" id="ld">Load pasted settings</button><span class="spacer"></span><button class="btn sm" id="cc">Clear caches</button><button class="btn sm danger" id="rs">Reset everything</button></div>
     <div id="bkmsg" class="small" style="margin-top:0.6rem"></div></div>`);
   const ta = $('#bk', w); const { view, ...rest } = S; ta.value = JSON.stringify(rest, null, 1);
   $('#cp', w).onclick = async () => { try { await navigator.clipboard.writeText(ta.value); $('#bkmsg', w).textContent = 'Copied.'; } catch (e) { ta.select(); $('#bkmsg', w).textContent = 'Selected; copy it with the keyboard.'; } };
-  $('#ld', w).onclick = () => { try { const n = JSON.parse(ta.value); S = Object.assign(defaults(), n); S.bop = Object.assign(defaults().bop, S.bop || {}); syncLayout(); save(); $('#bkmsg', w).textContent = 'Loaded.'; setTimeout(render, 300); } catch (e) { $('#bkmsg', w).innerHTML = '<span class="err">That is not valid settings text.</span>'; } };
-  let armed = false; $('#rs', w).onclick = e => { if (!armed) { armed = true; e.target.textContent = 'Click again to confirm'; return; } S = defaults(); save(); render(); };
+  $('#ld', w).onclick = () => { try { const n = JSON.parse(ta.value); localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), n, { view: 'dashboard' }))); location.reload(); } catch (e) { $('#bkmsg', w).innerHTML = '<span class="err">That is not valid settings text.</span>'; } };
+  $('#cc', w).onclick = () => { localStorage.removeItem(CACHE_KEY); if ('caches' in window) caches.keys().then(ks => ks.forEach(k => caches.delete(k))); $('#bkmsg', w).textContent = 'Caches cleared. Fresh data arrives on the next refresh.'; };
+  let armed = false; $('#rs', w).onclick = e => { if (!armed) { armed = true; e.target.textContent = 'Click again to confirm'; return; } localStorage.removeItem(KEY); localStorage.removeItem(OLD_KEY); localStorage.removeItem(CACHE_KEY); location.reload(); };
   return w;
 }
 
-/* ---------- routing, clock, ambient ---------- */
-function go(v, sub) { if (sub) setupTab = sub; S.view = v; save(); if (location.hash !== '#' + v) history.replaceState(null, '', '#' + v); render(); }
-window.go = go;
-function render() {
-  clearTimers(); syncLayout();
-  document.querySelectorAll('#nav button').forEach(b => { if (b.dataset.v === S.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
-  const m = $('#main'); m.innerHTML = ''; m.append((views[S.view] || views.setup)());
-  window.scrollTo({ top: 0 });
-}
-document.querySelectorAll('#nav button').forEach(b => b.onclick = () => go(b.dataset.v));
-window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (views[v] && v !== S.view) go(v); });
-function clock() {
-  const d = new Date();
-  const local = timeStr(d), et = timeStr(d, ET);
-  $('#clock').innerHTML = `<span><small>Local</small><b>${local}</b></span>` + (local !== et ? `<span><small>ET</small><b>${et}</b></span>` : '');
-}
+/* ---------- clock, ambient, boot ---------- */
+function clock() { const d = new Date(); const local = timeStr(d), et = timeStr(d, ET); $('#clock').innerHTML = `<span><small>Local</small><b>${local}</b></span>` + (local !== et ? `<span><small>ET</small><b>${et}</b></span>` : ''); }
 clock(); setInterval(clock, 1000);
 if (!reduced && matchMedia('(pointer:fine)').matches) {
   const sp = $('.spotlight');
   addEventListener('pointermove', e => { sp.style.setProperty('--mx', e.clientX + 'px'); sp.style.setProperty('--my', e.clientY + 'px'); }, { passive: true });
 }
+if ('serviceWorker' in navigator && location.protocol === 'https:') { navigator.serviceWorker.register('/election/sw.js').catch(() => {}); }
 (function init() {
   const h = location.hash.slice(1);
-  if (views[h]) S.view = h; else if (S.streams.some(s => s.code) || S.results.races.length) S.view = 'dashboard';
-  render();
+  if (VIEWS[h]) S.view = h; else if (!VIEWS[S.view]) S.view = 'dashboard';
+  applyView();
+  setTimeout(warmUp, 800);
 })();
 </script>
 </body>
