@@ -5,9 +5,10 @@ html=open(os.path.join(D,'index.html')).read()
 css=open(os.path.join(D,'app.css')).read(); js=open(os.path.join(D,'app.js')).read()
 html=html.replace('<link rel="stylesheet" href="app.css">', '<style>\n'+css+'\n</style>')
 tags=[]
-for key,fn in [('topo','mo.topo.json'),('meta','meta.json'),('holders','holders.json'),('places','places.json'),('local','local.json'),('about','measures.json')]:
+for key,fn in [('topo','mo.topo.json'),('meta','meta.json'),('holders','holders.json'),('places','places.json'),('local','local.json'),('about','measures.json'),('offices','offices.json')]:
     tags.append(f'<script id="data-{key}" type="application/json">{open(os.path.join(D,"data",fn)).read()}</script>')
-tags.append('<script id="data-results" type="text/csv">'+open(os.path.join(D,'data','results.csv')).read().replace('</script','</scr"+"ipt')+'</script>')
+for key,fn in [('results','results.csv'),('judicial','judicial.csv')]:
+    tags.append(f'<script id="data-{key}" type="text/csv">'+open(os.path.join(D,'data',fn)).read().replace('</script','</scr"+"ipt')+'</script>')
 html=html.replace('<script src="app.js" defer></script>','').replace('d3.min.js" defer>','d3.min.js">').replace('topojson.min.js" defer>','topojson.min.js">')
 html=html.replace('</body>', '\n'.join(tags)+'\n<script>\n'+js.replace('</script','<\\/script')+'\n</script>\n</body>')
 # absolute site paths -> fallbacks that work anywhere

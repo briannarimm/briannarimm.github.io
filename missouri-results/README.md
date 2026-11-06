@@ -1,6 +1,6 @@
 # Missouri Election Results, November 3, 2026
 
-A results page for Missouri's 2026 general election at `/missouri-results/`: the State Auditor race, Amendments 3, 6, 7 and 8, Proposition A, the Supreme Court retention vote, every U.S. House, State Senate and State House seat, and local ballot questions, with county and district maps, a seat chart with supermajority markers, and flips measured against who held each seat before the election.
+A results page for Missouri's 2026 general election at `/missouri-results/`: the State Auditor race, Amendments 3, 6, 7 and 8, Proposition A, the Supreme Court retention vote, every U.S. House, State Senate and State House seat, judicial retention votes and circuit-court races, county offices, and local ballot questions, with county and district maps, a seat chart with supermajority markers, and flips measured against who held each seat before the election.
 
 The page is plain HTML, CSS and JavaScript. It draws the maps with [d3](https://d3js.org) and [topojson-client](https://github.com/topojson/topojson-client), loaded from cdnjs. There is no build step: the page reads the files in `data/` when it loads.
 
@@ -15,6 +15,8 @@ The page is plain HTML, CSS and JavaScript. It draws the maps with [d3](https://
 | `data/meta.json` | When the statewide count was captured and which county files it came from. |
 | `data/holders.json` | Who held each seat before the election, used to find flips. |
 | `data/measures.json` | Plain-language descriptions of the statewide measures and races. |
+| `data/judicial.csv` | Court of Appeals retention votes and circuit/associate circuit races from the SOS count, by county. Columns: `race, group, unit_id, choice, party, votes, reporting` (`group` is `appeals`, `retention` or `elected`). The Supreme Court retention vote stays in `results.csv`. |
+| `data/offices.json` | County offices (presiding commissioner, clerks, recorder, treasurer, collector, prosecutor, auditor, associate circuit judges, Jackson County executive and legislature), by county, with each county's source. |
 | `data/local.json` | Local ballot questions gathered from county clerks, election boards and local news, with sources. |
 | `data/places.json` | City label positions and each county's and district's largest places. |
 | `data/mo.topo.json` | County, congressional, State Senate and State House boundaries (Census Bureau 2025 cartographic files, simplified). |
@@ -28,6 +30,8 @@ The page is plain HTML, CSS and JavaScript. It draws the maps with [d3](https://
 - **Kansas City:** the Kansas City Election Board counts only Kansas City voters who live in Jackson County. Its file is added into Jackson County on the map. Kansas City voters in Clay, Platte and Cass counties are counted in those counties' own results.
 - **Seat holders:** Ballotpedia's member lists, checked against the House and Senate sites. Vacant seats count for the party that last held them.
 - **Population centers:** Census 2024 city population estimates for counties; the 2020 Census redistricting file (block counts) for districts, assigned by `tools/district_places.py`.
+- **Courts:** the same SOS count. Linn County's Court of Appeals (Hardwick) rows were shifted in the state feed; the Linn County Clerk's 2,136 Yes / 1,076 No is used (listed in `corrections`). Andrew uses the county clerk's figures for every race.
+- **County offices:** the SOS doesn't publish them, so they come from county clerks' result reports (PDFs and scans, read with `pdftotext` or OCR and checked against each contest's printed total where there is one) and from local news (KY3, KFVS12, KOAM, the Southeast Missourian, the Mexico Ledger, The Beacon). News pages list only contested races, so those counties are marked as partial. `tools/build_offices.py` builds `offices.json`. 56 of 115 counties are covered; St. Louis County, St. Charles, Greene (except the auditor), Jefferson, Clay, Franklin, Jasper and most other large counties are not.
 - **Local measures:** `tools/merge_local.py` combines regional research files and checks each entry's vote share against its result and threshold.
 
 ## Updating the data

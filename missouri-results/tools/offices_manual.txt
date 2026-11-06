@@ -1,0 +1,232 @@
+# County|Office|cand:party:votes;...|note   (W = write-in total)
+Barry|Associate Circuit Judge Division I|Johnnie E. Cox:R:8821
+Barry|Associate Circuit Judge Division II|Robert "Bob" Foulke:R:8672
+Barry|Presiding Commissioner|Steve Blankenship:R:8757
+Barry|County Clerk|Kimi Deal:R:8714
+Barry|Circuit Clerk|Craig Williams:R:8801
+Barry|Recorder of Deeds|Danielle Still:R:8839
+Barry|County Treasurer|Gretta Tripp:R:8740
+Barry|Prosecuting Attorney|Andrew Cole:R:8808
+Barry|Collector of Revenue|Skyler Bowman:R:8944
+Barry|Surveyor||No candidate filed (0 votes)
+Benton|Associate Circuit Judge|James Kjar:R:5921
+Benton|Presiding Commissioner|Rich Chiles:R:5871
+Benton|County Clerk|Amber Segar:R:5877
+Benton|Circuit Clerk|Shanda Schultz:R:5877
+Benton|Recorder of Deeds|Carla J. Brown:R:5895
+Benton|County Treasurer|Rebecca J. Minks:R:5840
+Benton|Prosecuting Attorney|Dan Hagedorn:R:5851
+Benton|Collector|David Brodersen:R:5961
+Bates|Associate Circuit Judge|Julie Highley:R:4515
+Bates|Presiding Commissioner|Christopher M. Gach:R:4089;Mary DuBray:D:1222
+Bates|County Clerk|Jami Page:R:4527
+Bates|Circuit Clerk|Shelli White:R:4493
+Bates|Recorder of Deeds|Danyelle Baker:R:4365
+Bates|Prosecuting Attorney|Cody Lee Johnson:R:4394
+Daviess|Associate Circuit Judge|Micha L. Dixon:R:2104;Write-in:W:25
+Daviess|Presiding Commissioner|Jim Ruse:R:2094;Write-in:W:27
+Daviess|County Clerk|Rachel Taylor:R:2103;Write-in:W:21
+Daviess|Circuit Clerk|Jenni Hoppenthaler:R:2104;Write-in:W:21
+Daviess|Recorder of Deeds|Tiffany Tadlock:R:2117;Write-in:W:25
+Daviess|Prosecuting Attorney|Andrea (Annie) Gibson:D:1623;Write-in:W:138
+Cole|Associate Circuit Judge Circuit 19 Division 6|Joseph Shetler:R:20982;Write-in:W:646
+Cole|Presiding Commissioner|Mike Bernskoetter:R:17099;Chuck Steck:I:9813;Write-in:W:126
+Cole|County Clerk|Dave Griffith:R:21532;Write-in:W:627
+Cole|Circuit Clerk|Mark Eichholz:R:21124;Write-in:W:616
+Cole|Recorder of Deeds|Judy K Ridgeway:R:21122;Write-in:W:560
+Cole|Prosecuting Attorney|Locke Thompson:R:21288;Write-in:W:608
+Cole|County Collector|Larry Vincent:R:21668;Write-in:W:539
+Cole|County Auditor|Jay Moore:R:21073;Write-in:W:555
+Carroll|Associate Circuit Judge|Brandon Greer:R:2621
+Carroll|Presiding Commissioner|Stan Falke:R:2594
+Carroll|County Clerk|Petal J. Stanley:R:2613
+Carroll|Circuit Clerk and Ex-Officio Recorder of Deeds|Melanie Higgins:R:2554
+Carroll|Prosecuting Attorney|Joe Don McGaugh:R:1722
+Clinton|Associate Circuit Judge|Teresa Bingham:R:5016;Haleigh Karl:D:2479
+Clinton|Presiding Commissioner|Linda Penrod:R:6026
+Clinton|County Clerk|Kathleen Cottrell:R:5992
+Clinton|Circuit Clerk/Ex-Officio Recorder|Misty Dean:R:6005
+Clinton|County Treasurer|Justin Powell:R:4714;Louis Dreon:D:2703
+Clinton|Prosecuting Attorney|Brandi McClain:R:6017
+Clinton|Collector|Nicolette Fernandez:R:5985
+Taney|Associate Circuit Judge Division 1|R. Tiffany Yarnell:R:14555
+Taney|Associate Circuit Judge Division 2|Eric Eighmy:R:13678
+Taney|Presiding Commissioner|Nick Plummer:R:14531
+Taney|County Clerk|Stephanie Spencer:R:14526
+Taney|Circuit Clerk|Amy Strahan:R:14655
+Taney|Recorder of Deeds|Jody C Stahl:R:14495
+Taney|Prosecuting Attorney|Brad W. Hughes:R:14353
+Taney|County Collector|Myka Braschler:R:14452
+Taney|County Auditor|Dawn Bilyeu:R:14521
+Barton|Associate Circuit Judge|Kyla Moorhouse:R:3240
+Barton|Presiding Commissioner|David Johnson:R:3295
+Barton|County Clerk|April Graham:R:3278
+Barton|Clerk of the Circuit Court|Melinda Maberry:R:3296
+Barton|Recorder of Deeds|Rhonda Overstreet:R:3308
+Barton|Prosecuting Attorney|Mike Smalley:R:3097
+Callaway|Associate Circuit Judge Division 6|Christopher D Wilson:R:10718
+Callaway|Associate Circuit Judge Division 7|Sue Crane:R:10661
+Callaway|Presiding Commissioner|Clay Chism:R:8475;Mike Conner:D:5277
+Callaway|Clerk of the County Commission|Ronda Miller:R:11156
+Callaway|Clerk of the Circuit Court|Megan Morse:R:10906
+Callaway|Recorder of Deeds|Christine Kleindienst:R:10955
+Callaway|Prosecuting Attorney|Sandra Colhour:R:10739
+Callaway|Collector of Revenue|Sarah Gladman:R:10878
+Linn|Associate Circuit Judge|William Devoy:R:3081;Write-in:W:37
+Linn|Presiding Commissioner|Nelson Dinsmore:R:2580;Mitch Wrenn:D:944;Write-in:W:5
+Linn|County Clerk|Vanessa O'Dell:R:2994;Write-in:W:30
+Linn|Circuit Clerk|Shannon Murrell:R:3009;Write-in:W:25
+Linn|Recorder of Deeds|Jennifer Shoop-Baker:R:3002;Write-in:W:25
+Linn|Prosecuting Attorney|Tracy Lee Carlson:R:2788;Write-in:W:70
+Adair|Associate Circuit Judge|Kristie J Swaim:D:4864;Write-in:W:166
+Adair|Presiding Commissioner|Mark Shahan:R:4815;Write-in:W:245
+Adair|Clerk of the Circuit Court|Martha Cole:R:5088;Write-in:W:120
+Adair|Clerk of the County Commission|Tammy Miller:R:5049;Write-in:W:117
+Adair|Recorder of Deeds|Tracy M. Hunter:D:4800;Write-in:W:120
+Adair|Prosecuting Attorney|David Goring:R:4877;Write-in:W:147
+Adair|Collector of Revenue|Sonja Harden:D:5053;Write-in:W:103
+Adair|Treasurer|Lori J Smith:R:5078;Write-in:W:117
+Osage|Associate Circuit Judge|Sonya Brandt:R:4525;Write-in:W:36
+Osage|Presiding Commissioner|Darryl L. Griffin:R:4467
+Osage|Clerk of the Circuit Court|Maryann Jacquin:R:4514
+Osage|Clerk of the County Commission|Brooke Dudenhoeffer:R:4484
+Osage|Recorder of Deeds|Carrie A. Muenks:R:4110;Vickie Huckstep:D:895
+Osage|Prosecuting Attorney|Amanda Grellner:R:4506
+Osage|Collector of Revenue|Denise Nolte:R:4540
+Osage|Treasurer|Valerie Prater:R:4504
+Crawford|Associate Circuit Judge|Patrick J. Horsefield::5538;Write-in:W:93
+Crawford|Presiding Commissioner|Steve Black::5373;Write-in:W:118
+Crawford|Clerk of the Circuit Court|Karen Harlan::5494;Write-in:W:87
+Crawford|County Clerk|Kim Gibbs::5505;Write-in:W:97
+Crawford|Recorder of Deeds|Kim Cook::5515;Write-in:W:91
+Crawford|Prosecuting Attorney|David S. Smith::5392;Write-in:W:103
+Crawford|Collector of Revenue|Pat Schwent::5394;Write-in:W:110
+Crawford|Treasurer|Karen Sikes::5413;Write-in:W:90
+Polk|Associate Circuit Judge Division 2|Jill Porter:R:9138;Write-in:W:154
+Polk|Associate Circuit Judge Division 3|Randolph L. Blosch:R:9046;Write-in:W:135
+Polk|Presiding Commissioner|Shannon Hancock:R:8180;Evan Kemp:L:2024;Write-in:W:45
+Polk|Clerk of the Circuit Court|Tiffany H. Phillips:R:9249;Write-in:W:116
+Polk|Clerk of the County Commission|Rachel Lightfoot:R:9386;Write-in:W:109
+Polk|Recorder of Deeds|Carol Poindexter:R:9348;Write-in:W:105
+Polk|Prosecuting Attorney|Keaton Ashlock:R:9087;Write-in:W:136
+Polk|Collector of Revenue|Rachel Boyce:R:9301;Write-in:W:104
+Polk|Treasurer|Shirley Allison:R:9236;Write-in:W:110
+Macon|Recorder of Deeds|Kristen Harvey:R:4371;Write-in:W:46
+Macon|Associate Circuit Judge|Kristen Burks:R:4337;Write-in:W:60
+Macon|Treasurer|Krista Bruno:R:4313;Write-in:W:72
+Macon|Collector|Rhonda Anno:R:4330;Write-in:W:71
+Macon|Prosecuting Attorney|Josh Meisner:R:4203;Write-in:W:79
+Macon|Circuit Clerk|Twila L. Halley-Osborn:R:4372;Write-in:W:38
+Macon|County Clerk|Tammy Perkins:R:4381;Write-in:W:38
+Macon|Presiding Commissioner|Dean Still:R:4276;Write-in:W:68
+Sullivan|Associate Circuit Judge|Adam L. Warren:R:1352;Write-in:W:18|Machine tape with the clerk's handwritten additions
+Sullivan|Presiding Commissioner|Chris May:R:1345;Write-in:W:28|Machine tape with the clerk's handwritten additions
+Sullivan|County Clerk|Rachael Hall:R:1416;Write-in:W:11|Machine tape with the clerk's handwritten additions
+Sullivan|Clerk of the Circuit Court|Melissa VanDusseldorp:R:1406;Write-in:W:15|Machine tape with the clerk's handwritten additions
+Sullivan|Recorder of Deeds|Brooke Wyant:R:908;Shari Hopkins:D:683;Write-in:W:3|Machine tape with the clerk's handwritten additions
+Sullivan|Prosecuting Attorney|Write-in:W:61|No candidate filed; 61 write-in votes
+Randolph|Associate Circuit Judge|Garreth Cooksey:R:5655
+Randolph|Presiding Commissioner|Sid Conklin:R:4823;Jeff Chick:I:1724
+Randolph|County Clerk|Lanee (Riddle) Vogan:R:5683
+Randolph|Clerk of the Circuit Court|Sandy Dutton:R:5748
+Randolph|Recorder of Deeds|Roger Christy:R:5669
+Randolph|County Treasurer|Gabriel Kyle Mayo:R:5628
+Randolph|Prosecuting Attorney|Stephanie Luntsford:R:5599
+Randolph|Collector of Revenue|Donna Tracy:R:4303;Crystal Wright:D:2484
+Audrain|Associate Circuit Judge|Melissa Buckman Young::5302
+Audrain|Presiding Commissioner|Alan Winders::5080
+Audrain|County Clerk|Heather Lierheimer::5190
+Audrain|Circuit Clerk|Meagan Miller::5210
+Audrain|Recorder of Deeds|Teresa L. Allen::5236
+Audrain|Treasurer|Lisa Smith::5235
+Audrain|Prosecuting Attorney|Jacob W. Shellabarger::5052
+Audrain|County Collector|Amy LeCount::5242
+Bollinger|Associate Circuit Judge|Alan J. Beussink::3052
+Bollinger|Presiding Commissioner|Leo Arnzen::2888
+Bollinger|County Clerk|Megan Jo Hill::3009
+Bollinger|Circuit Clerk|Hattie Davis::3008
+Bollinger|Recorder of Deeds|Dana Fulbright::3062
+Bollinger|Treasurer|Scott Minson::3016
+Bollinger|Prosecuting Attorney|Jill C. Wedemeier::3046
+Bollinger|Collector of Revenue|Nonie Cowell::3004
+Scott|Associate Circuit Judge Division 4|Blake Pearson::8432
+Scott|Associate Circuit Judge Division 5|Amanda Oesch::8254
+Scott|Presiding Commissioner|Danny Tetley::8407
+Scott|County Clerk|Allen Seabaugh::8413
+Scott|Circuit Court Clerk|Stacey Naile::8379
+Scott|Recorder of Deeds|Tara Mason::8486
+Scott|County Treasurer|Joe Bill Davis::8348
+Scott|Prosecuting Attorney|Don Cobb::8170
+Scott|Collector of Revenue|Mark Hensley::8611
+Perry|Associate Circuit Judge|Craig D. Brewer::4346
+Perry|Presiding Commissioner|Jay Wengert::4402
+Perry|County Commission Clerk|Jared W. Kutz::4425
+Perry|Circuit Court Clerk|Jennifer A. Hotop::4563
+Perry|Recorder of Deeds|Dana (Ballman) Pritchard::4526
+Perry|Treasurer|Katie Schemel::4477
+Perry|Prosecuting Attorney|Caitlin M. Hoeh Pistorio::4441
+Perry|Collector of Revenue|Dena L. Preston::4530
+Atchison|Associate Circuit Judge|Brett Hurst::1432
+Atchison|Presiding Commissioner|Curtis Livengood::1344;Larry Grimes (write-in):W:84
+Atchison|County Clerk|Susette M. Taylor::1449
+Atchison|Circuit Clerk|Thyra (Davis) Beckman::1443
+Atchison|Recorder of Deeds|Eliza Beasing::1451
+Atchison|County Treasurer|Tasha Zach::1439
+Atchison|Prosecuting Attorney|Dan Smith (write-in):W:230|No candidate on the ballot; won as a write-in
+Atchison|County Collector|Diane Livengood::1467
+Madison|Presiding Commissioner|Jim Thompson:R:2479;Larry Brewington:D:806|KFVS lists only contested county races
+Wayne|Presiding Commissioner|Jason A. Street:R:2806;Chuck Banks:D:580|KFVS lists only contested county races
+Dallas|County Clerk|Savannah Skinner:R:3762;Julianna Hall:I:1267|KY3 lists only contested county races
+Greene|County Auditor|Cindy S. Stein:R:54898;Angela Crawford:D:47069|KY3 lists only contested county races
+Oregon|County Clerk|Tracy Bridges:D:1549;Babe Reese:R:1320|KY3 lists only contested county races
+Phelps|Presiding Commissioner|Joey Auxler:R:8037;Bill Lindgren:D:4421|KY3 lists only contested county races
+Shannon|Presiding Commissioner|Dennis Baker:R:1741;Kenny Schulz:D:707|KY3 lists only contested county races
+Shannon|County Treasurer|Michelle Osborne Shedd:R:1813;Debra Blackburn:D:848|KY3 lists only contested county races
+Texas|Recorder of Deeds|Lindsay Koch:R:5974;Madeline Miller:D:1362|KY3 lists only contested county races
+Texas|Presiding Commissioner|Scott Long:R:5658;Lee Kern:D:1658|KY3 lists only contested county races
+Webster|Presiding Commissioner|Alan Rost:R:6192;Gail Peak Brown:I:2168|KY3 lists only contested county races
+Pulaski|County Clerk|Dustin Robertson:R:7667
+Pulaski|Circuit Clerk and Recorder|Rachelle Beasley:D:7147
+Pulaski|County Treasurer|Mack Wilkerson:R:7654
+Pulaski|Prosecuting Attorney|Jeff Thomas:R:7650
+Pulaski|Collector of Revenue|Courtney A. Friend:R:7650
+Pulaski|Associate Circuit Judge (Magistrate)|Kevin Hillman:R:7798
+Pulaski|Associate Circuit Judge (Probate)|Michael V. Headrick:R:7809
+Pulaski|Presiding Commissioner|Robert Goodrich:R:7751
+Pulaski|911 Board, Western District (vote for 2)|Dave Howlett::1494;Bart Warren::1431;Rex Larson::1382|Two seats; top two win
+Pulaski|911 Board, Eastern District (vote for 2)|Deborah Decker::5429;L.D. Curran::4947|Two seats
+Laclede|Associate Circuit Judge Division 4|Larry Winfrey Jr.:R:9712
+Laclede|Associate Circuit Judge Division 5|Steve Jackson:R:9648
+Laclede|Presiding Commissioner|Randy Angst:R:9662
+Laclede|County Clerk|Linda Cansler:R:9751
+Laclede|Circuit Clerk|Heather Officer:R:9756
+Laclede|Collector|Toni Morris:R:9763
+Laclede|Prosecuting Attorney|Amy Folsom:R:9617
+Laclede|Public Administrator|Rebecka Woolley:R:9678
+Laclede|Recorder of Deeds|Jennifer Raef:R:9720
+Laclede|Treasurer|Kristy Carr:R:9709
+Andrew|Associate Circuit Judge|Emily M. Bauman:R:5564
+Andrew|Presiding Commissioner|Fritz Hegeman:R:5409
+Andrew|County Clerk|Sarah E. Miller:R:5551
+Andrew|Circuit Clerk|Tannah Buhman:R:5429
+Andrew|Recorder of Deeds|Chanler M. Williams:R:5370
+Andrew|Treasurer|Cindy Esely:R:5490
+Andrew|Prosecuting Attorney|Reilly DeLong:R:5400
+Andrew|Collector|Phillip (Phil) N. Rogers:R:5499
+McDonald|Presiding Commissioner|Bryan Hall::4106;Jonica Bridenstine::862;James McCool::850|KOAM lists only contested county races; party labels not given
+Newton|Presiding Commissioner|Mark Bridges::14104;Martin Lindstedt::2442|KOAM lists only contested county races; party labels not given
+Chariton|Associate Circuit Judge|Andrea Vandeloech:D:1874;Write-in:W:31
+Chariton|Presiding Commissioner|Evan M. Emmerich:R:2091;Write-in:W:33
+Chariton|County Clerk|Sheila Lewis:R:1895;Kassie McGrew:D:607
+Chariton|Circuit Clerk/Recorder of Deeds|Eric Stallo:D:1994;Write-in:W:25
+Chariton|Prosecuting Attorney|Cliff Thornburg:D:1812;Write-in:W:42
+Jackson|County Executive|Stacy Lake:D:163582;Alan Rohlfing:R:75058|The Beacon, unofficial as of 10 p.m. Nov. 3 (both election boards)
+Jackson|County Legislature, 1st District at-large|Carla Fields:D:161463;Lance Pollard:R:75517|The Beacon, unofficial as of 10 p.m. Nov. 3
+Jackson|County Legislature, 2nd District at-large|Donna Peyton:D:162110;Gresia Cabrera:R:74347|The Beacon, unofficial as of 10 p.m. Nov. 3
+Jackson|County Legislature, 3rd District at-large|Susan B. Wilson:D:|Unopposed; vote count not reported
+Jackson|County Legislature, District 1|Kelly Thompson:D:|Unopposed; vote count not reported
+Jackson|County Legislature, District 2|Venessa Huskey:D:|Unopposed; vote count not reported
+Jackson|County Legislature, District 3|Phyllis Hernandez:D:19403;Scott Qualls:R:13649|The Beacon, unofficial as of 10 p.m. Nov. 3
+Jackson|County Legislature, District 4|Byron Townsend:D:26421;Lon McDonald:R:6246|The Beacon, unofficial as of 10 p.m. Nov. 3
+Jackson|County Legislature, District 5|Dale Carter:R:20686;Antoine Jennings:D:19802|The Beacon, unofficial as of 10 p.m. Nov. 3
+Jackson|County Legislature, District 6|Tony Lawson:D:30017;Bill Haley:R:24516|The Beacon, unofficial as of 10 p.m. Nov. 3

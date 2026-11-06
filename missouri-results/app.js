@@ -3,14 +3,15 @@
    when the page is bundled into a single file). Map and charts are drawn with d3 + topojson. */
 "use strict";
 
-const DATA_FILES = { topo:'data/mo.topo.json', meta:'data/meta.json', holders:'data/holders.json', places:'data/places.json', local:'data/local.json', about:'data/measures.json', results:'data/results.csv' };
+const DATA_FILES = { topo:'data/mo.topo.json', meta:'data/meta.json', holders:'data/holders.json', places:'data/places.json', local:'data/local.json', about:'data/measures.json', offices:'data/offices.json', results:'data/results.csv', judicial:'data/judicial.csv' };
 async function loadData(){
   const out={};
   for(const [k,file] of Object.entries(DATA_FILES)){
     const el=document.getElementById('data-'+k);
-    if(el){ out[k]= k==='results'? el.textContent.trim() : JSON.parse(el.textContent); continue; }
+    const csv=file.endsWith('.csv');
+    if(el){ out[k]= csv? el.textContent.trim() : JSON.parse(el.textContent); continue; }
     const r=await fetch(file); if(!r.ok) throw new Error(`Couldn’t load ${file} (${r.status})`);
-    out[k]= k==='results'? (await r.text()).trim() : await r.json();
+    out[k]= csv? (await r.text()).trim() : await r.json();
   }
   return out;
 }
@@ -78,24 +79,33 @@ function parseCSV(text){
   if(f!==''||row.length){ row.push(f); rows.push(row); }
   return rows.filter(r=>r.some(x=>x.trim()!==''));
 }
+// each CSV row adds one choice's votes to one reporting unit of a race
+function csvRows(text, each){
+  const rows=parseCSV(text), ix=Object.fromEntries(rows[0].map((h,i)=>[h,i]));
+  for(const R of rows.slice(1)) each(k=>(R[ix[k]]||'').trim());
+}
+function addVotes(rc, type, id, g){
+  const uk=type+':'+id;
+  if(!rc.units.has(uk)) rc.units.set(uk,{type,id,choices:new Map(),reporting:null});
+  const u=rc.units.get(uk), prev=u.choices.get(g('choice'));
+  u.choices.set(g('choice'),{choice:g('choice'),party:g('party'),votes:(prev?prev.votes:0)+(+g('votes')||0)});
+  if(g('reporting')!=='') u.reporting=+g('reporting');
+}
 const store = new Map();
-(function ingest(){
-  const rows=parseCSV(DATA.results);
-  const H=rows[0]; const ix=Object.fromEntries(H.map((h,i)=>[h,i]));
-  for(const R of rows.slice(1)){
-    const g=k=>(R[ix[k]]||'').trim();
-    const race=g('race'), district=g('district'); let type=g('unit'), id=g('unit_id');
-    if(type==='county'){ id=countyByKey.get(norm(id)); if(!id){ console.warn('unknown county',g('unit_id')); continue; } }
-    const key=race+'|'+district;
-    if(!store.has(key)) store.set(key,{name:race,district,chamber:district?(CHAMBERS.find(c=>c.race===race)||{}).id:null,units:new Map()});
-    const rc=store.get(key), uk=type+':'+id;
-    if(!rc.units.has(uk)) rc.units.set(uk,{type,id,choices:new Map(),reporting:null});
-    const u=rc.units.get(uk);
-    const prev=u.choices.get(g('choice'));
-    u.choices.set(g('choice'),{choice:g('choice'),party:g('party'),votes:(prev?prev.votes:0)+(+g('votes')||0)});
-    if(g('reporting')!=='') u.reporting=+g('reporting');
-  }
-})();
+csvRows(DATA.results, g=>{
+  const race=g('race'), district=g('district'); let type=g('unit'), id=g('unit_id');
+  if(type==='county'){ id=countyByKey.get(norm(id)); if(!id){ console.warn('unknown county',g('unit_id')); return; } }
+  const key=race+'|'+district;
+  if(!store.has(key)) store.set(key,{name:race,district,chamber:district?(CHAMBERS.find(c=>c.race===race)||{}).id:null,units:new Map()});
+  addVotes(store.get(key), type, id, g);
+});
+// judicial races other than the Supreme Court (which is in results.csv): appellate retention, circuit and associate circuit races
+const JSTORE = new Map();
+csvRows(DATA.judicial, g=>{
+  const id=countyByKey.get(norm(g('unit_id'))); if(!id){ console.warn('unknown county',g('unit_id')); return; }
+  const race=g('race'); if(!JSTORE.has(race)) JSTORE.set(race,{name:race,group:g('group'),units:new Map()});
+  addVotes(JSTORE.get(race), 'county', id, g);
+});
 
 // ---------- aggregation ----------
 const isMeasure = rc => { for(const u of rc.units.values()){ const k=[...u.choices.keys()].map(s=>s.toLowerCase()); return k.length>0 && k.every(c=>c==='yes'||c==='no'); } return false; };
@@ -173,7 +183,7 @@ function chamberModel(ch){
 }
 
 // ---------- state ----------
-const state = { view:'statewide', race:null, selected:null, overlay:true, cat:'All' };
+const state = { view:'statewide', race:null, selected:null, overlay:true, cat:'All', court:'supreme', ocat:'all' };
 const raceOrder = n => /auditor/i.test(n)?0 : /amend/i.test(n)?1 : /prop/i.test(n)?2 : 3;
 function statewideRaces(){ return [...store.values()].filter(r=>!r.district).sort((a,b)=>raceOrder(a.name)-raceOrder(b.name)||a.name.localeCompare(b.name,undefined,{numeric:true})); }
 
@@ -257,9 +267,14 @@ let current = {};
 function render(){
   cssCache=new Map(); hideTip();
   if(current.kind && current.kind!==viewKind()) { sortKey='name'; sortDir=1; }
-  const views=[{id:'statewide',label:'Statewide'},...CHAMBERS,{id:'local-issues',label:'Local issues'}];
+  const views=[{id:'statewide',label:'Statewide'},...CHAMBERS,{id:'courts',label:'Courts'},{id:'county-offices',label:'County offices'},{id:'local-issues',label:'Local issues'}];
   d3.select('#viewTabs').selectAll('button').data(views).join('button').attr('role','tab').attr('aria-selected',d=>d.id===state.view).text(d=>d.label).on('click',(e,d)=>{ state.view=d.id; state.selected=null; syncHash(); render(); });
-  if(state.view==='local-issues'){
+  if(state.view==='courts' || state.view==='county-offices'){
+    current = state.view==='courts' ? courtsState() : officesState();
+    d3.select('#chamber').attr('hidden',true);
+    d3.select('#ctyToggle').style('visibility','hidden');
+    gOverlay.style('display','none');
+  } else if(state.view==='local-issues'){
     const cats=['All',...[...new Set(LOCAL.measures.map(m=>m.category))].sort((a,b)=>catOrder(a)-catOrder(b))];
     if(!cats.includes(state.cat)) state.cat='All';
     d3.select('#raceChips').style('display',null).selectAll('button').data(cats,d=>d).join('button').attr('aria-pressed',d=>d===state.cat).text(d=>d==='All'?`All (${LOCAL.measures.length})`:catLabel(d)).on('click',(e,d)=>{ state.cat=d; state.selected=null; render(); });
@@ -295,13 +310,15 @@ function render(){
   drawMap(); drawLegend(); drawSummary(); drawDetail(); drawTable(); drawStatus();
 }
 
-const viewKind=()=> state.view==='statewide'?'statewide': state.view==='local-issues'?'local':'chamber';
+const viewKind=()=> ({statewide:'statewide','local-issues':'local',courts:'courts','county-offices':'offices'})[state.view]||'chamber';
 function drawMap(){
   const sums=new Map(current.features.map(f=>[f.properties.id,current.sumOf(f.properties.id)]));
   current.sums=sums;
   gUnits.selectAll('path.unit').data(current.features,d=>d.properties.name).join('path').attr('class','unit').attr('d',path)
     .attr('fill',d=>{ const id=d.properties.id, s=sums.get(id);
       if(current.kind==='local') return localFill(s);
+      if(current.kind==='offices') return officeFill(id);
+      if(current.kind==='courts' && !s) return css('--notup');
       if(current.kind==='chamber' && !s) return css('--notup');
       if(current.kind==='statewide' && !s) return css('--nodata');
       return fillFor(s); })
@@ -320,6 +337,8 @@ function drawMap(){
 }
 function unitTip(id){
   if(current.kind==='local') return localTip(id);
+  if(current.kind==='courts') return courtsTip(id);
+  if(current.kind==='offices') return officesTip(id);
   if(current.kind==='statewide'){
     const s=current.sums.get(id);
     return tipHTML(current.nameOf(id), s, s? (id==='29095'?'Includes Kansas City’s Jackson County part':null) : (haveCounty.has(id)?'No results':missingMsg(id))) + popCenters(id);
@@ -349,14 +368,17 @@ function updateLabels(){
 function drawLegend(){
   const L=d3.select('#legend'); L.html('');
   if(current.kind==='local') return localLegend(L);
+  if(current.kind==='offices') return officesLegend(L);
   const fams=new Set(); current.sums.forEach(s=>{ if(s&&s.lead) fams.add(famOf(s.lead)); });
   const names={R:'Republican',D:'Democratic',O:'Other',Y:'Yes',N:'No'};
-  L.append('span').style('font-weight','600').text('Leader, by margin:');
+  L.append('span').style('font-weight','600').text(current.kind==='courts'&&current.court.id==='trial'?'Yes share across judges, or winner:':'Leader, by margin:');
   ['R','D','O','Y','N'].filter(f=>fams.has(f)).forEach(f=>{ const r=L.append('span').attr('class','ramp'); r.append('span').text(names[f]); const sw=r.append('span').attr('class','sw'); [0,1,2,3].forEach(i=>sw.append('i').style('background',css(`--${f}${i}`))); });
   L.append('span').style('color','var(--muted)').text('<5 · 5–15 · 15–30 · 30+ pts');
   if(current.kind==='chamber'){
     if(current.model.flips.length){ const n=L.append('span'); n.append('svg').attr('width',16).attr('height',12).style('vertical-align','-2px').style('margin-right','4px').html(`<rect width="16" height="12" rx="3" fill="${solid('D')}"/><rect width="16" height="12" rx="3" fill="url(#hatch)"/>`); n.append('span').text('Flipped'); }
     if(current.model.up<current.ch.seats){ const n=L.append('span'); n.append('span').attr('class','k').style('background',css('--notup')); n.append('span').text('Not on the ballot'); }
+  } else if(current.kind==='courts'){
+    if([...current.sums.values()].some(s=>!s)){ const n=L.append('span'); n.append('span').attr('class','k').style('background',css('--notup')); n.append('span').text(current.court.id==='trial'?'No circuit-court race in the state’s count':'Not in this district'); }
   } else if([...current.sums.values()].some(s=>!s)){ const n=L.append('span'); n.append('span').attr('class','k').style('background',css('--nodata')); n.append('span').text(redo.size?'County file being re-collected':'County file not collected yet'); }
 }
 
@@ -524,6 +546,8 @@ const isIncumbent = (cand, holder) => !/^vacant/i.test(holder) && lastName(cand)
 function drawSummary(){
   const el=d3.select('#summary');
   if(current.kind==='local') return localSummary(el);
+  if(current.kind==='courts') return courtsSummary(el);
+  if(current.kind==='offices') return officesSummary(el);
   if(current.kind==='statewide'){
     const rc=current.rc, tot=summarize(raceTotal(rc)), meas=isMeasure(rc);
     let line='';
@@ -560,6 +584,8 @@ function drawSummary(){
 function drawDetail(){
   const el=d3.select('#detail'), id=state.selected;
   if(current.kind==='local') return localDetail(el,id);
+  if(current.kind==='courts') return courtsDetail(el,id);
+  if(current.kind==='offices') return officesDetail(el,id);
   if(!id){ el.html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over the map${current.kind==='chamber'?' or a seat':''} for a quick look. Click to pin results here.</p>`); return; }
   if(current.kind==='statewide'){
     const s=current.sums.get(id);
@@ -684,10 +710,260 @@ function localTable(){
     .attr('tabindex',0).attr('role','button')
     .on('click',(e,m)=>{ if(m.fips) select(m.fips,true); }).on('keydown',(e,m)=>{ if((e.key==='Enter'||e.key===' ')&&m.fips){ e.preventDefault(); select(m.fips,true); } });
 }
+// ---------- courts ----------
+// Missouri Plan judges (Supreme Court, Courts of Appeals, and circuit judges in Jackson, Clay, Platte, Greene,
+// St. Louis County and St. Louis City) face a yes/no retention vote; other circuit judges run on party ballots.
+const SUPREME = store.get('Supreme Court Retention|');
+const crCache = new Map();
+const crOf = rc => { if(!crCache.has(rc)) crCache.set(rc, countyResults(rc)); return crCache.get(rc); };
+const seatOf = n => n.split(': ')[0];
+const judgeOf = n => n.includes(': ') ? n.split(': ').slice(1).join(': ') : null;
+const APPEALS = [...JSTORE.values()].filter(r=>r.group==='appeals').map(rc=>{
+  const [, dist, judge] = rc.name.match(/^Court of Appeals, (\w+) District: (.+)$/);
+  const surname = judge.split(/\s+/).pop();
+  return {id:slug(surname), label:`${dist} · ${surname}`, rc, kicker:`Court of Appeals · ${dist} District`, title:judge};
+}).sort((a,b)=>['Western','Eastern','Southern'].indexOf(a.kicker.split(' · ')[1].split(' ')[0])-['Western','Eastern','Southern'].indexOf(b.kicker.split(' · ')[1].split(' ')[0]) || a.label.localeCompare(b.label));
+const TRIAL = [...JSTORE.values()].filter(r=>r.group!=='appeals').sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+const COURTS = [
+  {id:'supreme', label:'Supreme Court · Wilson', rc:SUPREME, kicker:'Missouri Supreme Court', title:'Paul C. Wilson'},
+  ...APPEALS,
+  {id:'trial', label:'Circuit courts', kicker:'Circuit courts', title:'Circuit and associate circuit judges'},
+];
+const yesShare = s => { const y=s&&s.arr.find(c=>c.choice==='Yes'); return y? y.pct : null; };
+// one county's trial-court races folded into one map color: combined yes share if any judge faced retention, else the winner
+function trialSum(L){
+  const ret=L.filter(x=>x.rc.group==='retention');
+  if(!ret.length) return L[0].s;
+  let y=0, n=0; ret.forEach(x=>x.s.arr.forEach(c=>{ if(c.choice==='Yes') y+=c.votes; else n+=c.votes; }));
+  return summarize({choices:new Map([['Yes',{choice:'Yes',party:'',votes:y}],['No',{choice:'No',party:'',votes:n}]]), reporting:d3.min(ret,x=>x.s.reporting)});
+}
+function courtsState(){
+  const c=COURTS.find(x=>x.id===state.court)||COURTS[0]; state.court=c.id;
+  d3.select('#raceChips').style('display',null).selectAll('button').data(COURTS,d=>d.id).join('button').attr('aria-pressed',d=>d.id===c.id).text(d=>d.label)
+    .on('click',(e,d)=>{ state.court=d.id; state.selected=null; syncHash(); render(); });
+  const base={kind:'courts', court:c, features:LAYERS.counties, layer:'counties', unitWord:'County', nameOf:countyFull};
+  if(c.id==='trial'){
+    const byC=new Map();
+    TRIAL.forEach(rc=>crOf(rc).forEach((res,id)=>{ (byC.get(id)||byC.set(id,[]).get(id)).push({rc, s:summarize(res)}); }));
+    return {...base, byC, sumOf:id=>{ const L=byC.get(id); return L? trialSum(L) : null; }};
+  }
+  const cr=crOf(c.rc);
+  return {...base, rc:c.rc, sumOf:id=>summarize(cr.get(id))};
+}
+// every judicial contest on one county's ballot (from the state's count)
+function courtsIn(id){
+  const out=[];
+  [{rc:SUPREME, court:'Supreme Court', judge:'Paul C. Wilson'}, ...APPEALS.map(a=>({rc:a.rc, court:a.kicker.replace(' · ',', '), judge:a.title})),
+   ...TRIAL.map(rc=>({rc, court:seatOf(rc.name).replace(/^Circuit (\d+)/,'Circuit Court $1'), judge:judgeOf(rc.name)}))]
+    .forEach(x=>{ const res=crOf(x.rc).get(id); if(res) out.push({...x, s:summarize(res)}); });
+  return out;
+}
+function courtLine(x, tag='div'){
+  const y=yesShare(x.s);
+  if(y!=null) return `<${tag} class="jl"><span><b>${esc(x.judge)}</b> ${muted(esc(x.court),true)}</span><span class="num">${x.s.total? `Yes ${pct(y)}`:'—'}</span></${tag}>`;
+  const w=x.s.lead; return `<${tag} class="jl"><span><b>${esc(w.choice)}</b> ${muted(`${esc(w.party)} · ${esc(x.court)}`,true)}</span><span class="num">${x.s.uncontested?'Unopposed':pct(w.pct)}</span></${tag}>`;
+}
+function courtsTip(id){
+  const s=current.sums.get(id);
+  if(current.court.id==='trial'){
+    const L=current.byC.get(id);
+    if(!L) return `<h4>${countyFull(id)}</h4><div class="muted">No circuit-court race in the state’s count</div>`+popCenters(id);
+    const xs=courtsIn(id).filter(x=>x.rc!==SUPREME && x.rc.group!=='appeals');
+    return `<h4>${countyFull(id)}</h4>${xs.slice(0,8).map(x=>courtLine(x)).join('')}${xs.length>8?`<div class="foot">+${xs.length-8} more · click for all</div>`:''}`+popCenters(id);
+  }
+  return tipHTML(countyFull(id), s, s? (id==='29095'&&current.rc.units.has('county:KC')?'Includes Kansas City’s Jackson County part':null) : 'Not in this court’s district') + popCenters(id);
+}
+const RETAIN_NOTE = 'Missouri Plan judges are appointed, then face a yes-or-no retention vote. A judge needs a simple majority of yes votes to keep the seat.';
+function courtsSummary(el){
+  const c=current.court;
+  if(c.id==='trial'){
+    const ret=TRIAL.filter(r=>r.group==='retention').map(rc=>({rc, s:summarize(raceTotal(rc))})).sort((a,b)=>yesShare(a.s)-yesShare(b.s));
+    const elect=TRIAL.filter(r=>r.group==='elected').map(rc=>({rc, s:summarize(raceTotal(rc))}));
+    const lost=ret.filter(x=>yesShare(x.s)<=50), circuits=new Set(ret.map(x=>seatOf(x.rc.name).split(',')[0]));
+    const contested=elect.filter(x=>!x.s.uncontested);
+    el.html(`<div class="kicker">Circuit courts · ${TRIAL.length} races</div><h2>Circuit and associate circuit judges</h2>
+      <p class="sub">${ret.length} judges in ${circuits.size} circuits faced retention votes; ${lost.length? `${lost.length} fell short of a majority` : 'all were retained'}. ${elect.length} seats were filled on party ballots${contested.length?'':', every one by an unopposed candidate'}. ${RETAIN_NOTE}</p>
+      <div class="kicker" style="margin-top:12px">Retention votes, lowest yes share first</div>
+      <table class="minitable">${ret.slice(0,10).map(x=>`<tr data-id="${[...crOf(x.rc).keys()][0]}" style="cursor:pointer"><td>${esc(judgeOf(x.rc.name))} ${muted(esc(seatOf(x.rc.name)),true)}</td><td class="r num">${pct(yesShare(x.s))}</td></tr>`).join('')}</table>${ret.length>10?`<p class="sub" style="margin-top:6px">All ${ret.length} are in the table below.</p>`:''}
+      <p class="sub" style="margin-top:8px">Associate circuit judges elected on county ballots aren’t in the state’s count; they’re under County offices.</p>`);
+    el.selectAll('tr[data-id]').on('click',function(){ select(this.dataset.id,true); });
+    return;
+  }
+  const tot=summarize(raceTotal(c.rc)), y=yesShare(tot), done=tot.final, n=crOf(c.rc).size;
+  const word = y>50 ? (done?'Retained':'Leading to retain') : (done?'Not retained':'Trailing');
+  el.html(`<div class="kicker">${esc(c.kicker)}</div><h2>${esc(c.title)}</h2>
+    <div class="result-line" style="color:${deep(y>50?'Y':'N')}">${word}: Yes ${pct(y)}</div>
+    <div class="about">${RETAIN_NOTE}${c.id==='supreme'?'':` The ${esc(c.kicker.split(' · ')[1])} covers ${n} ${n===1?'county':'counties'}${c.rc.units.has('county:KC')?' (Kansas City’s board reports separately and is added to Jackson County)':''}.`}</div>
+    ${candRows(tot)}
+    <div class="reporting">From the Secretary of State’s count.${corrNote(c.id==='supreme'?'Supreme Court Retention':c.rc.name)}</div>`);
+}
+function courtsDetail(el,id){
+  if(!id){ el.html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over a county for a quick look. Click to see every judge on that county’s ballot.</p>`); return; }
+  const c=current.court, s=c.id==='trial'? null : current.sums.get(id);
+  const raceName = c.id==='supreme'?'Supreme Court Retention':c.rc&&c.rc.name;
+  const fix = raceName && corrFor(raceName).find(x=>countyByKey.get(norm(x.county))===id);
+  const xs=courtsIn(id);
+  const off=OFFC.get(id), aj=off? off.races.filter(r=>r.cat==='judge') : [];
+  el.html(`${detailHead(c.id==='trial'?'Courts':esc(c.title), countyFull(id))}
+    ${c.id==='trial'? '' : s? candRows(s,{noCheck:true}) : `<div class="detail-empty">${esc(countyFull(id))} isn’t in this court’s district.</div>`}
+    ${fix?`<div class="reporting" style="color:var(--accent-pink)">${esc(fix.note)}</div>`:''}
+    <div class="kicker" style="margin-top:14px">Every judge on the ballot here</div>
+    <div class="jlist">${xs.map(x=>courtLine(x)).join('')}</div>
+    ${aj.length?`<div class="kicker" style="margin-top:14px">Associate circuit judges (county ballot)</div><div class="jlist">${aj.map(r=>r.s?`<div class="jl"><span><b>${esc(r.s.lead.choice)}</b> ${muted(`${r.s.lead.party?esc(r.s.lead.party)+' · ':''}${esc(r.office)}`,true)}</span><span class="num">${r.s.uncontested?'Unopposed':pct(r.s.lead.pct)}</span></div>`:'').join('')}</div><div class="reporting">From ${esc(off.source)}.</div>`:''}
+    ${popCenters(id,'reporting')}`);
+  d3.select('#clearSel').on('click',()=>select(null));
+}
+let cSort=null, cDir=1;
+function courtsTable(){
+  const c=current.court, T=d3.select('#table'); T.html('');
+  let cols, rows;
+  if(c.id==='trial'){
+    d3.select('#tableTitle').text(`Circuit courts · ${TRIAL.length} races`);
+    rows=TRIAL.map(rc=>{ const s=summarize(raceTotal(rc)), y=yesShare(s), ids=[...crOf(rc).keys()];
+      return {id:ids[0], seat:seatOf(rc.name), judge:judgeOf(rc.name)||s.lead.choice, counties:ids.map(i=>countyFull(i).replace(/ County$/,'')).join(', '), yes:y??-1, res: y!=null? (y>50?'Retained':'Not retained') : `Elected (${s.lead.party}${s.uncontested?', unopposed':''})`}; });
+    cols=[['seat','Seat'],['judge','Judge'],['counties','Counties'],['yes','Yes %','r'],['res','Result']];
+  } else {
+    d3.select('#tableTitle').text(`${c.title} · results by county`);
+    rows=[...current.sums].filter(([,s])=>s).map(([id,s])=>{ const yes=s.arr.find(x=>x.choice==='Yes'), no=s.arr.find(x=>x.choice==='No');
+      return {id, name:countyFull(id).replace(/ County$/,''), yes:yesShare(s), y:yes?yes.votes:0, n:no?no.votes:0, total:s.total}; });
+    cols=[['name','County'],['yes','Yes %','r'],['y','Yes','r'],['n','No','r'],['total','Total votes','r']];
+  }
+  if(!cols.find(x=>x[0]===cSort)){ cSort=cols[0][0]; cDir=1; }
+  const q=norm(d3.select('#tableSearch').property('value'));
+  const data=rows.filter(r=>!q||norm(Object.values(r).join(' ')).includes(q))
+    .sort((a,b)=>{ const x=a[cSort], y=b[cSort]; return (typeof x==='number'? x-y : String(x).localeCompare(String(y),undefined,{numeric:true}))*cDir; });
+  T.append('thead').append('tr').selectAll('th').data(cols).join('th').attr('class',d=>d[2]||'').html(d=>d[1]+(cSort===d[0]?' '+ico(cDir>0?'up':'down','sort'):''))
+    .on('click',(e,d)=>{ if(cSort===d[0]) cDir*=-1; else { cSort=d[0]; cDir=d[2]?-1:1; } courtsTable(); });
+  const tb=T.append('tbody');
+  if(!data.length){ tb.append('tr').append('td').attr('colspan',cols.length).style('color','var(--muted)').text('No rows match.'); return; }
+  tb.selectAll('tr').data(data).join('tr').attr('data-id',d=>d.id).classed('sel',d=>d.id===state.selected)
+    .html(d=> c.id==='trial'
+      ? `<td>${esc(d.seat)}</td><td>${esc(d.judge)}</td><td>${esc(d.counties)}</td><td class="r num">${d.yes>=0?pct(d.yes):''}</td><td>${d.yes>=0?`<span class="res ${d.yes>50?'passed':'failed'}">${d.res}</span>`:esc(d.res)}</td>`
+      : `<td>${esc(d.name)}</td><td class="r"><span class="lean num" style="background:${fillFor(current.sums.get(d.id))};color:${Math.abs(d.yes-50)>=7.5?css('--on-strong'):'var(--fg)'}">${pct(d.yes)}</span></td><td class="r num">${fmt(d.y)}</td><td class="r num">${fmt(d.n)}</td><td class="r num">${fmt(d.total)}</td>`)
+    .attr('tabindex',0).attr('role','button')
+    .on('click',(e,d)=>select(d.id,true)).on('keydown',(e,d)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(d.id,true); } });
+}
+
+// ---------- county offices (from county clerks and local news; the state doesn't publish these) ----------
+const OFFICES = DATA.offices;
+const OCATS = new Map(OFFICES.categories);
+// one race's candidates in the same shape summarize() returns, so candRows/fillFor work on it
+function offSum(r){
+  const named=r.cands.filter(x=>x.n!=='Write-in');
+  if(!named.length) return null;
+  const arr=r.cands.map(x=>({choice:x.n, party:x.p, votes:x.v||0, w:!!x.w})).sort((a,b)=>b.votes-a.votes || b.w-a.w);
+  const total=d3.sum(arr,c=>c.votes);
+  arr.forEach(c=>c.pct= total? c.votes/total*100 : (c.w?100:0));
+  const winners=arr.filter(c=>c.w), lead=winners[0]||arr[0], second=arr.find(c=>!c.w);
+  // with several seats, the margin that matters is between the last winner and the first loser
+  const last = winners.length>1 ? winners[winners.length-1] : lead;
+  return {arr, total, lead, second, edge:last, margin: total? last.pct-(second?second.pct:0) : 100, reporting:null,
+    uncontested: named.length<=winners.length, final:true, winner:lead, noCount:!total, seats:winners.length};
+}
+const OFFC = new Map();
+Object.entries(OFFICES.counties).forEach(([name,c])=>{
+  const id=countyByKey.get(norm(name)); if(!id){ console.warn('unknown county',name); return; }
+  c.races.forEach(r=>r.s=offSum(r)); OFFC.set(id==='KC'?'29095':id, {...c, name});
+});
+const ALL_ORACES = [...OFFC].flatMap(([id,c])=>c.races.map(r=>({...r, id, county:c.name})));
+const ocatsPresent = () => ['all', ...[...OCATS.keys()].filter(k=>ALL_ORACES.some(r=>r.cat===k))];
+const ocatLabel = k => k==='all' ? 'All offices' : OCATS.get(k);
+const isContested = r => r.s && !r.s.uncontested && r.s.arr.filter(c=>c.choice!=='Write-in'&&!/\(write-in\)/i.test(c.choice)).length>r.s.seats;
+function officesState(){
+  const cats=ocatsPresent(); if(!cats.includes(state.ocat)) state.ocat='all';
+  d3.select('#raceChips').style('display',null).selectAll('button').data(cats,d=>d).join('button').attr('aria-pressed',d=>d===state.ocat)
+    .text(d=>d==='all'?`All offices (${ALL_ORACES.length})`:ocatLabel(d)).on('click',(e,d)=>{ state.ocat=d; state.selected=null; render(); });
+  const inCat = r => state.ocat==='all' || r.cat===state.ocat;
+  return {kind:'offices', features:LAYERS.counties, layer:'counties', unitWord:'County', nameOf:countyFull, inCat,
+    races: ALL_ORACES.filter(inCat), sumOf:id=>{ const c=OFFC.get(id); return c? c.races.filter(inCat) : null; }};
+}
+// one office: its margin shade. Several: the party that won most of them, darker the more it won.
+function officeFill(id){
+  const list=current.sums.get(id);
+  if(!list) return css('--nodata');
+  const ss=list.map(r=>r.s).filter(Boolean);
+  if(!ss.length) return css('--notup');
+  if(ss.length===1) return fillFor(ss[0]);
+  const [fam,n]=[...d3.rollup(ss,v=>v.length,s=>famOf(s.lead))].sort((a,b)=>b[1]-a[1])[0];
+  const share=n/ss.length; return css(`--${fam}${share>=1?3:share>=0.75?2:share>0.5?1:0}`);
+}
+function officesTip(id){
+  const c=OFFC.get(id), L=current.sums.get(id);
+  let h=`<h4>${countyFull(id)}</h4>`;
+  if(!c) return h+`<div class="muted">County offices not collected</div>`+popCenters(id);
+  if(!L.length) return h+`<div class="muted">No ${esc(ocatLabel(state.ocat).toLowerCase())} race in our source${c.partial?' (it lists only some races)':''}</div>`+popCenters(id);
+  L.slice(0,8).forEach(r=>{ const s=r.s; h+=`<div class="row"><i style="background:${s?solid(famOf(s.lead)):'transparent'}"></i><span>${esc(r.office)}: ${s?`<b>${esc(s.lead.choice)}</b>${s.lead.party&&s.lead.party!=='W'?' '+muted(s.lead.party,true):''}`:muted('no candidate')}</span><span class="p num">${s&&!s.uncontested?pct(s.lead.pct):''}</span></div>`; });
+  if(L.length>8) h+=`<div class="foot">+${L.length-8} more · click for all</div>`;
+  else if(c.partial) h+=`<div class="foot">Source lists only some races</div>`;
+  return h+popCenters(id);
+}
+function officesLegend(L){
+  L.append('span').style('font-weight','600').text('Winning party:');
+  const fams=new Set(current.races.filter(r=>r.s).map(r=>famOf(r.s.lead)));
+  const names={R:'Republican',D:'Democratic',O:'Other or no label'};
+  ['R','D','O'].filter(f=>fams.has(f)).forEach(f=>{ const r=L.append('span').attr('class','ramp'); r.append('span').text(names[f]); const sw=r.append('span').attr('class','sw'); [0,1,2,3].forEach(i=>sw.append('i').style('background',css(`--${f}${i}`))); });
+  L.append('span').style('color','var(--muted)').text('darker = wider margin, or more of the offices');
+  [['--nodata','Not collected'],['--notup','No race of this kind in our source']].forEach(([v,t])=>{ const n=L.append('span'); n.append('span').attr('class','k').style('background',css(v)); n.append('span').text(t); });
+}
+function officesSummary(el){
+  const R=current.races, cty=new Set(R.map(r=>r.id)).size;
+  const won=p=>R.filter(r=>r.s&&(p==='O'? !['R','D'].includes(r.s.lead.party) : r.s.lead.party===p)).length;
+  const close=R.filter(isContested).sort((a,b)=>a.s.margin-b.s.margin);
+  const partial=[...OFFC.values()].filter(c=>c.partial).length;
+  el.html(`<div class="kicker">County offices · Nov 3, 2026</div><h2>${esc(ocatLabel(state.ocat))}</h2>
+    <p class="sub">${R.length} race${R.length===1?'':'s'} in ${cty} count${cty===1?'y':'ies'}. The Secretary of State doesn’t publish county offices, so these come from county clerks and local news. ${OFFC.size} of 115 counties are collected${partial?`; for ${partial} of them we only found news reports that list some races`:''}.</p>
+    <div class="split" style="gap:18px;margin:4px 0 10px">
+      <div class="side"><b class="num" style="font-size:30px;color:${deep('R')}">${won('R')}</b><span>Republican</span></div>
+      <div class="side"><b class="num" style="font-size:30px;color:${deep('D')}">${won('D')}</b><span>Democratic</span></div>
+      <div class="side"><b class="num" style="font-size:30px;color:var(--muted)">${won('O')}</b><span>other or no label</span></div>
+    </div>
+    <div class="kicker" style="margin-top:8px">Contested races · ${close.length}, closest first</div>
+    ${close.length?`<table class="minitable">${close.slice(0,12).map(r=>`<tr data-id="${r.id}" style="cursor:pointer"><td>${esc(r.county.replace(/ County$/,''))} ${muted(esc(r.office),true)}</td><td>${esc(r.s.edge.choice)}${r.s.edge.party?' '+muted(esc(r.s.edge.party),true):''}</td><td class="r num">+${r.s.margin.toFixed(1)}</td></tr>`).join('')}</table>${close.length>12?`<p class="sub" style="margin-top:6px">${close.length-12} more in the table below.</p>`:''}`:'<div class="detail-empty">None in this group.</div>'}
+    <p class="sub" style="margin-top:10px">Unofficial election-night counts. Most county offices were uncontested. Sources without party labels show the candidate with no party.</p>`);
+  el.selectAll('tr[data-id]').on('click',function(){ select(this.dataset.id,true); });
+}
+function officeCard(r){
+  const s=r.s;
+  const body = !s ? `<div class="detail-empty">${esc(r.note||'No candidate filed.')}</div>`
+    : s.noCount ? `<div class="cand"><div class="nm">${esc(s.lead.choice)}${s.lead.party?`<span class="pty">${partyName(s.lead.party)}</span>`:''}</div><div class="pct">Unopposed</div></div>`
+    : candRows(s);
+  return `<div class="lm"><div class="hd"><span class="jn">${esc(r.office)}</span>${isContested(r)?'<span class="res unknown">Contested</span>':''}</div>${body}${s&&r.note?`<div class="meta">${esc(r.note)}</div>`:''}</div>`;
+}
+function officesDetail(el,id){
+  if(!id){ el.html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over a county for a quick look. Click to see every county office we have for it.</p>`); return; }
+  const c=OFFC.get(id), L=c? current.sums.get(id) : [];
+  el.html(`${detailHead(`County offices${state.ocat!=='all'?' · '+esc(ocatLabel(state.ocat)):''}`, countyFull(id))}
+    ${!c? `<p class="detail-empty">Not collected. We didn’t find a county report or news source with ${esc(countyFull(id))}’s office results.</p>`
+      : `<p class="sub">From ${esc(c.source)}.${c.partial?' This source lists only some races, so uncontested offices may be missing.':''}</p>${L.length? L.map(officeCard).join('') : `<p class="detail-empty">No ${esc(ocatLabel(state.ocat).toLowerCase())} race in this source.</p>`}`}
+    <p class="sub" style="margin-top:10px">Circuit and appellate judges from the state’s count are under Courts.</p>
+    ${popCenters(id,'reporting')}`);
+  d3.select('#clearSel').on('click',()=>select(null));
+}
+let oSort='county', oDir=1;
+function officesTable(){
+  d3.select('#tableTitle').text(`${ocatLabel(state.ocat)} · ${current.races.length} races`);
+  const q=norm(d3.select('#tableSearch').property('value'));
+  const rows=current.races.map(r=>({r, id:r.id, county:r.county, office:r.office, winner:r.s?r.s.lead.choice:'', party:r.s?r.s.lead.party:'', margin:r.s&&isContested(r)?r.s.margin:999, total:r.s?r.s.total:0}));
+  const data=rows.filter(d=>!q||norm([d.county,d.office,d.winner,...(d.r.cands||[]).map(c=>c.n)].join(' ')).includes(q))
+    .sort((a,b)=>{ const x=a[oSort], y=b[oSort]; return (typeof x==='number'? x-y : String(x).localeCompare(String(y),undefined,{numeric:true}))*oDir || a.county.localeCompare(b.county) || a.office.localeCompare(b.office); });
+  const cols=[['county','County'],['office','Office'],['winner','Winner'],['party','Party'],['margin','Margin','r'],['total','Votes','r']];
+  const T=d3.select('#table'); T.html('');
+  T.append('thead').append('tr').selectAll('th').data(cols).join('th').attr('class',d=>d[2]||'').html(d=>d[1]+(oSort===d[0]?' '+ico(oDir>0?'up':'down','sort'):''))
+    .on('click',(e,d)=>{ if(oSort===d[0]) oDir*=-1; else { oSort=d[0]; oDir=1; } officesTable(); });
+  const tb=T.append('tbody');
+  if(!data.length){ tb.append('tr').append('td').attr('colspan',6).style('color','var(--muted)').text('No races match.'); return; }
+  tb.selectAll('tr').data(data).join('tr').attr('data-id',d=>d.id).classed('sel',d=>d.id===state.selected)
+    .html(d=>{ const s=d.r.s; return `<td>${esc(d.county)}</td><td>${esc(d.office)}</td><td>${s?esc(s.lead.choice):muted('No candidate')}</td><td>${esc(d.party)}</td><td class="r">${!s?'':isContested(d.r)?`<span class="lean num" style="background:${fillFor(s)};color:${s.margin>=15?css('--on-strong'):'var(--fg)'}">+${s.margin.toFixed(1)}</span>`:muted('Uncontested')}</td><td class="r num">${d.total?fmt(d.total):''}</td>`; })
+    .attr('tabindex',0).attr('role','button')
+    .on('click',(e,d)=>select(d.id,true)).on('keydown',(e,d)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(d.id,true); } });
+}
+
 let sortKey='name', sortDir=1;
 function drawTable(){
   const ch=current.ch;
   if(current.kind==='local') return localTable();
+  if(current.kind==='courts') return courtsTable();
+  if(current.kind==='offices') return officesTable();
   d3.select('#tableTitle').text(current.kind==='statewide'? `${current.rc.name} · results by county` : `${ch.label} · results by district`);
   let rows, cols;
   if(current.kind==='statewide'){
@@ -733,12 +1009,14 @@ function drawStatus(){
   const corr = CORRECTIONS.length ? ` Where the state feed has a clear error, the county clerk’s own report is used instead: ${CORRECTIONS.map(c=>esc(c.note)).join(' ')} Statewide and district totals add up the corrected county figures.` : '';
   d3.select('#foot').html(`Results: Missouri Secretary of State election-night reporting (enr.sos.mo.gov), unofficial, as of ${META.statewide_asof}.${corr} County maps use ${[...haveCounty].filter(id=>id!=='KC').length} of 115 county result files${haveCounty.has('KC')?' plus the Kansas City Election Board’s count':''}, which covers only KC’s Jackson County part and is added into Jackson County.${redo.size?` ${[...redo].map(countyFull).join(', ')}: the collected files were duplicates of other counties, so they’re blank on the map until re-collected (statewide and district totals already include them).`:''} A check mark means a candidate is ahead with all precincts reported. These are not certified results.<br>
   Flips are measured against the party holding each seat before the election. Vacant seats count for the party that last held them (House 95, 110, 114, 149 and 160, and Senate 10, all Republican). Recount range: under 0.5% of votes cast (RSMo § 115.601).<br>
+  Courts: appellate retention votes and circuit-court races are from the same Secretary of State count. County offices are not in the state’s count; they come from county clerks’ reports and local news (KY3, KFVS12, KOAM, the Southeast Missourian, the Mexico Ledger and The Beacon), and each county names its source. They cover ${OFFC.size} of 115 counties.<br>
   Population centers: Census 2024 city estimates for counties; 2020 Census block counts for districts. Boundaries: U.S. Census Bureau 2025 cartographic boundary files (counties; 2022 congressional plan, in effect for this election; current State Senate and State House districts). ${SOURCES}`);
 }
 
 // ---------- hash ----------
-function syncHash(){ const h = state.view==='statewide' ? (state.race? 'race-'+slug(state.race) : '') : state.view; try{ history.replaceState(null,'',h?'#'+h:location.pathname); }catch(e){} }
-function readHash(){ const h=location.hash.slice(1); if(!h){ state.view='statewide'; return; } if(CHAMBERS.find(c=>c.id===h)||h==='local-issues'){ state.view=h; return; } if(h.startsWith('race-')){ state.view='statewide'; const r=statewideRaces().find(r=>slug(r.name)===h.slice(5)); if(r) state.race=r.name; } }
+function syncHash(){ const h = state.view==='statewide' ? (state.race? 'race-'+slug(state.race) : '') : state.view==='courts' && state.court!=='supreme' ? 'courts-'+state.court : state.view; try{ history.replaceState(null,'',h?'#'+h:location.pathname); }catch(e){} }
+function readHash(){ const h=location.hash.slice(1); if(!h){ state.view='statewide'; return; } if(CHAMBERS.find(c=>c.id===h)||['local-issues','courts','county-offices'].includes(h)){ state.view=h; return; }
+  if(h.startsWith('courts-')){ state.view='courts'; state.court=h.slice(7); return; } if(h.startsWith('race-')){ state.view='statewide'; const r=statewideRaces().find(r=>slug(r.name)===h.slice(5)); if(r) state.race=r.name; } }
 addEventListener('hashchange',()=>{ readHash(); state.selected=null; render(); });
 
 readHash(); render();

@@ -611,6 +611,13 @@
    "races": [
     "State Auditor"
    ]
+  },
+  {
+   "county": "Linn",
+   "note": "Court of Appeals (Hardwick) is 2,136 Yes, 1,076 No per the Linn County Clerk; the SOS feed shifted the rows.",
+   "races": [
+    "Court of Appeals, Western District: Lisa White Hardwick"
+   ]
   }
  ]
 }

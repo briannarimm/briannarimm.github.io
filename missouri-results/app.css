@@ -291,3 +291,10 @@ footer p { margin: 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .js .reveal { opacity: 1; transform: none; }
 }
+
+/* courts + county offices */
+.jlist { display: flex; flex-direction: column; margin-top: 4px; }
+.jl { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 0.84rem; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.jl:last-child { border-bottom: 0; }
+.jl .num { white-space: nowrap; color: var(--text-soft); }
+#tip .jl { font-size: 12px; padding: 1px 0; border: 0; }
