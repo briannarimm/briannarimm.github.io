@@ -890,7 +890,7 @@ function officeFill(id){
 function officesTip(id){
   const c=OFFC.get(id), L=current.sums.get(id);
   let h=`<h4>${countyFull(id)}</h4>`;
-  if(!c) return h+`<div class="muted">County offices not collected</div>`+popCenters(id);
+  if(!c) return h+`<div class="muted">No county-office results</div>`+popCenters(id);
   if(!L.length) return h+`<div class="muted">No ${esc(ocatLabel(state.ocat).toLowerCase())} race in our source${c.partial?' (it lists only some races)':''}</div>`+popCenters(id);
   L.slice(0,8).forEach(r=>{ const s=r.s; h+=`<div class="row"><i style="background:${s?solid(famOf(s.lead)):'transparent'}"></i><span>${esc(r.office)}: ${s?`<b>${esc(s.lead.choice)}</b>${s.lead.party&&s.lead.party!=='W'?' '+muted(s.lead.party,true):''}`:muted('no candidate')}</span><span class="p num">${s&&!s.uncontested?pct(s.lead.pct):''}</span></div>`; });
   if(L.length>8) h+=`<div class="foot">+${L.length-8} more · click for all</div>`;
@@ -903,7 +903,7 @@ function officesLegend(L){
   const names={R:'Republican',D:'Democratic',O:'Other or no label'};
   ['R','D','O'].filter(f=>fams.has(f)).forEach(f=>{ const r=L.append('span').attr('class','ramp'); r.append('span').text(names[f]); const sw=r.append('span').attr('class','sw'); [0,1,2,3].forEach(i=>sw.append('i').style('background',css(`--${f}${i}`))); });
   L.append('span').style('color','var(--muted)').text('darker = wider margin, or more of the offices');
-  [['--nodata','Not collected'],['--notup','No race of this kind in our source']].forEach(([v,t])=>{ const n=L.append('span'); n.append('span').attr('class','k').style('background',css(v)); n.append('span').text(t); });
+  [['--nodata','No county-office results'],['--notup','No race of this kind in our source']].forEach(([v,t])=>{ const n=L.append('span'); n.append('span').attr('class','k').style('background',css(v)); n.append('span').text(t); });
 }
 function officesSummary(el){
   const R=current.races, cty=new Set(R.map(r=>r.id)).size;
@@ -911,7 +911,7 @@ function officesSummary(el){
   const close=R.filter(isContested).sort((a,b)=>a.s.margin-b.s.margin);
   const partial=[...OFFC.values()].filter(c=>c.partial).length;
   el.html(`<div class="kicker">County offices · Nov 3, 2026</div><h2>${esc(ocatLabel(state.ocat))}</h2>
-    <p class="sub">${R.length} race${R.length===1?'':'s'} in ${cty} count${cty===1?'y':'ies'}. The Secretary of State doesn’t publish county offices, so these come from county clerks and local news. ${OFFC.size} of 115 counties are collected${partial?`; for ${partial} of them we only found news reports that list some races`:''}.</p>
+    <p class="sub">${R.length} race${R.length===1?'':'s'} in ${cty} count${cty===1?'y':'ies'}. The Secretary of State doesn’t publish county offices, so these come from county clerks and local news. ${OFFC.size} of 115 counties have results${partial?`; for ${partial} of them we only found news reports that list some races`:''}. The rest posted none. Counties elect these offices on different cycles, and many don’t report uncontested races.</p>
     <div class="split" style="gap:18px;margin:4px 0 10px">
       <div class="side"><b class="num" style="font-size:30px;color:${deep('R')}">${won('R')}</b><span>Republican</span></div>
       <div class="side"><b class="num" style="font-size:30px;color:${deep('D')}">${won('D')}</b><span>Democratic</span></div>
@@ -933,7 +933,7 @@ function officesDetail(el,id){
   if(!id){ el.html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over a county for a quick look. Click to see every county office we have for it.</p>`); return; }
   const c=OFFC.get(id), L=c? current.sums.get(id) : [];
   el.html(`${detailHead(`County offices${state.ocat!=='all'?' · '+esc(ocatLabel(state.ocat)):''}`, countyFull(id))}
-    ${!c? `<p class="detail-empty">Not collected. We didn’t find a county report or news source with ${esc(countyFull(id))}’s office results.</p>`
+    ${!c? `<p class="detail-empty">No county-office results. ${esc(countyFull(id))} posted none for this election. Counties elect these offices on different cycles, and many don’t report uncontested races, so this can mean there was no county race or that nothing was reported.</p>`
       : `<p class="sub">From ${esc(c.source)}.${c.partial?' This source lists only some races, so uncontested offices may be missing.':''}</p>${L.length? L.map(officeCard).join('') : `<p class="detail-empty">No ${esc(ocatLabel(state.ocat).toLowerCase())} race in this source.</p>`}`}
     <p class="sub" style="margin-top:10px">Circuit and appellate judges from the state’s count are under Courts.</p>
     ${popCenters(id,'reporting')}`);
