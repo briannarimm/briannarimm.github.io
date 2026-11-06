@@ -5,8 +5,8 @@
   "name": "briannaimm-site",
   "compatibility_date": "2026-11-06",
   // Workers Builds runs `bash cloudflare/build.sh`, which writes the site to _site/.
-  // Migration day (step 5 of cloudflare/README.md in briannarimm.github.io): remove the // below to serve this on your domain.
-  // "routes": [{ "pattern": "www.briannaimm.com/*", "zone_name": "briannaimm.com" }],
+  // Serves the website on the live domain. Project Workers have more specific routes (for example /CodePix*), so they win for their paths.
+  "routes": [{ "pattern": "www.briannaimm.com/*", "zone_name": "briannaimm.com" }],
   "assets": {
     "directory": "./_site",
     "html_handling": "auto-trailing-slash"
