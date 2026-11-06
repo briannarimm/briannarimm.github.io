@@ -54,6 +54,10 @@ const countyFull = id => id==='29510' ? 'St. Louis City' : id==='29189' ? 'St. L
 const haveCounty = new Set(Object.keys(META.counties).map(n=>countyByKey.get(norm(n))).filter(Boolean));
 const redo = new Set((META.needs_redownload||[]).map(n=>countyByKey.get(norm(n))));
 const missingMsg = id => redo.has(id) ? 'Results file needs to be collected again' : 'County file not collected yet';
+// counties where the SOS feed had an error and the county clerk's own report is used instead
+const CORRECTIONS = META.corrections || [];
+const corrFor = race => CORRECTIONS.filter(c => c.races.includes('*') || c.races.includes(race));
+const corrNote = race => { const c=corrFor(race); return c.length ? ` ${c.map(x=>x.county).join(', ')}: corrected from the county clerk’s report (the state feed has an error there).` : ''; };
 
 // ---------- chambers ----------
 const CHAMBERS = [
@@ -141,6 +145,12 @@ const ico=(n,cls='')=>`<svg class="ico ${cls}" aria-hidden="true"><use href="#i-
 const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 const pct = v => v.toFixed(1)+'%';
 const RECOUNT = 0.5; // RSMo 115.601: candidates filing with SOS may request a recount if defeated by < 0.5% of votes cast
+// small shared bits of markup
+const muted = (t, small) => `<span class="muted${small?' sm':''}">${t}</span>`;
+const sq = color => `<span class="swatch" style="background:${color}"></span>`;
+const badge = (text, fam) => `<span class="badge" style="background:${solid(fam)}">${text}</span>`;
+const abbrev = v => v>=1e6 ? (v/1e6).toFixed(1)+'M' : v>=1e4 ? Math.round(v/1e3)+'k' : v>=1e3 ? (v/1e3).toFixed(1)+'k' : String(v);
+const detailHead = (kicker, title) => `<div class="dhead"><div><div class="kicker">${kicker}</div><h2>${title}</h2></div><button class="iconbtn sq" id="clearSel" aria-label="Clear selection">${ico('x')}</button></div>`;
 
 // ---------- chamber model ----------
 function chamberModel(ch){
@@ -177,7 +187,10 @@ const gUnits=gZoom.append('g'), gFlip=gZoom.append('g'), gOverlay=gZoom.append('
 gOverlay.append('path').attr('class','cty-overlay').attr('d',path(countyMesh));
 gOutline.append('path').attr('class','state-outline').attr('d',path(stateMesh));
 let zk=1;
-const zoom=d3.zoom().scaleExtent([1,40]).translateExtent([[-100,-100],[W+100,H+100]]).on('zoom',e=>{ gZoom.attr('transform',e.transform); zk=e.transform.k; zT=e.transform; updateLabels(); updateCities(); });
+const zoom=d3.zoom().scaleExtent([1,40]).translateExtent([[-100,-100],[W+100,H+100]]).on('zoom',e=>{
+  gZoom.attr('transform',e.transform); zk=e.transform.k; zT=e.transform; updateLabels(); updateCities();
+  if(e.sourceEvent) d3.selectAll('#zoomPresets button').attr('aria-pressed',false);   // user panned/zoomed by hand
+});
 // ---------- city landmarks ----------
 const cityData = PLACES.labels.map(([name,x,y,pop,tier])=>({name,pop,tier: tier===3 && pop<20000 ? 4 : tier, p:proj([x,y])}));
 let zT=d3.zoomIdentity;
@@ -203,18 +216,16 @@ function updateCities(){
 updateCities();
 function distCenters(layer,id,cls='pc'){
   const D=(PLACES.district[layer]||{})[id]; if(!D) return '';
-  const k=v=>v>=1e4?Math.round(v/1e3)+'k':v>=1e3?(v/1e3).toFixed(1)+'k':v;
-  const list=D.places.map(([n,p,t,cdp])=>`<b>${n}</b>${p<t*0.97?' (part)':''}${cdp?'*':''} ${k(p)}`).join(' · ');
+  const list=D.places.map(([n,p,t,cdp])=>`<b>${n}</b>${p<t*0.97?' (part)':''}${cdp?'*':''} ${abbrev(p)}`).join(' · ');
   const un=D.uninc/D.pop, anyCdp=D.places.some(x=>x[3]);
   let h = list? `Largest places: ${list}` : 'No cities, towns or named communities';
   if(un>=0.4) h+=`<br>${Math.round(un*100)}% live outside incorporated cities`;
-  h+=`<br><span style="color:var(--muted)">District pop. ${fmt(D.pop)} (2020 Census)${anyCdp?' · *unincorporated community':''}</span>`;
+  h+=`<br>${muted(`District pop. ${fmt(D.pop)} (2020 Census)${anyCdp?' · *unincorporated community':''}`)}`;
   return `<div class="${cls}">${h}</div>`;
 }
-function popCenters(id){
+function popCenters(id, cls='pc'){
   const L=PLACES.county[id]; if(!L||!L.length) return '';
-  const k=v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e4?Math.round(v/1e3)+'k':v>=1e3?(v/1e3).toFixed(1)+'k':v;
-  return `<div class="pc">Largest places: ${L.slice(0,4).map(([n,p,t,multi])=>`<b>${n}</b>${multi?' (part)':''} ${k(p)}`).join(' · ')}</div>`;
+  return `<div class="${cls}">Largest places: ${L.slice(0,4).map(([n,p,t,multi])=>`<b>${n}</b>${multi?' (part)':''} ${abbrev(p)}`).join(' · ')}</div>`;
 }
 svg.call(zoom).on('dblclick.zoom',null);
 d3.select('#zin').on('click',()=>svg.transition().duration(dur(300)).call(zoom.scaleBy,1.8));
@@ -232,8 +243,8 @@ d3.select('#ctyOverlay').on('change',function(){ state.overlay=this.checked; gOv
 const tip=d3.select('#tip');
 function tipHTML(title,s,foot){
   let h=`<h4>${title}</h4>`;
-  if(!s||!s.total) return h+`<div style="color:var(--muted)">${foot||'No results'}</div>`;
-  s.arr.slice(0,5).forEach(c=>{ h+=`<div class="row"><i style="background:${solid(famOf(c))}"></i><span>${c.choice}${c.party&&c.party!=='W'?` <span style="color:var(--muted);font-size:11px">${c.party}</span>`:''}</span><span class="p num">${pct(c.pct)}</span><span class="vv num">${fmt(c.votes)}</span></div>`; });
+  if(!s||!s.total) return h+`<div class="muted">${foot||'No results'}</div>`;
+  s.arr.slice(0,5).forEach(c=>{ h+=`<div class="row"><i style="background:${solid(famOf(c))}"></i><span>${c.choice}${c.party&&c.party!=='W'?' '+muted(c.party,true):''}</span><span class="p num">${pct(c.pct)}</span><span class="vv num">${fmt(c.votes)}</span></div>`; });
   const f=[]; if(s.reporting!=null) f.push(`${Math.round(s.reporting)}% of precincts`); if(s.uncontested) f.push('Uncontested'); if(foot) f.push(foot);
   return h+(f.length?`<div class="foot">${f.join(' · ')}</div>`:'');
 }
@@ -314,22 +325,25 @@ function unitTip(id){
     return tipHTML(current.nameOf(id), s, s? (id==='29095'?'Includes Kansas City’s Jackson County part':null) : (haveCounty.has(id)?'No results':missingMsg(id))) + popCenters(id);
   }
   const seat=current.byD.get(id);
-  if(!seat.raced) return `<h4>${current.nameOf(id)}</h4><div>${seat.prevName} <span style="color:var(--muted)">(${seat.prev})</span></div><div class="foot">Not on the ballot this year</div>`+distCenters(current.layer,id);
+  if(!seat) return `<h4>${current.nameOf(id)}</h4>`;
+  if(!seat.raced) return `<h4>${current.nameOf(id)}</h4><div>${seat.prevName} ${muted(`(${seat.prev})`)}</div><div class="foot">Not on the ballot this year</div>`+distCenters(current.layer,id);
   const notes=[]; if(seat.flip) notes.push(`<b>Flip</b> ${seat.prev} to ${seat.party}`); if(seat.close) notes.push('<b>Recount range</b>'); else if(seat.tight) notes.push('Under 3 pts');
   return tipHTML(current.nameOf(id), seat.s, notes.join(' · ')||`Held by ${seat.prev}`)+distCenters(current.layer,id);
 }
+// label anchor = centroid of the largest polygon part; width is cached so zooming doesn't re-measure every district
 const lpCache=new Map();
-function labelPoint(f){
+function labelGeom(f){
   const k=f.properties.name; if(lpCache.has(k)) return lpCache.get(k);
   const g=f.geometry; let best=null, ba=-1;
   (g.type==='MultiPolygon'? g.coordinates : [g.coordinates]).forEach(p=>{ const ft={type:'Polygon',coordinates:p}; const a=path.area(ft); if(a>ba){ba=a;best=ft;} });
-  const c=path.centroid(best); lpCache.set(k,c); return c;
+  const b=path.bounds(f), v={c:path.centroid(best), w:b[1][0]-b[0][0]}; lpCache.set(k,v); return v;
 }
+const labelPoint = f => labelGeom(f).c;
 function updateLabels(){
   const base = current.layer==='congress'?18: current.layer==='senate'?12: 9;
   const minK = current.layer==='house'?3.2 : 1;
   gLabels.selectAll('text').style('font-size',(base/Math.pow(zk,0.8))+'px').style('stroke-width',(3/zk)+'px')
-    .style('display', function(d){ if(zk<minK) return 'none'; if(current.layer!=='house') return null; const b=path.bounds(d); return (b[1][0]-b[0][0])*zk>22? null:'none'; });
+    .style('display', d => zk<minK ? 'none' : current.layer!=='house' || labelGeom(d).w*zk>22 ? null : 'none');
 }
 
 function drawLegend(){
@@ -380,9 +394,9 @@ function drawChamber(){
   const ballR = Math.min(lay.dot, step*0.42, rows===1?0.075:1);
   const zOf = i => i*rise;
   // camera: in front of the open side, raised, looking down at the chamber
-  const camD=1.55, camH=1.25, phi=0.62, F=1;
+  const camD=1.55, camH=1.25, phi=0.62;
   const cosP=Math.cos(phi), sinP=Math.sin(phi);
-  const P3=(X,Y,Z)=>{ const y=Y+camD, z=Z-camH; const depth=y*cosP - z*sinP, up=y*sinP + z*cosP; return [F*X/depth, -F*up/depth, depth]; };
+  const P3=(X,Y,Z)=>{ const y=Y+camD, z=Z-camH; const depth=y*cosP - z*sinP, up=y*sinP + z*cosP; return [X/depth, -up/depth, depth]; };
   const polar=(a,r,z)=>P3(Math.cos(a)*r, Math.sin(a)*r, z);
   // gather geometry in projected space, then fit to the viewBox
   const A=d3.range(0,49).map(i=>Math.PI*i/48);
@@ -504,17 +518,22 @@ function candRows(s, opts={}){
     </div>`).join('') + (s.reporting!=null?`<div class="reporting">${s.reporting===100?'All precincts reported':Math.round(s.reporting)+'% of precincts reported'}<div class="track"><i style="width:${s.reporting}%"></i></div></div>`:'');
 }
 const lastName = n => String(n).replace(/\(.*?\)/g,'').replace(/,?\s+(Jr\.?|Sr\.?|II|III|IV)$/i,'').trim().split(/\s+/).pop().toLowerCase();
+const firstName = n => String(n).trim().split(/\s+/)[0].toLowerCase();
+// incumbent = same first AND last name as the pre-election holder (avoids e.g. two different Murphys)
+const isIncumbent = (cand, holder) => !/^vacant/i.test(holder) && lastName(cand)===lastName(holder) && firstName(cand)===firstName(holder);
 function drawSummary(){
   const el=d3.select('#summary');
   if(current.kind==='local') return localSummary(el);
   if(current.kind==='statewide'){
     const rc=current.rc, tot=summarize(raceTotal(rc)), meas=isMeasure(rc);
     let line='';
-    if(meas){ const y=tot.arr.find(c=>c.choice==='Yes'); line=`<div class="result-line" style="color:${deep(y.pct>50?'Y':'N')}">${y.pct>50?'Passing':'Failing'}: Yes ${pct(y.pct)}</div>`; }
+    if(meas){ const y=tot.arr.find(c=>c.choice.toLowerCase()==='yes'); if(y){ const pass=y.pct>50, done=tot.final;
+      const word = /retention/i.test(rc.name) ? (pass?(done?'Retained':'Leading to retain'):(done?'Not retained':'Trailing')) : done?(pass?'Passed':'Failed'):(pass?'Passing':'Failing');
+      line=`<div class="result-line" style="color:${deep(pass?'Y':'N')}">${word}: Yes ${pct(y.pct)}</div>`; } }
     const counted=[...current.sums.values()].filter(Boolean).length; const redoTxt=redo.size?` ${[...redo].map(id=>countyName[id]).join(', ')} are being re-collected.`:'';
     el.html(`<div class="kicker">${(ABOUT[rc.name]||{}).kicker||'Statewide'}</div><h2>${rc.name==='Supreme Court Retention'?'Supreme Court: Paul C. Wilson':rc.name}</h2>
       ${line}${aboutHTML(rc.name)}${candRows(tot,{inc:c=>rc.name==='State Auditor'&&/fitzpatrick/i.test(c.choice)})}
-      <div class="reporting">County map: ${counted} of 115 counties.${redoTxt} The statewide totals above are complete.</div>`);
+      <div class="reporting">County map: ${counted} of 115 counties.${redoTxt} The statewide totals above are complete.${corrNote(rc.name)}</div>`);
   } else {
     const {model,ch}=current;
     const tight=model.seats.filter(s=>s.tight).sort((a,b)=>a.s.margin-b.s.margin);
@@ -527,12 +546,12 @@ function drawSummary(){
     const tp=vD+vR, pD=vD/tp*100, pR=vR/tp*100;
       el.html(`<div class="kicker">${ch.label} · all ${model.up} races</div><h2>Closest races</h2>
       <p class="sub">Margins under 3 points, from the statewide count.</p>
-      ${tight.length? `<table class="minitable">${tight.map(s=>`<tr data-d="${s.d}" style="cursor:pointer"><td>${ch.prefix} ${s.d}${s.flip?` <span class="badge" style="background:${solid(famP(s.party))}">flip</span>`:''}${s.close?' <span class="badge close">recount range</span>':''}</td><td>${s.s.lead.choice} (${s.s.lead.party})</td><td class="r num">+${s.s.margin.toFixed(2)}</td></tr>`).join('')}</table>` : '<div class="detail-empty">None.</div>'}
+      ${tight.length? `<table class="minitable">${tight.map(s=>`<tr data-d="${s.d}" style="cursor:pointer"><td>${ch.prefix} ${s.d}${s.flip?' '+badge('flip',famP(s.party)):''}${s.close?' <span class="badge close">recount range</span>':''}</td><td>${s.s.lead.choice} (${s.s.lead.party})</td><td class="r num">+${s.s.margin.toFixed(2)}</td></tr>`).join('')}</table>` : '<div class="detail-empty">None.</div>'}
       <div class="kicker" style="margin-top:16px">Two-party vote · ${contested.length} D-vs-R race${contested.length===1?'':'s'}</div>
       <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;gap:2px;margin:8px 0 6px"><i style="width:${pD}%;background:${solid('D')}"></i><i style="width:${pR}%;background:${solid('R')}"></i></div>
       <table class="minitable">
-        <tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${solid('D')};margin-right:6px"></span>Democratic</td><td class="r num">${fmt(vD)}</td><td class="r num"><b>${pct(pD)}</b></td></tr>
-        <tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${solid('R')};margin-right:6px"></span>Republican</td><td class="r num">${fmt(vR)}</td><td class="r num"><b>${pct(pR)}</b></td></tr>
+        <tr><td>${sq(solid('D'))}Democratic</td><td class="r num">${fmt(vD)}</td><td class="r num"><b>${pct(pD)}</b></td></tr>
+        <tr><td>${sq(solid('R'))}Republican</td><td class="r num">${fmt(vR)}</td><td class="r num"><b>${pct(pR)}</b></td></tr>
       </table>
       <p class="sub" style="margin-top:8px">${onlyD||onlyR?`Not counted: ${[onlyD?`${onlyD} race${onlyD===1?'':'s'} with no Republican on the ballot`:'',onlyR?`${onlyR} with no Democrat`:''].filter(Boolean).join(' and ')}. Including races without both parties would skew the totals. `:''}Third-party votes are left out of the two-party share.</p>`);
     el.selectAll('tr[data-d]').on('click',function(){ select(this.dataset.d,true); });
@@ -544,20 +563,23 @@ function drawDetail(){
   if(!id){ el.html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over the map${current.kind==='chamber'?' or a seat':''} for a quick look. Click to pin results here.</p>`); return; }
   if(current.kind==='statewide'){
     const s=current.sums.get(id);
-    el.html(`<div style="display:flex;justify-content:space-between;align-items:start;gap:8px"><div><div class="kicker">${current.rc.name}</div><h2>${countyFull(id)}</h2></div><button class="iconbtn sq" id="clearSel" aria-label="Clear selection">${ico('x')}</button></div>
+    const fix=corrFor(current.rc.name).find(c=>countyByKey.get(norm(c.county))===id);
+    el.html(`${detailHead(current.rc.name, countyFull(id))}
       ${s? candRows(s,{noCheck:true}) : `<div class="detail-empty">${haveCounty.has(id)?'No results for this race here.':missingMsg(id)+'. The statewide totals already include it.'}</div>`}
-      ${id==='29095'&&s? kcBreakdown(current.rc) : ''}${popCenters(id).replace('class="pc"','class="reporting"')}`);
+      ${fix?`<div class="reporting" style="color:var(--accent-pink)">${esc(fix.note)}</div>`:''}
+      ${id==='29095'&&s? kcBreakdown(current.rc) : ''}${popCenters(id,'reporting')}`);
   } else {
     const seat=current.byD.get(id), ch=current.ch;
-    let h=`<div style="display:flex;justify-content:space-between;align-items:start;gap:8px"><div><div class="kicker">${ch.label}</div><h2>${ch.long} ${id}</h2></div><button class="iconbtn sq" id="clearSel" aria-label="Clear selection">${ico('x')}</button></div>`;
+    let h=detailHead(ch.label, `${ch.long} ${id}`);
     if(!seat.raced){ h+=`<p class="sub">Not on the ballot in 2026.</p><div class="cand"><div class="nm">${seat.prevName}<span class="pty">${partyName(seat.prev)}</span></div><div></div></div>`; }
     else{
-      const tags=[]; if(seat.flip) tags.push(`<span class="badge" style="background:${solid(famP(seat.party))}">${seat.prev} to ${seat.party} flip</span>`); if(seat.close) tags.push('<span class="badge close">Recount range</span>');
-      h+=`<p class="sub">Previously held by ${seat.prevName.startsWith('Vacant')?seat.prevName.replace('Vacant','vacant, last held by').replace(/[()]/g,''):seat.prevName} (${seat.prev})</p>${tags.length?`<div style="margin:-4px 0 8px;display:flex;gap:6px">${tags.join('')}</div>`:''}`;
-      h+=candRows(seat.s,{inc:c=>!seat.prevName.startsWith('Vacant') && lastName(c.choice)===lastName(seat.prevName) && c.choice.trim().split(/\s+/)[0].toLowerCase()===seat.prevName.trim().split(/\s+/)[0].toLowerCase()});
+      const tags=[]; if(seat.flip) tags.push(badge(`${seat.prev} to ${seat.party} flip`, famP(seat.party))); if(seat.close) tags.push('<span class="badge close">Recount range</span>');
+      h+=`<p class="sub">Previously held by ${seat.prevName.startsWith('Vacant')?seat.prevName.replace('Vacant','vacant, last held by').replace(/[()]/g,''):seat.prevName} (${seat.prev})</p>${tags.length?`<div class="tags">${tags.join('')}</div>`:''}`;
+      h+=candRows(seat.s,{inc:c=>isIncumbent(c.choice, seat.prevName)});
       if(seat.close) h+=`<div class="reporting" style="color:var(--accent-pink)">The margin is under 0.5% of votes cast, so the trailing candidate can ask for a recount after the results are certified (RSMo § 115.601).</div>`;
       const rc=store.get(ch.race+'|'+id), cr=countyResults(rc);
-      if(cr.size) h+=`<div class="kicker" style="margin-top:14px">By county (collected files)</div><table class="minitable">${[...cr].map(([cid,res])=>{const ss=summarize(res);return `<tr><td>${countyFull(cid)}${cid==='29095'&&rc.units.has('county:KC')?' <span style="color:var(--muted);font-size:11px">(incl. KC board)</span>':''}</td><td class="r num">${ss.lead?`${lastName(ss.lead.choice).replace(/^./,m=>m.toUpperCase())} +${ss.margin.toFixed(1)}`:'—'}</td><td class="r num" style="color:var(--muted)">${fmt(ss.total)}</td></tr>`;}).join('')}</table>`;
+      const fixed=new Set(corrFor(ch.race).map(c=>countyByKey.get(norm(c.county))));
+      if(cr.size) h+=`<div class="kicker" style="margin-top:14px">By county</div><table class="minitable">${[...cr].map(([cid,res])=>{const ss=summarize(res);return `<tr><td>${countyFull(cid)}${cid==='29095'&&rc.units.has('county:KC')?' '+muted('(incl. KC board)',true):''}${fixed.has(cid)?' '+muted('(county clerk count)',true):''}</td><td class="r num">${ss.lead?`${lastName(ss.lead.choice).replace(/^./,m=>m.toUpperCase())} +${ss.margin.toFixed(1)}`:'—'}</td><td class="r num muted">${fmt(ss.total)}</td></tr>`;}).join('')}</table>`;
     }
     h+=distCenters(current.layer,id,'reporting');
     el.html(h);
@@ -584,11 +606,26 @@ function localFill(list){
   const n=list.length; const step=n>=8?3:n>=4?2:n>=2?1:0; return css(`--O${step}`);
 }
 function yesPct(m){ if(m.yes_pct!=null) return +m.yes_pct; if(m.yes_votes!=null&&m.no_votes!=null&&(m.yes_votes+m.no_votes)>0) return m.yes_votes/(m.yes_votes+m.no_votes)*100; return null; }
-function thresholdPct(t){ t=String(t||''); if(/4\/7/.test(t)) return 57.14; if(/2\/3|two-thirds/i.test(t)) return 66.67; return 50; }
+// pass line for the yes bar; null when the threshold isn't known
+function thresholdPct(t){
+  t=String(t||'');
+  if(/^(unknown|not stated)/i.test(t)) return null;
+  if(/4\/7/.test(t)) return 57.14;
+  if(/2\/3|two-thirds/i.test(t)) return 66.67;
+  const m=t.match(/^(\d+(?:\.\d+)?)%/); if(m) return +m[1];
+  return 50;
+}
+// what we know about a county with no measures in the current filter
+function noMeasuresText(id){
+  if(state.cat!=='All') return 'No local measures in this category';
+  if(UNCHECKED.has(id)) return 'Not fully checked: '+esc(UNCHECKED.get(id));
+  if(NOTFOUND.has(id)) return 'Checked: no local measures found';
+  return 'No local measures found (not every county source was available)';
+}
 function localTip(id){
   const L=current.sums.get(id);
   let h=`<h4>${countyFull(id)}</h4>`;
-  if(!L||!L.length){ h+=`<div style="color:var(--muted)">${UNCHECKED.has(id)?'Not fully checked: '+esc(UNCHECKED.get(id)):NOTFOUND.has(id)?'No local measures found':'No local measures found'}${state.cat!=='All'?' in this category':''}</div>`; return h+popCenters(id); }
+  if(!L||!L.length) return h+`<div class="muted">${noMeasuresText(id)}</div>`+popCenters(id);
   L.slice(0,7).forEach(m=>{ const y=yesPct(m); h+=`<div style="display:flex;gap:6px;align-items:baseline;padding:2px 0"><span class="res ${m.result}" style="font-size:9px">${m.result==='unknown'?'?':ico(m.result==='passed'?'check':'x')}</span><span><b>${esc(m.jurisdiction)}</b> ${esc(m.measure)} <span style="color:var(--muted)">· ${esc(catLabel(m.category))}${y!=null?` · ${y.toFixed(0)}% yes`:''}</span></span></div>`; });
   if(L.length>7) h+=`<div class="foot">+${L.length-7} more · click for all</div>`;
   return h+popCenters(id);
@@ -619,15 +656,15 @@ function measureCard(m){
   const y=yesPct(m), th=thresholdPct(m.threshold);
   return `<div class="lm"><div class="hd"><div><span class="jn">${esc(m.jurisdiction)}</span> <span class="mn">${esc(m.measure)} · ${esc(catLabel(m.category))}</span></div><span class="res ${m.result}">${resWord(m.result)}</span></div>
     <div class="ds">${esc(m.description)}</div>
-    ${y!=null?`<div class="meta num">Yes ${y.toFixed(1)}%${m.yes_votes!=null?` (${fmt(m.yes_votes)} – ${fmt(m.no_votes)})`:''} · needs ${esc(m.threshold||'majority')}</div><div class="ybar"><i style="width:${y}%"></i><b style="left:${th}%"></b></div>`:`<div class="meta">Needs ${esc(m.threshold||'majority')}</div>`}
+    ${y!=null?`<div class="meta num">Yes ${y.toFixed(1)}%${m.yes_votes!=null?` (${fmt(m.yes_votes)} – ${fmt(m.no_votes)})`:''} · needs ${esc(m.threshold||'majority')}</div><div class="ybar"><i style="width:${y}%"></i>${th!=null?`<b style="left:${th}%"></b>`:''}</div>`:`<div class="meta">Needs ${esc(m.threshold||'majority')}</div>`}
     <div class="meta" style="margin-top:4px">${esc(m.jurisdiction_type)}${m.result_note?` · ${esc(m.result_note)}`:''} · ${(m.sources||[]).slice(0,3).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(host(u))}</a>`).join(' · ')}</div></div>`;
 }
 function localDetail(el,id){
   if(!id){ el.html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over a county for a quick look. Click to see every measure there, with descriptions and sources.</p>`); return; }
   const L=current.sums.get(id)||[];
-  el.html(`<div style="display:flex;justify-content:space-between;align-items:start;gap:8px"><div><div class="kicker">Local measures${state.cat!=='All'?' · '+esc(catLabel(state.cat)):''}</div><h2>${countyFull(id)}</h2></div><button class="iconbtn sq" id="clearSel" aria-label="Clear selection">${ico('x')}</button></div>
-    ${L.length? L.slice().sort((a,b)=>(a.jurisdiction_type==='county'?0:1)-(b.jurisdiction_type==='county'?0:1)||a.jurisdiction.localeCompare(b.jurisdiction)).map(measureCard).join('') : `<p class="detail-empty">${UNCHECKED.has(id)?'Couldn’t fully check this county: '+esc(UNCHECKED.get(id)):'No local measures found for this county.'}</p>`}
-    ${popCenters(id).replace('class="pc"','class="reporting"')}`);
+  el.html(`${detailHead(`Local measures${state.cat!=='All'?' · '+esc(catLabel(state.cat)):''}`, countyFull(id))}
+    ${L.length? L.slice().sort((a,b)=>(a.jurisdiction_type==='county'?0:1)-(b.jurisdiction_type==='county'?0:1)||a.jurisdiction.localeCompare(b.jurisdiction)).map(measureCard).join('') : `<p class="detail-empty">${noMeasuresText(id)}.</p>`}
+    ${popCenters(id,'reporting')}`);
   d3.select('#clearSel').on('click',()=>select(null));
 }
 let lSort='county', lDir=1;
@@ -668,13 +705,13 @@ function drawTable(){
     .attr('aria-sort',d=>sortKey===d[0]?(sortDir>0?'ascending':'descending'):null)
     .on('click',(e,d)=>{ if(sortKey===d[0]) sortDir*=-1; else { sortKey=d[0]; sortDir=(d[2]||d[0]==='flip')?-1:1; } drawTable(); });
   const tb=T.append('tbody');
-  const marginCell=s=> s&&s.total? (s.uncontested?'<span style="color:var(--muted)">Uncontested</span>':`<span class="lean num" style="background:${fillFor(s)};color:${s.margin>=15?css('--on-strong'):'var(--fg)'}">+${s.margin.toFixed(1)}</span>`) : '';
+  const marginCell=s=> s&&s.total? (s.uncontested?muted('Uncontested'):`<span class="lean num" style="background:${fillFor(s)};color:${s.margin>=15?css('--on-strong'):'var(--fg)'}">+${s.margin.toFixed(1)}</span>`) : '';
   tb.selectAll('tr').data(data).join('tr').attr('data-id',d=>d.id).classed('sel',d=>d.id===state.selected)
     .html(d=>{ const s=d.s;
-      if(current.kind==='statewide') return `<td>${d.name}</td><td>${s&&s.lead?`${s.lead.choice}${s.lead.party&&s.lead.party!=='W'?` <span style="color:var(--muted);font-size:11px">${s.lead.party}</span>`:''}`:`<span style="color:var(--muted)">${haveCounty.has(d.id)?'—':(redo.has(d.id)?'Being re-collected':'Not collected yet')}</span>`}</td><td class="r">${marginCell(s)}</td><td class="r num">${s&&s.total?fmt(s.total):''}</td><td class="r num">${d.rep>=0?Math.round(d.rep)+'%':''}</td>`;
+      if(current.kind==='statewide') return `<td>${d.name}</td><td>${s&&s.lead?`${s.lead.choice}${s.lead.party&&s.lead.party!=='W'?' '+muted(s.lead.party,true):''}`:muted(haveCounty.has(d.id)?'—':(redo.has(d.id)?'Being re-collected':'Not collected yet'))}</td><td class="r">${marginCell(s)}</td><td class="r num">${s&&s.total?fmt(s.total):''}</td><td class="r num">${d.rep>=0?Math.round(d.rep)+'%':''}</td>`;
       const seat=d.seat;
-      if(!seat.raced) return `<td>${ch.prefix} ${d.name}</td><td style="color:var(--muted)">${seat.prevName} (${seat.prev}) · not up</td><td></td><td>${seat.prev}</td><td></td><td></td>`;
-      return `<td>${ch.prefix} ${d.name}</td><td>${s.lead.choice} <span style="color:var(--muted);font-size:11px">${s.lead.party}</span>${seat.close?' <span class="badge close">recount range</span>':''}</td><td class="r">${marginCell(s)}</td><td>${seat.prev}</td><td>${seat.flip?`<span class="badge" style="background:${solid(famP(seat.party))}">${seat.prev} to ${seat.party}</span>`:''}</td><td class="r num">${fmt(s.total)}</td>`; })
+      if(!seat.raced) return `<td>${ch.prefix} ${d.name}</td><td class="muted">${seat.prevName} (${seat.prev}) · not up</td><td></td><td>${seat.prev}</td><td></td><td></td>`;
+      return `<td>${ch.prefix} ${d.name}</td><td>${s.lead.choice} ${muted(s.lead.party,true)}${seat.close?' <span class="badge close">recount range</span>':''}</td><td class="r">${marginCell(s)}</td><td>${seat.prev}</td><td>${seat.flip?badge(`${seat.prev} to ${seat.party}`,famP(seat.party)):''}</td><td class="r num">${fmt(s.total)}</td>`; })
     .attr('tabindex',0).attr('role','button')
     .on('click',(e,d)=>select(d.id)).on('keydown',(e,d)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(d.id); } })
     .on('mouseenter',(e,d)=>gUnits.selectAll('path.unit').filter(f=>f.properties.id===d.id).classed('hl',true).raise())
@@ -693,14 +730,15 @@ function select(id,force){
 function drawStatus(){
   const t = META.statewide_asof ? META.statewide_asof.replace(/:\d\d (?=[AP]M)/,' ') : '';
   d3.select('#statusText').text(`Unofficial results · MO Secretary of State · as of ${t}`);
-  d3.select('#foot').html(`Results: Missouri Secretary of State election-night reporting (enr.sos.mo.gov), unofficial, statewide count as of ${META.statewide_asof}. County maps use ${[...haveCounty].filter(id=>id!=='KC').length} of 115 county result files${haveCounty.has('KC')?' plus the Kansas City Election Board’s count':''}, which covers only KC’s Jackson County part and is added into Jackson County.${redo.size?` ${[...redo].map(countyFull).join(', ')}: the collected files were duplicates of other counties, so they’re blank on the map until re-collected (statewide and district totals already include them).`:''} A check mark means a candidate is ahead with all precincts reported. These are not certified results.<br>
+  const corr = CORRECTIONS.length ? ` Where the state feed has a clear error, the county clerk’s own report is used instead: ${CORRECTIONS.map(c=>esc(c.note)).join(' ')} Statewide and district totals add up the corrected county figures.` : '';
+  d3.select('#foot').html(`Results: Missouri Secretary of State election-night reporting (enr.sos.mo.gov), unofficial, as of ${META.statewide_asof}.${corr} County maps use ${[...haveCounty].filter(id=>id!=='KC').length} of 115 county result files${haveCounty.has('KC')?' plus the Kansas City Election Board’s count':''}, which covers only KC’s Jackson County part and is added into Jackson County.${redo.size?` ${[...redo].map(countyFull).join(', ')}: the collected files were duplicates of other counties, so they’re blank on the map until re-collected (statewide and district totals already include them).`:''} A check mark means a candidate is ahead with all precincts reported. These are not certified results.<br>
   Flips are measured against the party holding each seat before the election. Vacant seats count for the party that last held them (House 95, 110, 114, 149 and 160, and Senate 10, all Republican). Recount range: under 0.5% of votes cast (RSMo § 115.601).<br>
   Population centers: Census 2024 city estimates for counties; 2020 Census block counts for districts. Boundaries: U.S. Census Bureau 2025 cartographic boundary files (counties; 2022 congressional plan, in effect for this election; current State Senate and State House districts). ${SOURCES}`);
 }
 
 // ---------- hash ----------
 function syncHash(){ const h = state.view==='statewide' ? (state.race? 'race-'+slug(state.race) : '') : state.view; try{ history.replaceState(null,'',h?'#'+h:location.pathname); }catch(e){} }
-function readHash(){ const h=location.hash.slice(1); if(!h) return; if(CHAMBERS.find(c=>c.id===h)||h==='local-issues'){ state.view=h; return; } if(h.startsWith('race-')){ state.view='statewide'; const r=statewideRaces().find(r=>slug(r.name)===h.slice(5)); if(r) state.race=r.name; } }
+function readHash(){ const h=location.hash.slice(1); if(!h){ state.view='statewide'; return; } if(CHAMBERS.find(c=>c.id===h)||h==='local-issues'){ state.view=h; return; } if(h.startsWith('race-')){ state.view='statewide'; const r=statewideRaces().find(r=>slug(r.name)===h.slice(5)); if(r) state.race=r.name; } }
 addEventListener('hashchange',()=>{ readHash(); state.selected=null; render(); });
 
 readHash(); render();

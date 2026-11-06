@@ -1,5 +1,5 @@
 {
- "statewide_asof": "11/3/2026 11:54:46 PM",
+ "statewide_asof": "11/5/2026 6:30:23 PM",
  "counties": {
   "Adair": {
    "file": "adair.txt",
@@ -582,5 +582,35 @@
    "races": 10
   }
  },
- "needs_redownload": []
+ "needs_redownload": [],
+ "corrections": [
+  {
+   "county": "Andrew",
+   "note": "All races use the Andrew County Clerk's 9:31 p.m. summary; the SOS feed is missing about 175 ballots.",
+   "races": [
+    "*"
+   ]
+  },
+  {
+   "county": "Osage",
+   "note": "Proposition A Yes is 2,677 per the Osage County Clerk; the SOS feed shows 3,677, which is more votes than ballots cast.",
+   "races": [
+    "Proposition A"
+   ]
+  },
+  {
+   "county": "Linn",
+   "note": "Proposition A is 1,702 Yes, 1,822 No per the Linn County Clerk; the SOS feed shifted the No and undervote rows.",
+   "races": [
+    "Proposition A"
+   ]
+  },
+  {
+   "county": "Randolph",
+   "note": "State Auditor Wilson is 2,001 per the Randolph County Clerk; the SOS feed shows 1,001.",
+   "races": [
+    "State Auditor"
+   ]
+  }
+ ]
 }

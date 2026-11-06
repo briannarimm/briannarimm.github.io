@@ -106,6 +106,11 @@ nav.primary button[aria-selected="true"] { background: var(--card); border-color
 .iconbtn { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.82rem; font-weight: 500; color: var(--muted); padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); transition: color 0.2s, border-color 0.2s, transform 0.2s; }
 .iconbtn:hover { color: var(--fg); border-color: var(--hover-line); transform: translateY(-1px); }
 .iconbtn.sq { padding: 0.35rem 0.5rem; }
+.muted { color: var(--muted); }
+.muted.sm { font-size: 11px; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.dhead { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.tags { margin: -4px 0 8px; display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* ---------- layout ---------- */
 main { padding: 0.6rem max(1rem, 2vw) 3rem; }

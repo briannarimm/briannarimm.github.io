@@ -578,7 +578,7 @@
   {
    "county": "Caldwell",
    "jurisdiction": "Golden Age Nursing Home District",
-   "jurisdiction_type": "other district",
+   "jurisdiction_type": "special district",
    "measure": "Proposition 1",
    "category": "property tax",
    "description": "Raises the nursing home district levy from $0.3022 to $0.35 per $100 assessed value. The district also appears on Carroll and Ray County ballots.",
@@ -739,7 +739,7 @@
   {
    "county": "Nodaway",
    "jurisdiction": "White Cloud Township",
-   "jurisdiction_type": "other district",
+   "jurisdiction_type": "special district",
    "measure": "Zoning regulations question",
    "category": "other",
    "description": "Asks whether White Cloud Township should implement zoning regulations.",
@@ -798,7 +798,7 @@
   {
    "county": "Dunklin",
    "jurisdiction": "Dunklin County Public Water Supply District No. 1",
-   "jurisdiction_type": "other district",
+   "jurisdiction_type": "special district",
    "measure": "Question 1",
    "category": "bond",
    "description": "$12 million in waterworks revenue bonds to build, extend and improve the water district's system, repaid only from water system revenues.",
@@ -1064,7 +1064,7 @@
   {
    "county": "Stone",
    "jurisdiction": "Stone County Public Water Supply District No. 1",
-   "jurisdiction_type": "other district",
+   "jurisdiction_type": "special district",
    "measure": "Stone PWSD No. 1 Question (dissolution/sale)",
    "category": "other",
    "description": "Dissolves the water district and sells/transfers its system and assets to Missouri-American Water Company, which would then serve the district's customers.",
@@ -1547,7 +1547,7 @@
   {
    "county": "Lafayette",
    "jurisdiction": "Sni Valley Fire Protection District",
-   "jurisdiction_type": "special district",
+   "jurisdiction_type": "fire protection district",
    "measure": "Sni Valley Fire Protection District Question",
    "category": "sales tax",
    "description": "Sni Valley Fire Protection District question (also on the ballot in Jackson County).",
@@ -1608,7 +1608,7 @@
    "no_votes": 734,
    "yes_pct": 52.4,
    "result": "passed",
-   "result_note": "Unofficial; Macon County Electionware summary.",
+   "result_note": "Unofficial; Macon County Electionware summary with 11 of 12 Election Day precincts and all absentee ballots counted. The outstanding precinct may not be inside the city.",
    "sources": [
     "County clerk unofficial results PDF (results-4 upload), Nov 3, 2026",
     "https://www.ballotready.org/measures/question-1-83109cce-d933-4e03-9db8-f771c0ec8281",
@@ -1636,7 +1636,7 @@
   {
    "county": "Lincoln",
    "jurisdiction": "Lincoln County Ambulance District",
-   "jurisdiction_type": "special district",
+   "jurisdiction_type": "ambulance district",
    "measure": "Proposition EMS (bonds)",
    "category": "bond",
    "description": "$20 million in general obligation bonds for a new ambulance base near Hawk Point, an eighth ambulance and equipment; district says no tax rate increase.",
@@ -1654,24 +1654,25 @@
   {
    "county": "Lincoln",
    "jurisdiction": "Elsberry Fire Protection District",
-   "jurisdiction_type": "special district",
+   "jurisdiction_type": "fire protection district",
    "measure": "Proposition F (tax levy)",
    "category": "property tax",
    "description": "Tax levy increase for the Elsberry Fire Protection District.",
    "threshold": "simple majority",
-   "yes_votes": 817,
+   "yes_votes": 829,
    "no_votes": 542,
-   "yes_pct": 60.12,
+   "yes_pct": 60.47,
    "result": "passed",
-   "result_note": "Unofficial; Lincoln County Clerk (Clarity), 3 precincts.",
+   "result_note": "Unofficial; Lincoln County portion 817-542 (Clarity) plus Pike County portion 12-0 (Pike County clerk summary).",
    "sources": [
-    "https://results.enr.clarityelections.com/MO/Lincoln/127552/"
+    "https://results.enr.clarityelections.com/MO/Lincoln/127552/",
+    "Pike County clerk unofficial summary (Nov 5 upload)"
    ]
   },
   {
    "county": "Henry",
    "jurisdiction": "Tightwad Fire Protection District",
-   "jurisdiction_type": "special district",
+   "jurisdiction_type": "fire protection district",
    "measure": "Question 1 (additional sales tax)",
    "category": "sales tax",
    "description": "Additional sales tax for the Tightwad Fire Protection District (district Resolution 26-06).",
@@ -1689,7 +1690,7 @@
   {
    "county": "Henry",
    "jurisdiction": "Tightwad Fire Protection District",
-   "jurisdiction_type": "special district",
+   "jurisdiction_type": "fire protection district",
    "measure": "Question 2 (local use tax)",
    "category": "use tax",
    "description": "Local use tax on out-of-state and online purchases for the Tightwad Fire Protection District (district Resolution 26-07).",
@@ -1724,7 +1725,7 @@
   {
    "county": "Newton",
    "jurisdiction": "Seneca Area Fire Protection District",
-   "jurisdiction_type": "special district",
+   "jurisdiction_type": "fire protection district",
    "measure": "Proposition 2 (tax levy)",
    "category": "property tax",
    "description": "25-cent per $100 assessed value levy for the rural Seneca/Racine fire district; first levy increase since 1988.",
@@ -1825,15 +1826,17 @@
   "Gentry",
   "Howard",
   "Howell",
-  "Jasper",
+  "Laclede",
   "Lawrence",
   "Marion",
   "Miller",
   "Moniteau",
   "Oregon",
+  "Osage",
   "Perry",
   "Pettis",
   "Phelps",
+  "Pulaski",
   "Putnam",
   "Randolph",
   "Ripley",
@@ -1841,6 +1844,7 @@
   "Scott",
   "Shannon",
   "St. Francois",
+  "Ste. Genevieve",
   "Sullivan",
   "Vernon",
   "Warren",
@@ -1848,16 +1852,8 @@
  ],
  "unchecked": [
   {
-   "county": "Osage",
-   "why": "News Tribune-hosted county results PDF is a scanned image with no readable text; no other source found."
-  },
-  {
    "county": "Maries",
    "why": "County clerk results PDF (via News Tribune) is a scanned image; no other source found."
-  },
-  {
-   "county": "Pulaski",
-   "why": "Sample ballot is a Google Drive file that could not be read; county site blocked to fetcher. KY3 results list only a 911 board race for Pulaski (suggests none, unconfirmed)."
   },
   {
    "county": "St. Clair",
@@ -1866,14 +1862,6 @@
   {
    "county": "Camden (city measures)",
    "why": "Camden publication ballot shows only the two fire district questions; no city measures found for Osage Beach, Camdenton, Lake Ozark."
-  },
-  {
-   "county": "Ste. Genevieve",
-   "why": "Sample ballot PDF is scanned image (no readable text); no results posted; no news found"
-  },
-  {
-   "county": "Pike",
-   "why": "Nov 3 materials only available as a zip package on pikemocountyclerk.org; could not open; no news found"
   },
   {
    "county": "Gasconade",
@@ -1973,15 +1961,7 @@
   },
   {
    "county": "Newton",
-   "why": "Seneca Area FPD and Diamond found via KOAM. BallotReady lists Newton County 'Proposition 2' and 'Proposition 3' (additional tax); Proposition 3 is not identified."
-  },
-  {
-   "county": "McDonald",
-   "why": "Publication ballot PDF text yields only headers; unofficial results PDF (posted Nov 4) is image-only. Propositions text shows only statewide items. No local measure confirmed either way."
-  },
-  {
-   "county": "Laclede",
-   "why": "Sample ballots and unofficial results exist only as Google Drive files that could not be read. KY3 tracker lists no Laclede questions."
+   "why": "Seneca Area FPD and Diamond found via KOAM; KOAM's full Newton list shows no other questions, so BallotReady's 'Proposition 3' may be stale."
   },
   {
    "county": "Cedar",
@@ -2006,10 +1986,6 @@
   {
    "county": "Wright",
    "why": "Sample ballot only as KY3 gallery images (unreadable). KY3 results tracker lists no Wright questions."
-  },
-  {
-   "county": "Greene (completeness)",
-   "why": "Composite ballot lists only Springfield's four charter questions as local issues, so other Greene cities and districts appear to have none."
   }
  ],
  "notes": {
