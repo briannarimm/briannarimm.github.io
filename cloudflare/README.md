@@ -74,7 +74,7 @@ For each repository, open `wrangler.jsonc` and remove the two `//` characters at
 "routes": [{ "pattern": "www.briannaimm.com/CodePix*", "zone_name": "briannaimm.com" }],
 ```
 
-Commit the change to `main`. Cloudflare builds the Worker again and adds the route. The build log may show the warning "The following routes will attempt to serve Assets on a configured path". That is expected: the `base_path` setting maps the path, as Cloudflare documents for serving a subdirectory. Keep the routes in the file, so the file stays the record of what each Worker serves.
+Commit the change to `main`. Cloudflare builds the Worker again and adds the route. The build log shows the warning "The following routes will attempt to serve Assets on a configured path", for example `.cloudflare-dist/CodePix*`. That is expected: each project build puts its files in a folder with the same name as its path. Keep the routes in the file, so the file stays the record of what each Worker serves.
 
 Then check the live addresses:
 
@@ -103,4 +103,4 @@ These steps are optional.
 * **Publish a change:** push to `main`, as now. Cloudflare builds and deploys the Worker. Each Worker's **Deployments** tab shows the builds.
 * **Previews:** a push to any other branch makes a preview build with its own link. In CodePix, a branch other than `main` builds the release candidate (the `rc` channel, saved under `codepix-save-rc`).
 * **CodePix checks:** GitHub Actions still runs the CodePix checks. Cloudflare only builds.
-* **Build tools:** the Workers use the newest Wrangler. The `base_path` setting needs Wrangler 4.148 or later. Wrangler 4.158 was the newest when this guide was written.
+* **Project folders:** each project build writes its files to `.cloudflare-dist/<path>/`, for example `.cloudflare-dist/CodePix/`. A request for `/CodePix/` finds them by path. (Cloudflare's `base_path` setting would do the same job, but it is not turned on for this account: deploys failed with error 100343.)
