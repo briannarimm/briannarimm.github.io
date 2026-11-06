@@ -545,6 +545,7 @@ const firstName = n => String(n).trim().split(/\s+/)[0].toLowerCase();
 const isIncumbent = (cand, holder) => !/^vacant/i.test(holder) && lastName(cand)===lastName(holder) && firstName(cand)===firstName(holder);
 function drawSummary(){
   const el=d3.select('#summary');
+  if(current.kind!=='offices') d3.select('#raceList').attr('hidden',true).html('');
   if(current.kind==='local') return localSummary(el);
   if(current.kind==='courts') return courtsSummary(el);
   if(current.kind==='offices') return officesSummary(el);
@@ -917,10 +918,23 @@ function officesSummary(el){
       <div class="side"><b class="num" style="font-size:30px;color:${deep('D')}">${won('D')}</b><span>Democratic</span></div>
       <div class="side"><b class="num" style="font-size:30px;color:var(--muted)">${won('O')}</b><span>other or no label</span></div>
     </div>
-    <div class="kicker" style="margin-top:8px">Contested races · ${close.length}, closest first</div>
-    ${close.length?`<table class="minitable">${close.slice(0,12).map(r=>`<tr data-id="${r.id}" style="cursor:pointer"><td>${esc(r.county.replace(/ County$/,''))} ${muted(esc(r.office),true)}</td><td>${esc(r.s.edge.choice)}${r.s.edge.party?' '+muted(esc(r.s.edge.party),true):''}</td><td class="r num">+${r.s.margin.toFixed(1)}</td></tr>`).join('')}</table>${close.length>12?`<p class="sub" style="margin-top:6px">${close.length-12} more in the table below.</p>`:''}`:'<div class="detail-empty">None in this group.</div>'}
-    <p class="sub" style="margin-top:10px">Unofficial election-night counts. Most county offices were uncontested. Sources without party labels show the candidate with no party.</p>`);
-  el.selectAll('tr[data-id]').on('click',function(){ select(this.dataset.id,true); });
+    <p class="sub" style="margin-top:10px">Unofficial election-night counts. Most county offices were uncontested. Sources without party labels show the candidate with no party.${close.length?` The ${close.length} contested race${close.length===1?' is':'s are'} listed below the map, closest first.`:''}</p>`);
+  raceList(close);
+}
+// contested county races, full width under the map and side panel
+let raceListAll=false;
+function raceList(close){
+  const el=d3.select('#raceList');
+  if(!close||!close.length){ el.attr('hidden',true).html(''); return; }
+  const N=24, show=raceListAll?close:close.slice(0,N);
+  el.attr('hidden',null).html(`<div class="rl-head"><div><div class="kicker">Contested races · ${esc(ocatLabel(state.ocat))}</div><h3>${close.length} contested, closest first</h3></div>
+    ${close.length>N?`<button type="button" class="rl-more">${raceListAll?'Show fewer':`Show all ${close.length}`}</button>`:''}</div>
+    <div class="rl-grid">${show.map(r=>`<button type="button" class="rl-item${r.id===state.selected?' sel':''}" data-id="${r.id}">
+      <span class="rl-where"><b>${esc(r.county.replace(/ County$/,''))}</b> <span class="muted">${esc(r.office)}</span></span>
+      <span class="rl-res"><span>${esc(r.s.edge.choice)}${r.s.edge.party&&r.s.edge.party!=='W'?' <span class="muted">'+esc(r.s.edge.party)+'</span>':''}</span><span class="num">+${r.s.margin.toFixed(1)}</span></span>
+    </button>`).join('')}</div>`);
+  el.selectAll('.rl-item').on('click',function(){ select(this.dataset.id,true); });
+  el.select('.rl-more').on('click',()=>{ raceListAll=!raceListAll; raceList(close); });
 }
 function officeCard(r){
   const s=r.s;
@@ -1001,6 +1015,7 @@ function select(id,force){
   gUnits.selectAll('path.unit').classed('sel',d=>d.properties.id===state.selected);
   gUnits.selectAll('.sel').raise();
   if(current.kind==='chamber') updateSeatSel();
+  d3.selectAll('#raceList .rl-item').classed('sel',function(){ return this.dataset.id===state.selected; });
   drawDetail(); drawTable();
 }
 function drawStatus(){

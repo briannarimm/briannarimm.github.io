@@ -277,6 +277,17 @@ footer p { margin: 0; }
 .js .reveal.in { opacity: 1; transform: none; }
 
 /* ---------- responsive ---------- */
+.racelist { margin-top: 1.25rem; padding: 1.2rem 1.4rem 1.3rem; }
+.rl-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 0.8rem; }
+.rl-head h3 { margin: 0.2rem 0 0; font-size: 1.05rem; }
+.rl-more { font-size: 0.82rem; font-weight: 500; padding: 0.34rem 0.85rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); white-space: nowrap; }
+.rl-more:hover { color: var(--fg); border-color: var(--hover-line); }
+.rl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr)); gap: 0 1.5rem; }
+.rl-item { display: flex; flex-direction: column; gap: 0.15rem; text-align: left; background: none; border: 0; border-top: 1px solid var(--border); padding: 0.5rem 0.25rem; font-size: 0.84rem; border-radius: 0; }
+.rl-item:hover, .rl-item.sel { background: var(--row); }
+.rl-where { line-height: 1.3; }
+.rl-res { display: flex; justify-content: space-between; gap: 0.6rem; color: var(--text-soft); }
+.rl-res .num { color: var(--muted); }
 @media (max-width: 64rem) { .grid, .chamber { grid-template-columns: 1fr; } }
 @media (max-width: 40rem) {
   main { padding-inline: 0.75rem; }
