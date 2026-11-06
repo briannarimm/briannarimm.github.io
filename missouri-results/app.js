@@ -584,6 +584,7 @@ function drawSummary(){
 }
 function drawDetail(){
   const el=d3.select('#detail'), id=state.selected;
+  if(current.kind!=='offices'){ d3.select('#countyCard').attr('hidden',true).html(''); el.attr('hidden',null); }
   if(current.kind==='local') return localDetail(el,id);
   if(current.kind==='courts') return courtsDetail(el,id);
   if(current.kind==='offices') return officesDetail(el,id);
@@ -944,14 +945,18 @@ function officeCard(r){
   return `<div class="lm"><div class="hd"><span class="jn">${esc(r.office)}</span>${isContested(r)?'<span class="res unknown">Contested</span>':''}</div>${body}${s&&r.note?`<div class="meta">${esc(r.note)}</div>`:''}</div>`;
 }
 function officesDetail(el,id){
-  if(!id){ el.html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over a county for a quick look. Click to see every county office we have for it.</p>`); return; }
+  // the county's offices go in a full-width card under the map; the side panel keeps only the hint
+  const card=d3.select('#countyCard');
+  if(!id){ card.attr('hidden',true).html(''); el.attr('hidden',null).html(`<div class="kicker">Details</div><p class="detail-empty" style="margin:6px 0 0">Hover over a county for a quick look. Click one to see every county office we have for it, below the map.</p>`); return; }
+  el.attr('hidden',true).html('');
   const c=OFFC.get(id), L=c? current.sums.get(id) : [];
-  el.html(`${detailHead(`County offices${state.ocat!=='all'?' · '+esc(ocatLabel(state.ocat)):''}`, countyFull(id))}
+  card.attr('hidden',null).html(`${detailHead(`County offices${state.ocat!=='all'?' · '+esc(ocatLabel(state.ocat)):''}`, countyFull(id))}
     ${!c? `<p class="detail-empty">No county-office results. ${esc(countyFull(id))} posted none for this election. Counties elect these offices on different cycles, and many don’t report uncontested races, so this can mean there was no county race or that nothing was reported.</p>`
-      : `<p class="sub">From ${esc(c.source)}.${c.partial?' This source lists only some races, so uncontested offices may be missing.':''}</p>${L.length? L.map(officeCard).join('') : `<p class="detail-empty">No ${esc(ocatLabel(state.ocat).toLowerCase())} race in this source.</p>`}`}
-    <p class="sub" style="margin-top:10px">Circuit and appellate judges from the state’s count are under Courts.</p>
-    ${popCenters(id,'reporting')}`);
+      : `<p class="sub">From ${esc(c.source)}.${c.partial?' This source lists only some races, so uncontested offices may be missing.':''}</p>${L.length? `<div class="cc-grid">${L.map(officeCard).join('')}</div>` : `<p class="detail-empty">No ${esc(ocatLabel(state.ocat).toLowerCase())} race in this source.</p>`}`}
+    <div class="cc-foot"><p class="sub">Circuit and appellate judges from the state’s count are under Courts.</p>${popCenters(id,'reporting')}</div>`);
   d3.select('#clearSel').on('click',()=>select(null));
+  const top=card.node().getBoundingClientRect().top;
+  if(top>innerHeight-140) scrollBy({top:top-90, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
 }
 let oSort='county', oDir=1;
 function officesTable(){

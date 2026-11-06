@@ -277,6 +277,10 @@ footer p { margin: 0; }
 .js .reveal.in { opacity: 1; transform: none; }
 
 /* ---------- responsive ---------- */
+.countycard { margin-top: 1.25rem; padding: 1.2rem 1.4rem 1.3rem; scroll-margin-top: 5rem; }
+.cc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 0 1.75rem; margin-top: 0.5rem; }
+.cc-grid .lm, .cc-grid .lm:first-of-type { border-top: 1px solid var(--border); }
+.cc-foot { margin-top: 0.6rem; }
 .racelist { margin-top: 1.25rem; padding: 1.2rem 1.4rem 1.3rem; }
 .rl-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 0.8rem; }
 .rl-head h3 { margin: 0.2rem 0 0; font-size: 1.05rem; }
