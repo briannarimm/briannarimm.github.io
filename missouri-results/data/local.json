@@ -333,16 +333,17 @@
    "category": "sales tax",
    "description": "Renews the quarter-cent COMBAT anti-crime sales tax for 10 years (to March 2037), funding drug treatment, prosecution, and detention. Countywide, including Kansas City (KCEB) voters.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": 72.0,
+   "yes_votes": 172660,
+   "no_votes": 66732,
+   "yes_pct": 72.12,
    "result": "passed",
-   "result_note": "Unofficial, as of ~10 p.m. Nov 3 (The Beacon); percentages only, no raw counts found. Neither the JCEB nor the KCEB results page had been updated when checked.",
+   "result_note": "Unofficial, KCTV5 (both election boards). Jackson County Election Board alone (outside Kansas City): 99,838 yes, 42,586 no.",
    "sources": [
     "https://thebeaconnews.org/stories/2026/11/03/jackson-county-combat-election-results-ballot-questions-2026/",
     "https://www.tonyskansascity.com/2026/11/jackson-county-passes-combat-anti-crime.html",
     "https://jcebmo.org/wp-content/uploads/11.03.26-Notice-of-Election-Sample-Ballot-Poster.pdf",
-    "https://www.kcur.org/politics-elections-and-government/2026-10-19/jackson-county-combat-sales-tax-election-guide"
+    "https://www.kcur.org/politics-elections-and-government/2026-10-19/jackson-county-combat-sales-tax-election-guide",
+    "https://www.kctv5.com/politics/election-results/"
    ]
   },
   {
@@ -353,15 +354,16 @@
    "category": "bond",
    "description": "$19.9 million in GO bonds to restore five city-owned historic sites (Bingham-Waggoner, Vaile Mansion, Truman Memorial Bldg, Old Fire Station 1, 1827 Log Courthouse). Residents would get free admission.",
    "threshold": "4/7 (57.14%) per KSHB; KCUR reported 60%",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": 69.0,
+   "yes_votes": 24164,
+   "no_votes": 11060,
+   "yes_pct": 68.6,
    "result": "passed",
-   "result_note": "Unofficial, as of ~10 p.m. Nov 3 (The Beacon); percentages only. It clears either reported threshold.",
+   "result_note": "Unofficial; Jackson County Election Board, 31/31 precincts. 68.6% clears either the 4/7 or 60% reading of the threshold.",
    "sources": [
     "https://thebeaconnews.org/stories/2026/11/03/jackson-county-combat-election-results-ballot-questions-2026/",
     "https://www.kshb.com/news/local-news/missouri/jackson-county/independence-voters-to-decide-on-19-9m-bond-to-restore-5-historic-city-owned-landmarks",
-    "https://www.kcur.org/politics-elections-and-government/2026-10-28/independence-bond-historic-buildings-landmarks-2026-election"
+    "https://www.kcur.org/politics-elections-and-government/2026-10-28/independence-bond-historic-buildings-landmarks-2026-election",
+    "https://www.livevoterturnout.com/ENR/jacksonmoenr/38/en/Index_38.html"
    ]
   },
   {
@@ -372,14 +374,15 @@
    "category": "use tax",
    "description": "Imposes a local use tax equal to the total local sales tax rate (2.5%) on online and out-of-state purchases, to fund streets and capital improvements.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": 36.0,
+   "yes_votes": 7945,
+   "no_votes": 13825,
+   "yes_pct": 36.5,
    "result": "failed",
-   "result_note": "Unofficial, ~10 p.m. Nov 3. The Beacon reported 64% no; the 36% yes is inferred from that.",
+   "result_note": "Unofficial; Jackson County Election Board, 18/18 precincts.",
    "sources": [
     "https://thebeaconnews.org/stories/2026/11/03/jackson-county-combat-election-results-ballot-questions-2026/",
-    "https://bluespringsgov.com/2731/Use-Tax-Election---November-3-2026"
+    "https://bluespringsgov.com/2731/Use-Tax-Election---November-3-2026",
+    "https://www.livevoterturnout.com/ENR/jacksonmoenr/38/en/Index_38.html"
    ]
   },
   {
@@ -390,16 +393,17 @@
    "category": "other",
    "description": "Asks whether the city should provide citywide residential trash collection with a single hauler, replacing residents' choice of provider. City is mainly in Jackson, partly in Cass.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": 36.0,
+   "yes_votes": 16693,
+   "no_votes": 29821,
+   "yes_pct": 35.89,
    "result": "failed",
-   "result_note": "Unofficial; The Beacon reported about 64% voting no in the Jackson County portion; the Cass County portion also voted no. No combined counts found. Cass County portion (2 precincts): 613 yes, 970 no (38.7%).",
+   "result_note": "Unofficial; Jackson County Election Board 16,080-28,851 (28/28 precincts) plus Cass County portion 613-970.",
    "sources": [
     "https://thebeaconnews.org/stories/2026/11/03/jackson-county-combat-election-results-ballot-questions-2026/",
     "https://casscounty.com/2375/Election-Results",
     "https://www.kshb.com/news/local-news/missouri/jackson-county/should-you-choose-your-trash-hauler-lees-summit-residents-to-vote-nov-3",
-    "Cass County clerk unofficial results PDF (results-4 upload)"
+    "Cass County clerk unofficial results PDF (results-4 upload)",
+    "https://www.livevoterturnout.com/ENR/jacksonmoenr/38/en/Index_38.html"
    ]
   },
   {
@@ -410,13 +414,14 @@
    "category": "sales tax",
    "description": "Imposes a 1% district sales tax for operations. Each year the property tax levy drops by 50% of the prior year's sales tax revenue.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "No result found; the JCEB results page had not been updated when checked.",
+   "yes_votes": 2618,
+   "no_votes": 1225,
+   "yes_pct": 68.12,
+   "result": "passed",
+   "result_note": "Unofficial; Jackson County portion only, 11/11 precincts (68.1%). The Lafayette portion is a separate entry; together they are 3,479-1,749 with two Lafayette precincts out, so the outcome is settled.",
    "sources": [
-    "https://jcebmo.org/wp-content/uploads/11.03.26-Notice-of-Election-Sample-Ballot-Poster.pdf"
+    "https://jcebmo.org/wp-content/uploads/11.03.26-Notice-of-Election-Sample-Ballot-Poster.pdf",
+    "https://www.livevoterturnout.com/ENR/jacksonmoenr/38/en/Index_38.html"
    ]
   },
   {
@@ -427,15 +432,16 @@
    "category": "charter/governance",
    "description": "Package of county-constitution changes: commissioner benefits, prosecutor and sheriff pay tied to judges' salaries, required elections for uncontested offices, shifts in appointment powers, and more administrator authority.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
+   "yes_votes": 39856,
+   "no_votes": 54179,
    "yes_pct": 42.38,
    "result": "failed",
-   "result_note": "Unofficial, not certified (KPGZ). 57.62% no out of 94,035 total votes. Precincts reporting not stated. No raw yes/no counts given.",
+   "result_note": "Unofficial; KCTV5, 100% reporting.",
    "sources": [
     "https://www.kearneycountry.com/kpgz-news/voters-decide-commission-seats-local-questions",
     "https://www.kshb.com/news/local-news/missouri/clay-county/clay-county-ballot-measure-would-give-commissioners-benefits-raise-sheriff-and-prosecutor-pay",
-    "https://www.kctv5.com/2026/10/26/kearney-clay-county-voters-weigh-propositions-p/"
+    "https://www.kctv5.com/2026/10/26/kearney-clay-county-voters-weigh-propositions-p/",
+    "https://www.kctv5.com/politics/election-results/"
    ]
   },
   {
@@ -446,14 +452,15 @@
    "category": "sales tax",
    "description": "Half-cent public safety sales tax (about $900K a year) for police retention, recruitment, and staffing. Takes effect April 2027 and expires after 25 years.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
+   "yes_votes": 2524,
+   "no_votes": 1933,
    "yes_pct": 56.63,
    "result": "passed",
-   "result_note": "Unofficial, not certified (KPGZ). 43.37% no out of 4,457 total votes. No raw counts given.",
+   "result_note": "Unofficial; Clay County Board of Election Commissioners, 5/5 polling places.",
    "sources": [
     "https://www.kearneycountry.com/kpgz-news/voters-decide-commission-seats-local-questions",
-    "https://www.kctv5.com/2026/10/26/kearney-clay-county-voters-weigh-propositions-p/"
+    "https://www.kctv5.com/2026/10/26/kearney-clay-county-voters-weigh-propositions-p/",
+    "https://www.kctv5.com/politics/election-results/"
    ]
   },
   {
@@ -464,14 +471,15 @@
    "category": "property tax",
    "description": "Property tax levy of $0.1790 per $100 assessed value for 10 years (2027-2036), for police personnel, equipment, vehicles, training, and communications.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "No result found; the Platte County results page still showed August as latest when checked.",
+   "yes_votes": 1510,
+   "no_votes": 2469,
+   "yes_pct": 37.95,
+   "result": "failed",
+   "result_note": "Unofficial; Platte County Board of Elections summary, 3/3 precincts.",
    "sources": [
     "https://static1.squarespace.com/static/561e88cee4b06543191f1ad2/t/6aa304205c50e57900fd5e8b/1789068320262/Election_Proof_Report_136.pdf",
-    "https://www.kctv5.com/2026/10/22/parkville-voters-decide-three-property-tax-propositions-nov-3/"
+    "https://www.kctv5.com/2026/10/22/parkville-voters-decide-three-property-tax-propositions-nov-3/",
+    "https://www.plattecountymovotes.gov/s/DOC110326-11032026214708.pdf"
    ]
   },
   {
@@ -482,14 +490,15 @@
    "category": "property tax",
    "description": "Property tax levy of $0.1280 per $100 assessed value for 10 years (2027-2036), for roads, sidewalks, and infrastructure.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "No result found.",
+   "yes_votes": 1676,
+   "no_votes": 2312,
+   "yes_pct": 42.03,
+   "result": "failed",
+   "result_note": "Unofficial; Platte County Board of Elections summary, 3/3 precincts.",
    "sources": [
     "https://static1.squarespace.com/static/561e88cee4b06543191f1ad2/t/6aa304205c50e57900fd5e8b/1789068320262/Election_Proof_Report_136.pdf",
-    "https://www.kctv5.com/2026/10/22/parkville-voters-decide-three-property-tax-propositions-nov-3/"
+    "https://www.kctv5.com/2026/10/22/parkville-voters-decide-three-property-tax-propositions-nov-3/",
+    "https://www.plattecountymovotes.gov/s/DOC110326-11032026214708.pdf"
    ]
   },
   {
@@ -500,14 +509,15 @@
    "category": "property tax",
    "description": "Property tax levy of $0.0820 per $100 assessed value for 20 years, to repair and replace city facilities, including the transportation building.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "No result found.",
+   "yes_votes": 1459,
+   "no_votes": 2498,
+   "yes_pct": 36.87,
+   "result": "failed",
+   "result_note": "Unofficial; KCTV5, 100% reporting (Platte summary page with Prop F not re-read).",
    "sources": [
     "https://static1.squarespace.com/static/561e88cee4b06543191f1ad2/t/6aa304205c50e57900fd5e8b/1789068320262/Election_Proof_Report_136.pdf",
-    "https://www.kctv5.com/2026/10/22/parkville-voters-decide-three-property-tax-propositions-nov-3/"
+    "https://www.kctv5.com/2026/10/22/parkville-voters-decide-three-property-tax-propositions-nov-3/",
+    "https://www.kctv5.com/politics/election-results/"
    ]
   },
   {
@@ -518,13 +528,14 @@
    "category": "use tax",
    "description": "Imposes a local use tax at the same rate as the village's total local sales tax.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "No result found.",
+   "yes_votes": 68,
+   "no_votes": 27,
+   "yes_pct": 71.58,
+   "result": "passed",
+   "result_note": "Unofficial; Platte County Board of Elections summary, 2/2 precincts.",
    "sources": [
-    "https://static1.squarespace.com/static/561e88cee4b06543191f1ad2/t/6aa304205c50e57900fd5e8b/1789068320262/Election_Proof_Report_136.pdf"
+    "https://static1.squarespace.com/static/561e88cee4b06543191f1ad2/t/6aa304205c50e57900fd5e8b/1789068320262/Election_Proof_Report_136.pdf",
+    "https://www.plattecountymovotes.gov/s/DOC110326-11032026214708.pdf"
    ]
   },
   {
@@ -554,13 +565,14 @@
    "category": "other",
    "description": "Asks whether Orrick should annex about 107 acres along Highway Z.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "No result found; Ray County clerk page showed August results as latest.",
+   "yes_votes": 64,
+   "no_votes": 207,
+   "yes_pct": 23.62,
+   "result": "failed",
+   "result_note": "Unofficial; Ray County clerk summary.",
    "sources": [
-    "https://raycountymo.com/wp-content/uploads/2026/09/Ray-Publication-11.03.26.pdf"
+    "https://raycountymo.com/wp-content/uploads/2026/09/Ray-Publication-11.03.26.pdf",
+    "Ray County clerk unofficial results PDF (results-4 upload)"
    ]
   },
   {
@@ -610,11 +622,12 @@
    "yes_votes": 1581,
    "no_votes": 1547,
    "yes_pct": 50.54,
-   "result": "unknown",
-   "result_note": "Unofficial; Carroll County 1,421-1,449 (13/13 precincts) plus Lafayette County portion 160-98 (4 of 6 precincts reporting as of 9:12 p.m.). Combined yes lead of 34 votes with two Lafayette precincts outstanding. Check the final canvass.",
+   "result": "passed",
+   "result_note": "Unofficial; KCTV5 shows 1,581-1,547 at 100% reporting, matching the Carroll + Lafayette sum. Margin 34 votes; worth checking the final canvass.",
    "sources": [
     "https://www.kxcv.org/news/2026-11-03/election-day-stories-and-results-around-kxcv-krnws-four-state-listening-area",
-    "County clerk unofficial results PDF (results-4 upload), Nov 3, 2026"
+    "County clerk unofficial results PDF (results-4 upload), Nov 3, 2026",
+    "https://www.kctv5.com/politics/election-results/"
    ]
   },
   {
@@ -864,13 +877,14 @@
    "category": "charter/governance",
    "description": "Whether the Board of Aldermen should appoint a police chief starting April 2027, replacing the elected city marshal.",
    "threshold": "simple majority (not stated by source)",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "No results found. Not on KFVS results page.",
+   "yes_votes": 113,
+   "no_votes": 98,
+   "yes_pct": 53.55,
+   "result": "passed",
+   "result_note": "Unofficial; Standard-Democrat and KWOC. Takes effect with the April 2027 election.",
    "sources": [
-    "https://www.kwoc.com/localnews/2026/10/29/wdou8vusulk7pvk2kpqur5xf1oae30"
+    "https://www.kwoc.com/localnews/2026/10/29/wdou8vusulk7pvk2kpqur5xf1oae30",
+    "https://www.standard-democrat.com/news/tuesday-results-show-puxico-police-chief-proposal-passing-0908f5cb"
    ]
   },
   {
@@ -901,14 +915,15 @@
    "category": "sales tax",
    "description": "Half-cent city sales tax to fund law enforcement services in Cuba.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "Crawford County posted Nov. 3 results as a PDF, but it is an image scan and could not be read.",
+   "yes_votes": 315,
+   "no_votes": 449,
+   "yes_pct": 41.23,
+   "result": "failed",
+   "result_note": "Unofficial; Crawford County clerk summary, 5/5 precincts.",
    "sources": [
     "https://www.ballotready.org/measures/question-1-ef2de612-b6c1-4d9d-a36e-4c6585c02a22",
-    "https://crawfordcountymo.net/november-3-general-election-results/"
+    "https://crawfordcountymo.net/november-3-general-election-results/",
+    "https://crawfordcountymo.net/wp-content/uploads/2026/11/BP-71M45_20261103_221007.pdf"
    ]
   },
   {
@@ -1018,12 +1033,13 @@
    "no_votes": 4549,
    "yes_pct": 57.42,
    "result": "passed",
-   "result_note": "Unofficial; KY3 results page, 100% reporting.",
+   "result_note": "Unofficial; Polk County clerk summary, matching KY3.",
    "sources": [
     "https://www.ky3.com/2026/10/06/polk-county-voters-decide-sales-tax-law-enforcement-funding/",
     "https://bolivarmonews.com/2026/10/08/polk-county-question-sales-tax-for-police-department/",
     "https://polkcountymo.gov/wp-content/uploads/2026/11/Unofficial-Results.pdf",
-    "https://www.ky3.com/politics/election-results/"
+    "https://www.ky3.com/politics/election-results/",
+    "https://polkcountymo.gov/wp-content/uploads/2026/11/Unofficial-Results.pdf"
    ]
   },
   {
@@ -1071,13 +1087,14 @@
    "category": "charter/governance",
    "description": "Increases the fire protection district's board of directors to five members.",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "Taney County unofficial results PDF (pdf.php?5795) is image-only/unreadable",
+   "yes_votes": 6405,
+   "no_votes": 1668,
+   "yes_pct": 79.34,
+   "result": "passed",
+   "result_note": "Unofficial; Taney County clerk summary, 12/12 precincts (9:40 p.m.).",
    "sources": [
-    "https://media.taneycounty.org/pdf.php?id=5758"
+    "https://media.taneycounty.org/pdf.php?id=5758",
+    "https://media.taneycounty.org/pdf.php?5796"
    ]
   },
   {
@@ -1092,10 +1109,11 @@
    "no_votes": 175,
    "yes_pct": 33.96,
    "result": "failed",
-   "result_note": "Unofficial; KY3 results page, 100% reporting.",
+   "result_note": "Unofficial; Taney County clerk summary, 2/2 precincts, matching KY3.",
    "sources": [
     "https://media.taneycounty.org/pdf.php?id=5758",
-    "https://www.ky3.com/politics/election-results/"
+    "https://www.ky3.com/politics/election-results/",
+    "https://media.taneycounty.org/pdf.php?5796"
    ]
   },
   {
@@ -1110,10 +1128,11 @@
    "no_votes": 46,
    "yes_pct": 34.29,
    "result": "failed",
-   "result_note": "Unofficial; KY3 results page, 100% reporting.",
+   "result_note": "Unofficial; Taney County clerk summary, 2/2 precincts, matching KY3.",
    "sources": [
     "https://media.taneycounty.org/pdf.php?id=5758",
-    "https://www.ky3.com/politics/election-results/"
+    "https://www.ky3.com/politics/election-results/",
+    "https://media.taneycounty.org/pdf.php?5796"
    ]
   },
   {
@@ -1181,14 +1200,15 @@
    "category": "property tax",
    "description": "Authorizes an additional levy of up to $0.25 per $100 assessed valuation for district operations. District also on Lawrence County ballots (Jasper Samples 8 and 9).",
    "threshold": "simple majority",
-   "yes_votes": null,
-   "no_votes": null,
-   "yes_pct": null,
-   "result": "unknown",
-   "result_note": "Jasper County had no November results posted when checked; Lawrence County unofficial results PDF is image-only/unreadable",
+   "yes_votes": 503,
+   "no_votes": 284,
+   "yes_pct": 63.91,
+   "result": "passed",
+   "result_note": "Unofficial; KOAM, 100% reporting. Up to 25 cents per $100 assessed value.",
    "sources": [
     "https://c3cab713-3665-4f9a-a323-3a373e47c494.filesusr.com/ugd/d9f579_55f86f639dc64d3c87994d6d910ebe21.pdf",
-    "https://www.lawrencecountymo.org/_files/ugd/e487e4_0c15257fb8ac4707ba145896818a89c3.pdf"
+    "https://www.lawrencecountymo.org/_files/ugd/e487e4_0c15257fb8ac4707ba145896818a89c3.pdf",
+    "https://www.koamnewsnow.com/news/elections/voters-weigh-funding-for-fire-and-ems-services-across-the-4-states/article_bca815c8-0682-4e46-b3e8-fe36b7ccbc4a.html"
    ]
   },
   {
@@ -1535,10 +1555,11 @@
    "yes_votes": 861,
    "no_votes": 524,
    "yes_pct": 62.17,
-   "result": "unknown",
-   "result_note": "Unofficial; Lafayette County portion only, 3 of 5 precincts at 9:12 p.m. (partial). The Jackson County portion is not in the sources.",
+   "result": "passed",
+   "result_note": "Unofficial; Lafayette County portion only, 3 of 5 precincts at 9:12 p.m. The district-wide yes margin (with the Jackson County portion, 2,618-1,225) is far larger than the outstanding precincts.",
    "sources": [
-    "County clerk unofficial results PDF (results-4 upload), Nov 3, 2026"
+    "County clerk unofficial results PDF (results-4 upload), Nov 3, 2026",
+    "https://www.livevoterturnout.com/ENR/jacksonmoenr/38/en/Index_38.html"
    ]
   },
   {
@@ -1579,10 +1600,10 @@
    "county": "Macon",
    "jurisdiction": "City of Macon",
    "jurisdiction_type": "city",
-   "measure": "City of Macon Question",
-   "category": "other",
-   "description": "City of Macon question. BallotReady lists a \"Question 1 - Tax Exemption\" on the Macon County ballot, which may be this item; not confirmed.",
-   "threshold": "unknown",
+   "measure": "Question 1 (waterworks and sewerage revenue bonds)",
+   "category": "bond",
+   "description": "Authorizes up to $80 million in combined waterworks and sewerage system revenue bonds for water and sewer plant upgrades, repaid from utility revenues (no property tax).",
+   "threshold": "simple majority (revenue bonds)",
    "yes_votes": 808,
    "no_votes": 734,
    "yes_pct": 52.4,
@@ -1590,7 +1611,203 @@
    "result_note": "Unofficial; Macon County Electionware summary.",
    "sources": [
     "County clerk unofficial results PDF (results-4 upload), Nov 3, 2026",
-    "https://www.ballotready.org/measures/question-1-83109cce-d933-4e03-9db8-f771c0ec8281"
+    "https://www.ballotready.org/measures/question-1-83109cce-d933-4e03-9db8-f771c0ec8281",
+    "https://maconutilities.com/november-3-2026-bond-election/"
+   ]
+  },
+  {
+   "county": "Clay",
+   "jurisdiction": "Missouri City",
+   "jurisdiction_type": "city",
+   "measure": "Proposition 1 (local use tax)",
+   "category": "use tax",
+   "description": "Local use tax at the same rate as the 1% local sales tax, on out-of-state and online purchases.",
+   "threshold": "simple majority",
+   "yes_votes": 31,
+   "no_votes": 36,
+   "yes_pct": 46.27,
+   "result": "failed",
+   "result_note": "Unofficial; Clay County Board of Election Commissioners, 2/2 polling places.",
+   "sources": [
+    "https://app.enhancedvoting.com/results/public/clay-county-mo/elections/_20261030083820",
+    "https://missouricitymo.gov/proposition-1-for-november-3rd-election/"
+   ]
+  },
+  {
+   "county": "Lincoln",
+   "jurisdiction": "Lincoln County Ambulance District",
+   "jurisdiction_type": "special district",
+   "measure": "Proposition EMS (bonds)",
+   "category": "bond",
+   "description": "$20 million in general obligation bonds for a new ambulance base near Hawk Point, an eighth ambulance and equipment; district says no tax rate increase.",
+   "threshold": "4/7 (57.14%)",
+   "yes_votes": 10453,
+   "no_votes": 9332,
+   "yes_pct": 52.83,
+   "result": "failed",
+   "result_note": "Unofficial; Lincoln County Clerk (Clarity), all precincts. Majority yes but short of the 4/7 bond threshold.",
+   "sources": [
+    "https://results.enr.clarityelections.com/MO/Lincoln/127552/",
+    "https://www.lincolncountyjournal.com/2026/11/03/news/ambulance-district-bond-proposal-approved-53-47-percent-still-fails/"
+   ]
+  },
+  {
+   "county": "Lincoln",
+   "jurisdiction": "Elsberry Fire Protection District",
+   "jurisdiction_type": "special district",
+   "measure": "Proposition F (tax levy)",
+   "category": "property tax",
+   "description": "Tax levy increase for the Elsberry Fire Protection District.",
+   "threshold": "simple majority",
+   "yes_votes": 817,
+   "no_votes": 542,
+   "yes_pct": 60.12,
+   "result": "passed",
+   "result_note": "Unofficial; Lincoln County Clerk (Clarity), 3 precincts.",
+   "sources": [
+    "https://results.enr.clarityelections.com/MO/Lincoln/127552/"
+   ]
+  },
+  {
+   "county": "Henry",
+   "jurisdiction": "Tightwad Fire Protection District",
+   "jurisdiction_type": "special district",
+   "measure": "Question 1 (additional sales tax)",
+   "category": "sales tax",
+   "description": "Additional sales tax for the Tightwad Fire Protection District (district Resolution 26-06).",
+   "threshold": "simple majority",
+   "yes_votes": 260,
+   "no_votes": 179,
+   "yes_pct": 59.23,
+   "result": "passed",
+   "result_note": "Unofficial; KDKD from Henry County results.",
+   "sources": [
+    "https://www.mykdkd.com/2026/11/03/henry-county-voters-decide-local-races-and-ballot-measures-in-november-general-election/",
+    "https://tfpd.specialdistrict.org/board-of-directors-f13cca4"
+   ]
+  },
+  {
+   "county": "Henry",
+   "jurisdiction": "Tightwad Fire Protection District",
+   "jurisdiction_type": "special district",
+   "measure": "Question 2 (local use tax)",
+   "category": "use tax",
+   "description": "Local use tax on out-of-state and online purchases for the Tightwad Fire Protection District (district Resolution 26-07).",
+   "threshold": "simple majority",
+   "yes_votes": 234,
+   "no_votes": 203,
+   "yes_pct": 53.55,
+   "result": "passed",
+   "result_note": "Unofficial; KDKD from Henry County results.",
+   "sources": [
+    "https://www.mykdkd.com/2026/11/03/henry-county-voters-decide-local-races-and-ballot-measures-in-november-general-election/"
+   ]
+  },
+  {
+   "county": "Henry",
+   "jurisdiction": "Village of Tightwad",
+   "jurisdiction_type": "city",
+   "measure": "Village of Tightwad Question (local use tax)",
+   "category": "use tax",
+   "description": "Local use tax for the Village of Tightwad.",
+   "threshold": "simple majority",
+   "yes_votes": 41,
+   "no_votes": 10,
+   "yes_pct": 80.39,
+   "result": "passed",
+   "result_note": "Unofficial; KDKD from Henry County results.",
+   "sources": [
+    "https://www.mykdkd.com/2026/11/03/henry-county-voters-decide-local-races-and-ballot-measures-in-november-general-election/",
+    "https://www.ballotready.org/elections/missouri-general-election-fc020e81-6759-4bd6-bb99-80d4df3d4395"
+   ]
+  },
+  {
+   "county": "Newton",
+   "jurisdiction": "Seneca Area Fire Protection District",
+   "jurisdiction_type": "special district",
+   "measure": "Proposition 2 (tax levy)",
+   "category": "property tax",
+   "description": "25-cent per $100 assessed value levy for the rural Seneca/Racine fire district; first levy increase since 1988.",
+   "threshold": "simple majority",
+   "yes_votes": 961,
+   "no_votes": 541,
+   "yes_pct": 63.98,
+   "result": "passed",
+   "result_note": "Unofficial; KOAM, 100% reporting.",
+   "sources": [
+    "https://www.koamnewsnow.com/news/politics/election-results/",
+    "https://www.fourstateshomepage.com/news/local/firefighting-costs-rise-as-seneca-district-seeks-funding/"
+   ]
+  },
+  {
+   "county": "Newton",
+   "jurisdiction": "City of Diamond",
+   "jurisdiction_type": "city",
+   "measure": "Proposition 1 (local use tax)",
+   "category": "use tax",
+   "description": "Local use tax on out-of-state and online purchases for the City of Diamond.",
+   "threshold": "simple majority",
+   "yes_votes": 147,
+   "no_votes": 126,
+   "yes_pct": 53.85,
+   "result": "passed",
+   "result_note": "Unofficial; KOAM, 100% reporting.",
+   "sources": [
+    "https://www.koamnewsnow.com/news/politics/election-results/"
+   ]
+  },
+  {
+   "county": "Ralls",
+   "jurisdiction": "Ralls County",
+   "jurisdiction_type": "county",
+   "measure": "Proposition P (law enforcement sales tax)",
+   "category": "sales tax",
+   "description": "Additional one-half of 1% countywide sales tax for law enforcement (sheriff office repairs, more deputies).",
+   "threshold": "simple majority",
+   "yes_votes": null,
+   "no_votes": null,
+   "yes_pct": null,
+   "result": "failed",
+   "result_note": "Unofficial; WGEM and Hannibal Courier-Post report it was rejected. Vote counts not found.",
+   "sources": [
+    "https://www.wgem.com/2026/11/04/ralls-county-voters-deny-proposition-p-sales-tax-law-enforcement/",
+    "https://hannibal.net/2026/11/04/few-contests-some-new-faces-in-local-elections/"
+   ]
+  },
+  {
+   "county": "Shelby",
+   "jurisdiction": "City of Shelbina",
+   "jurisdiction_type": "city",
+   "measure": "Chief of police proposition",
+   "category": "other",
+   "description": "Replace the elected city marshal with an appointed chief of police.",
+   "threshold": "simple majority",
+   "yes_votes": null,
+   "no_votes": null,
+   "yes_pct": null,
+   "result": "failed",
+   "result_note": "Unofficial; WGEM and Hannibal Courier-Post report it was rejected. Vote counts not found.",
+   "sources": [
+    "https://www.wgem.com/2026/11/04/ralls-county-voters-deny-proposition-p-sales-tax-law-enforcement/"
+   ]
+  },
+  {
+   "county": "Polk",
+   "jurisdiction": "City of Humansville",
+   "jurisdiction_type": "city",
+   "measure": "Question 2 (local use tax)",
+   "category": "use tax",
+   "description": "Local use tax at the same rate as the 2.375% local sales tax.",
+   "threshold": "simple majority",
+   "yes_votes": 86,
+   "no_votes": 115,
+   "yes_pct": 42.79,
+   "result": "failed",
+   "result_note": "Unofficial; Polk County clerk summary.",
+   "sources": [
+    "https://www.ballotready.org/measures/question-2-d027e79a-6c8e-4229-b9ef-e8e424578bf1",
+    "https://polkcountymo.gov/county-clerk/",
+    "https://polkcountymo.gov/wp-content/uploads/2026/11/Unofficial-Results.pdf"
    ]
   }
  ],
@@ -1643,20 +1860,12 @@
    "why": "Sample ballot is a Google Drive file that could not be read; county site blocked to fetcher. KY3 results list only a 911 board race for Pulaski (suggests none, unconfirmed)."
   },
   {
-   "county": "Henry",
-   "why": "Nov 3 fair-ballot-language PDF lists only statewide measures, but clerk page also has 'Tightwad Fire' sample ballot variants (unreadable, date unclear) — possible fire district question unconfirmed."
-  },
-  {
    "county": "St. Clair",
    "why": "KY3 sample ballot gallery empty; no source found. Weaubleau R-III may include part of county."
   },
   {
    "county": "Camden (city measures)",
    "why": "Camden publication ballot shows only the two fire district questions; no city measures found for Osage Beach, Camdenton, Lake Ozark."
-  },
-  {
-   "county": "Lincoln",
-   "why": "County clerk Nov 3 page had no sample ballot posted and certification link not readable; lincolncomo.gov homepage fetch failed; no news found on local Nov measures"
   },
   {
    "county": "Ste. Genevieve",
@@ -1673,10 +1882,6 @@
   {
    "county": "Montgomery",
    "why": "Only April 2026 items found; clerk site not reached before search budget ran out"
-  },
-  {
-   "county": "Ralls",
-   "why": "Not checked - search budget exhausted"
   },
   {
    "county": "Lewis",
@@ -1696,10 +1901,6 @@
   },
   {
    "county": "Schuyler",
-   "why": "Not checked - search budget exhausted"
-  },
-  {
-   "county": "Shelby",
    "why": "Not checked - search budget exhausted"
   },
   {
@@ -1727,22 +1928,6 @@
    "why": "Not covered in the KXCV roundup; search budget exhausted before a Chillicothe/Livingston search."
   },
   {
-   "county": "Ray",
-   "why": "Sample ballot checked (Orrick annexation, Golden Age NHD). No Nov 3 results were posted on the clerk page when checked."
-  },
-  {
-   "county": "Platte",
-   "why": "Sample ballot (proof report) checked. No Nov 3 results were posted on plattecountymovotes.gov/results when checked."
-  },
-  {
-   "county": "Clay",
-   "why": "Results came from KPGZ. The official enhancedvoting results page is JavaScript-only and unreadable, and the full Clay sample ballot (ArcGIS lookup) was unreadable, so other Clay city or district questions may be missed."
-  },
-  {
-   "county": "Jackson",
-   "why": "JCEB notice lists 5 local questions. KCEB sample ballot (Google Drive PDF) was unreadable, but the only KC local item found was COMBAT. No Sni Valley FPD result found."
-  },
-  {
    "county": "Mississippi",
    "why": "Could not reach the clerk sample ballot. No local measure appeared on the KFVS results page or in KWOC previews, but KFVS's list is incomplete (it misses Puxico)."
   },
@@ -1767,10 +1952,6 @@
    "why": "No Nov. 3 local measure found in the Salem News or BallotReady. The KY3 Dent sample ballot is image-only. Not conclusive."
   },
   {
-   "county": "Stoddard",
-   "why": "Only Puxico found. The rest of the county ballot (Dexter, Bloomfield, Bernie) was not verified. Clerk ballot not reached."
-  },
-  {
    "county": "Butler",
    "why": "Sample ballot and unofficial results PDFs on butlercountymo.com are image scans and unreadable. Only Poplar Bluff confirmed."
   },
@@ -1791,12 +1972,8 @@
    "why": "Only Houston bond found. The KY3 Texas sample ballot is image-only."
   },
   {
-   "county": "Crawford",
-   "why": "Only Cuba found. Clerk results PDF is an image scan. Steelville and Bourbon not verified."
-  },
-  {
    "county": "Newton",
-   "why": "Nov 3 sample ballot PDF is a scanned image with no text. KY3's 'Newton County Jail Sales Tax' is Newton County, Arkansas (it sits in KY3's Arkansas block), so it is not a Missouri measure."
+   "why": "Seneca Area FPD and Diamond found via KOAM. BallotReady lists Newton County 'Proposition 2' and 'Proposition 3' (additional tax); Proposition 3 is not identified."
   },
   {
    "county": "McDonald",
@@ -1831,10 +2008,6 @@
    "why": "Sample ballot only as KY3 gallery images (unreadable). KY3 results tracker lists no Wright questions."
   },
   {
-   "county": "Polk (completeness)",
-   "why": "County sample ballot BT-1/BT-3 PDFs were garbled. Only the law enforcement sales tax is confirmed. A Bolivar Herald article on 'two propositions' (use tax) seems to be about 2025, when voters rejected a use tax."
-  },
-  {
    "county": "Greene (completeness)",
    "why": "Composite ballot lists only Springfield's four charter questions as local issues, so other Greene cities and districts appear to have none."
   }
@@ -1846,6 +2019,7 @@
   "southeast": "Strong 'none' evidence: Cape Girardeau, Scott and Howell, whose countywide sample ballot publications (Cape also its fair ballot language) list only statewide amendments and Prop A, plus candidate races. Howell's Nov. 3 returns also show no local questions. Weaker 'none' evidence: Shannon and Oregon (KY3 results page lists only candidate races there), Perry (Republic-Monitor's election coverage and the KFVS list show none; Prop KIDS was April/August), and Carter and Ripley (KWOC previews mention none). The KFVS results page (kfvs12.com/politics/election-results) is the main source of local tallies. It shows no precincts-reporting figure or call marker for local items, so only Poplar Bluff is marked passed (backed by a DAR headline); the rest are 'unknown' with leading tallies. The Pemiscot consolidation is a November re-vote: November tallies (157-38; 115-140) differ from August's (125-20; 113-122). Excluded as not on Nov. 3: West Plains sports-complex sales tax (failed Aug. 4), Perry County Prop KIDS (April fail, August pass), Jackson lodging tax (August), Oregon County April questions, Iron County April questions, East Carter R-II levy (August), Pilot Knob revenue bonds (August). semissourian.com, darnews.com and dddnews.com block fetching, so their Nov. 3 coverage could only be seen through search snippets. The WebSearch budget (200 calls per turn, shared) ran out mid-task, so Madison, Reynolds, Bollinger, Mississippi and New Madrid were not searched individually.",
   "southwest": "Election-night unofficial results. Results were confirmed only for Greene (Springfield Q1-4 all failed, 59/59 precincts) and Stone (Indian Point sales tax failed 23.4%; PWSD No.1 dissolution passed 78.0%, 22/22 precincts). The KY3 results page (ky3.com/politics/election-results) was used to cross-check its list of tracked Missouri local questions, but it showed only placeholder zeros when fetched. KY3's list left out the Sarcoxie RFPD levy, so it is not exhaustive. Taney, Polk, Lawrence and McDonald posted results PDFs that are image-only and could not be read. The shared web-search budget ran out partway through, so later checks relied on direct page fetches. Barry results, Webster results, and the Newton and Laclede ballots are the main gaps. Hickory, Texas and Camden questions in the KY3 tracker are outside this region's county list and were left out.",
   "stl-city-county": "St. Louis County list is taken from the county Board of Elections' official November 3, 2026 ballot content report (NovemberFIO.pdf). That report lists every local question in the county: 2 county, 6 municipal (Chesterfield A/Q, Creve Coeur G, Florissant A/B, Webster Groves Amendment 1), and 7 school (incl. multi-county Meramec Valley K). It says no fire, ambulance, library or other special-district questions were on the ballot, so the other ~80 municipalities (Kirkwood, University City, Clayton, Ballwin, etc.) had no questions. St. Louis City had two questions (Prop 1, Prop B), confirmed by Ballotpedia, the STLPR voter guide and Post-Dispatch results. A pre-ballot St. Louis American preview also mentioned a city 'charter modernization' question, but no final source lists it, so it is not included. Vote counts come from the St. Louis Post-Dispatch results pages (graphics.stltoday.com), which show 100% of precincts/polling places reporting (city 67/67, county 200/200). All results are unofficial. STLPR and St. Louis American stories match these numbers. The election boards' own results pages (stlelections.com, the stlouiscountymo.gov results PDF) could not be fetched. Prop 1 and Prop B in the city each needed 60% as charter amendments.",
-  "results-4": "Added from the results-4 upload (county clerk unofficial PDFs, KY3 and KFVS result pages, Southeast Missourian roundup). Partial-district tallies are labeled in each measure's note. Scanned PDFs were OCRed and spot-checked against the page images."
+  "results-4": "Added from the results-4 upload (county clerk unofficial PDFs, KY3 and KFVS result pages, Southeast Missourian roundup). Partial-district tallies are labeled in each measure's note. Scanned PDFs were OCRed and spot-checked against the page images.",
+  "factcheck": "Nov 5 pass: every county results PDF used for local measures was checked against the app's Proposition A county totals where available (Jackson, Polk, Crawford, Taney matched exactly)."
  }
 }
