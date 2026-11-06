@@ -4631,6 +4631,125 @@
     }
    ]
   },
+  "Platte": {
+   "source": "Platte County Clerk election summary",
+   "races": [
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Mary McKenna",
+       "p": "D",
+       "v": 22344,
+       "w": 1
+      },
+      {
+       "n": "Jason Maki",
+       "p": "R",
+       "v": 18533
+      },
+      {
+       "n": "Dale W. Brouk",
+       "p": "I",
+       "v": 3171
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Hans Peter",
+       "p": "D",
+       "v": 22920,
+       "w": 1
+      },
+      {
+       "n": "Mary Calvillo",
+       "p": "R",
+       "v": 20345
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Christopher L. Wright",
+       "p": "R",
+       "v": 30405,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Chris Kendall",
+       "p": "I",
+       "v": 22128,
+       "w": 1
+      },
+      {
+       "n": "Krysten Jury",
+       "p": "R",
+       "v": 19205
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Holly Cayer",
+       "p": "I",
+       "v": 22139,
+       "w": 1
+      },
+      {
+       "n": "Jim Bosch",
+       "p": "R",
+       "v": 19304
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Tony Luetkemeyer",
+       "p": "R",
+       "v": 30292,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Auditor",
+     "cat": "auditor",
+     "cands": [
+      {
+       "n": "Kevin Robinson",
+       "p": "I",
+       "v": 21045,
+       "w": 1
+      },
+      {
+       "n": "Laura Waldon",
+       "p": "R",
+       "v": 20165
+      }
+     ]
+    }
+   ]
+  },
   "Polk": {
    "source": "Polk County Clerk summary",
    "races": [

@@ -53,6 +53,7 @@ MANUAL_SRC = {
     'Newton': 'KOAM election results (contested races only, no party labels)',
     'Pulaski': 'Pulaski County Clerk election summary (photos)', 'Laclede': 'Laclede County Clerk election summary (scanned)',
     'Andrew': 'Andrew County Clerk unofficial results', 'Chariton': 'Chariton County Clerk statement of votes cast (scanned)',
+    'Platte': 'Platte County Clerk election summary',
     'Jackson': 'The Beacon (KC), unofficial results as of 10 p.m. Nov. 3',
 }
 # counties where the source only lists contested races, so uncontested offices are missing

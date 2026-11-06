@@ -230,3 +230,10 @@ Jackson|County Legislature, District 3|Phyllis Hernandez:D:19403;Scott Qualls:R:
 Jackson|County Legislature, District 4|Byron Townsend:D:26421;Lon McDonald:R:6246|The Beacon, unofficial as of 10 p.m. Nov. 3
 Jackson|County Legislature, District 5|Dale Carter:R:20686;Antoine Jennings:D:19802|The Beacon, unofficial as of 10 p.m. Nov. 3
 Jackson|County Legislature, District 6|Tony Lawson:D:30017;Bill Haley:R:24516|The Beacon, unofficial as of 10 p.m. Nov. 3
+Platte|Presiding Commissioner|Mary McKenna:D:22344;Jason Maki:R:18533;Dale W. Brouk:I:3171
+Platte|County Clerk|Hans Peter:D:22920;Mary Calvillo:R:20345
+Platte|Recorder of Deeds|Christopher L. Wright:R:30405
+Platte|Prosecuting Attorney|Tony Luetkemeyer:R:30292
+Platte|County Auditor|Kevin Robinson:I:21045;Laura Waldon:R:20165
+Platte|County Collector|Holly Cayer:I:22139;Jim Bosch:R:19304
+Platte|County Treasurer|Chris Kendall:I:22128;Krysten Jury:R:19205
