@@ -148,7 +148,7 @@ function fillFor(s){
 }
 const solid = fam => css(`--${fam}2`);
 const deep = fam => css(`--${fam}3`);
-const partyName = p => ({R:'Republican',D:'Democratic',L:'Libertarian',G:'Green',C:'Constitution',I:'Independent',W:'Write-in'})[p]||p||'';
+const partyName = p => ({R:'Republican',D:'Democratic',L:'Libertarian',G:'Green',C:'Constitution',I:'Independent',N:'Nonpartisan',W:'Write-in'})[p]||p||'';
 const partyShort = p => ({R:'Republicans',D:'Democrats'})[p]||'Other';
 const fmt = d3.format(',');
 const ico=(n,cls='')=>`<svg class="ico ${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
@@ -1009,7 +1009,7 @@ function drawStatus(){
   const corr = CORRECTIONS.length ? ` Where the state feed has a clear error, the county clerk’s own report is used instead: ${CORRECTIONS.map(c=>esc(c.note)).join(' ')} Statewide and district totals add up the corrected county figures.` : '';
   d3.select('#foot').html(`Results: Missouri Secretary of State election-night reporting (enr.sos.mo.gov), unofficial, as of ${META.statewide_asof}.${corr} County maps use ${[...haveCounty].filter(id=>id!=='KC').length} of 115 county result files${haveCounty.has('KC')?' plus the Kansas City Election Board’s count':''}, which covers only KC’s Jackson County part and is added into Jackson County.${redo.size?` ${[...redo].map(countyFull).join(', ')}: the collected files were duplicates of other counties, so they’re blank on the map until re-collected (statewide and district totals already include them).`:''} A check mark means a candidate is ahead with all precincts reported. These are not certified results.<br>
   Flips are measured against the party holding each seat before the election. Vacant seats count for the party that last held them (House 95, 110, 114, 149 and 160, and Senate 10, all Republican). Recount range: under 0.5% of votes cast (RSMo § 115.601).<br>
-  Courts: appellate retention votes and circuit-court races are from the same Secretary of State count. County offices are not in the state’s count; they come from county clerks’ reports and local news (KY3, KFVS12, KOAM, the Southeast Missourian, the Mexico Ledger and The Beacon), and each county names its source. They cover ${OFFC.size} of 115 counties.<br>
+  Courts: appellate retention votes and circuit-court races are from the same Secretary of State count. County offices are not in the state’s count; they come from county clerks’ reports and local news (KY3, KFVS12, KOAM, KTTN, KRMS, the St. Louis Post-Dispatch, the Southeast Missourian, the Mexico Ledger and The Beacon), and each county names its source. They cover ${OFFC.size} of 115 counties.<br>
   Population centers: Census 2024 city estimates for counties; 2020 Census block counts for districts. Boundaries: U.S. Census Bureau 2025 cartographic boundary files (counties; 2022 congressional plan, in effect for this election; current State Senate and State House districts). ${SOURCES}`);
 }
 

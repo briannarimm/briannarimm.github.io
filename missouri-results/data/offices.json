@@ -1340,6 +1340,164 @@
     }
    ]
   },
+  "Butler": {
+   "source": "Butler County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division 2",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Wade Pierce",
+       "p": "R",
+       "v": 8760,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 170
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 3",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "John H. Shock",
+       "p": "R",
+       "v": 8724,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 177
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Vince Lampe",
+       "p": "R",
+       "v": 8718,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 186
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Holly Lawson",
+       "p": "R",
+       "v": 8706,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 151
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Donna Hillis",
+       "p": "R",
+       "v": 8758,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 147
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Lisa Larmie",
+       "p": "R",
+       "v": 8695,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 164
+      }
+     ]
+    },
+    {
+     "office": "Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Tammy Marler",
+       "p": "R",
+       "v": 8754,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 150
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Emily Parks",
+       "p": "R",
+       "v": 8789,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 150
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Ted Liszewski",
+       "p": "R",
+       "v": 8619,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 175
+      }
+     ]
+    }
+   ]
+  },
   "Caldwell": {
    "source": "Caldwell County Clerk election summary",
    "races": [
@@ -2091,6 +2249,147 @@
     }
    ]
   },
+  "Cedar": {
+   "source": "Cedar County Clerk unofficial results (header says 6 of 9 precincts, but the totals match the state's final count)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Jacob Dawson",
+       "p": "R",
+       "v": 3879,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 44
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Kenneth Thornton",
+       "p": "R",
+       "v": 3761,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 64
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Sarah Turner",
+       "p": "R",
+       "v": 3870,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 37
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Chrislynn Price",
+       "p": "R",
+       "v": 3813,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 47
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Melissa Heskett",
+       "p": "R",
+       "v": 3820,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 44
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Carla Lowe",
+       "p": "R",
+       "v": 3810,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 31
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Lisa Nelson",
+       "p": "R",
+       "v": 3893,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 37
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Nicole L Barrett",
+       "p": "R",
+       "v": 3806,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 35
+      }
+     ]
+    }
+   ]
+  },
   "Chariton": {
    "source": "Chariton County Clerk statement of votes cast (scanned)",
    "races": [
@@ -2291,6 +2590,57 @@
        "w": 1
       }
      ]
+    }
+   ]
+  },
+  "Clay": {
+   "source": "Clay County Board of Election Commissioners results",
+   "races": [
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Jennifer Justus",
+       "p": "N",
+       "v": 48831,
+       "w": 1
+      },
+      {
+       "n": "Jerry Nolte",
+       "p": "N",
+       "v": 38056
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 856
+      }
+     ],
+     "note": "Nonpartisan race under the county charter"
+    },
+    {
+     "office": "Eastern Commissioner",
+     "cat": "commish",
+     "cands": [
+      {
+       "n": "Jay R. Johnson",
+       "p": "N",
+       "v": 23847,
+       "w": 1
+      },
+      {
+       "n": "Mark McAuliffe",
+       "p": "N",
+       "v": 20940
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 331
+      }
+     ],
+     "note": "Nonpartisan; Eastern District voters only"
     }
    ]
   },
@@ -2977,6 +3327,315 @@
     }
    ]
   },
+  "Dunklin": {
+   "source": "Dunklin County Clerk unofficial results (9:26 p.m.)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division 2",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "John Spielman",
+       "p": "R",
+       "v": 4375,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 125
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 3",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Jason M. Scherer",
+       "p": "R",
+       "v": 4337,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 115
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Don Collins",
+       "p": "R",
+       "v": 4342,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 122
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Paula S. Gargus",
+       "p": "R",
+       "v": 4340,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 108
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Larry Ray",
+       "p": "R",
+       "v": 4292,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 120
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Angela Smith Casey",
+       "p": "R",
+       "v": 4315,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 107
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Nicholas Dave Jain",
+       "p": "R",
+       "v": 4204,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 144
+      }
+     ]
+    }
+   ]
+  },
+  "Franklin": {
+   "source": "Franklin County Clerk election-night results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division V",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Joe Purschke",
+       "p": "R",
+       "v": 30113,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 879
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division VI",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Matthew Houston",
+       "p": "R",
+       "v": 29304,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 904
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division VII",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Mark E. Brinkmann",
+       "p": "R",
+       "v": 29475,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 866
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Dave Schatz",
+       "p": "R",
+       "v": 17531,
+       "w": 1
+      },
+      {
+       "n": "Richele Landa",
+       "p": "D",
+       "v": 15475
+      },
+      {
+       "n": "Thomas Krausch",
+       "p": "L",
+       "v": 4780
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 129
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Connie S. Ward",
+       "p": "R",
+       "v": 30027,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 728
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Tim Baker",
+       "p": "R",
+       "v": 30878,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 751
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Lisa Smart",
+       "p": "R",
+       "v": 30009,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 716
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Doug Trentmann",
+       "p": "R",
+       "v": 30228,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 734
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Matthew Becker",
+       "p": "R",
+       "v": 29669,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 792
+      }
+     ]
+    },
+    {
+     "office": "County Auditor",
+     "cat": "auditor",
+     "cands": [
+      {
+       "n": "Anne Barry",
+       "p": "R",
+       "v": 29716,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 716
+      }
+     ]
+    }
+   ]
+  },
   "Greene": {
    "source": "KY3 election results (contested races only)",
    "races": [
@@ -3000,6 +3659,211 @@
     }
    ],
    "partial": true
+  },
+  "Grundy": {
+   "source": "KTTN (unopposed races; vote counts not reported)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Carrie Lamm-Clark",
+       "p": "",
+       "v": null,
+       "w": 1
+      }
+     ],
+     "note": "Unopposed; vote count not reported"
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Phillip Ray",
+       "p": "",
+       "v": null,
+       "w": 1
+      }
+     ],
+     "note": "Unopposed; vote count not reported"
+    },
+    {
+     "office": "Circuit Clerk and Ex Officio Recorder of Deeds",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Michelle Vandevender",
+       "p": "",
+       "v": null,
+       "w": 1
+      }
+     ],
+     "note": "Unopposed; vote count not reported"
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Courtney Campbell",
+       "p": "",
+       "v": null,
+       "w": 1
+      }
+     ],
+     "note": "Unopposed; vote count not reported"
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Kelly Puckett",
+       "p": "",
+       "v": null,
+       "w": 1
+      }
+     ],
+     "note": "Unopposed; vote count not reported"
+    }
+   ]
+  },
+  "Harrison": {
+   "source": "KTTN (only some races listed)",
+   "races": [
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Chancel Crabtree",
+       "p": "I",
+       "v": 1719,
+       "w": 1
+      },
+      {
+       "n": "Lee Ann Miles",
+       "p": "",
+       "v": 547
+      }
+     ]
+    }
+   ],
+   "partial": true
+  },
+  "Hickory": {
+   "source": "Hickory County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "James A. Hackett",
+       "p": "D",
+       "v": 2321,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Robert Sawyer",
+       "p": "R",
+       "v": 2915,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Alana (Barger) Brauch",
+       "p": "R",
+       "v": 2919,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Tamara Weidman",
+       "p": "R",
+       "v": 2975,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Pamela Hutton",
+       "p": "R",
+       "v": 2937,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Kenny Ratliff",
+       "p": "R",
+       "v": 1355,
+       "w": 1
+      },
+      {
+       "n": "Anita Moss",
+       "p": "W",
+       "v": 997
+      },
+      {
+       "n": "Lindsey Pitts",
+       "p": "W",
+       "v": 331
+      }
+     ],
+     "note": "Moss and Pitts were declared write-in candidates"
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Karen Stokes",
+       "p": "R",
+       "v": 3003,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Darla J. Mueller",
+       "p": "R",
+       "v": 2845,
+       "w": 1
+      }
+     ]
+    }
+   ]
   },
   "Howard": {
    "source": "Howard County Clerk election summary",
@@ -3130,8 +3994,121 @@
     }
    ]
   },
+  "Howell": {
+   "source": "Howell County Clerk election results (9:47 p.m.)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division 2",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Melissa Stewart",
+       "p": "R",
+       "v": 9323,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 3",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Heath Hardman",
+       "p": "R",
+       "v": 9191,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Ralph Riggs",
+       "p": "R",
+       "v": 9203,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Cynthia Lee",
+       "p": "R",
+       "v": 9261,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Kelly Waggoner",
+       "p": "R",
+       "v": 9400,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Jeff Brasier",
+       "p": "R",
+       "v": 9178,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Nancy Franz",
+       "p": "R",
+       "v": 9266,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Janet Crow",
+       "p": "R",
+       "v": 9145,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Michael P. Hutchings",
+       "p": "R",
+       "v": 9130,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
   "Jackson": {
-   "source": "The Beacon (KC), unofficial results as of 10 p.m. Nov. 3",
+   "source": "Jackson County and Kansas City election boards combined, via The Beacon (unofficial as of 10 p.m. Nov. 3)",
    "races": [
     {
      "office": "County Executive",
@@ -3298,8 +4275,513 @@
      ],
      "note": "The Beacon, unofficial as of 10 p.m. Nov. 3"
     }
-   ],
-   "partial": true
+   ]
+  },
+  "Jasper": {
+   "source": "Jasper County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division 4",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "John A. Nicholas",
+       "p": "R",
+       "v": 25288,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 960
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 5",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Nicole Marie Carlton",
+       "p": "R",
+       "v": 25187,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 934
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 6",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Luke Boyer",
+       "p": "R",
+       "v": 25278,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 886
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Lane J. Roberts",
+       "p": "R",
+       "v": 25272,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 914
+      }
+     ]
+    },
+    {
+     "office": "Commissioner of the County Commission Eastern District",
+     "cat": "commish",
+     "cands": [
+      {
+       "n": "Jimmy Morris",
+       "p": "R",
+       "v": 14794,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 381
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Melissa Holcomb",
+       "p": "R",
+       "v": 25285,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 866
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Charlie Davis",
+       "p": "R",
+       "v": 25648,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 847
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Brent L. Hensley",
+       "p": "R",
+       "v": 25230,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 869
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Steven E. McIntosh",
+       "p": "R",
+       "v": 25317,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 851
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Mike Roberts",
+       "p": "R",
+       "v": 25216,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 872
+      }
+     ]
+    },
+    {
+     "office": "Auditor",
+     "cat": "auditor",
+     "cands": [
+      {
+       "n": "Sarah D. Hoover",
+       "p": "R",
+       "v": 25229,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 848
+      }
+     ]
+    }
+   ]
+  },
+  "Jefferson": {
+   "source": "Jefferson County Clerk election-night results",
+   "races": [
+    {
+     "office": "County Executive",
+     "cat": "exec",
+     "cands": [
+      {
+       "n": "Tim Whitney",
+       "p": "R",
+       "v": 45102,
+       "w": 1
+      },
+      {
+       "n": "David Frank",
+       "p": "D",
+       "v": 30182
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 161
+      }
+     ]
+    },
+    {
+     "office": "County Council Member District 1",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "John T Parker",
+       "p": "R",
+       "v": 7760,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 372
+      }
+     ]
+    },
+    {
+     "office": "County Council Member District 3",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Lori Arons",
+       "p": "R",
+       "v": 7696,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 395
+      }
+     ]
+    },
+    {
+     "office": "County Council Member District 5",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Timothy Bennett",
+       "p": "R",
+       "v": 5777,
+       "w": 1
+      },
+      {
+       "n": "Danielle \"Dani\" Elliott",
+       "p": "L",
+       "v": 3985
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 62
+      }
+     ]
+    },
+    {
+     "office": "County Council Member District 7",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Bob Tullock",
+       "p": "R",
+       "v": 8209,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 356
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 10",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Lucas Null",
+       "p": "R",
+       "v": 44227,
+       "w": 1
+      },
+      {
+       "n": "Colby Smith-Hynes",
+       "p": "L",
+       "v": 25023
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 648
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 11",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Juli Hand",
+       "p": "R",
+       "v": 54184,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2476
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 12",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Renee Reuter",
+       "p": "R",
+       "v": 53401,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2659
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 13",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Katherine Hardy Senkel",
+       "p": "R",
+       "v": 53711,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2416
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 14",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Timothy Miller",
+       "p": "R",
+       "v": 53807,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2372
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 15",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Michelle Hughes",
+       "p": "R",
+       "v": 53634,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2364
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Mike Reuter",
+       "p": "R",
+       "v": 53277,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2516
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Jaclyn Riebold",
+       "p": "R",
+       "v": 43869,
+       "w": 1
+      },
+      {
+       "n": "Tracy Johnson",
+       "p": "D",
+       "v": 31403
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 154
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Debbie (Dunnegan) Waters",
+       "p": "R",
+       "v": 54647,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2234
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Jennifer Modray",
+       "p": "R",
+       "v": 54014,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2194
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Trisha C Stefanski",
+       "p": "R",
+       "v": 53809,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2358
+      }
+     ]
+    },
+    {
+     "office": "Auditor",
+     "cat": "auditor",
+     "cands": [
+      {
+       "n": "Kristy Apprill",
+       "p": "R",
+       "v": 53897,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 2208
+      }
+     ]
+    }
+   ]
   },
   "Johnson": {
    "source": "Johnson County Clerk election summary",
@@ -3459,6 +4941,117 @@
     }
    ]
   },
+  "Knox": {
+   "source": "Knox County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Andrew A. Boster",
+       "p": "R",
+       "v": 908,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Leslie Cardwell",
+       "p": "I",
+       "v": 653,
+       "w": 1
+      },
+      {
+       "n": "Weldon Woodward",
+       "p": "R",
+       "v": 267
+      },
+      {
+       "n": "Chaise A. Stull",
+       "p": "I",
+       "v": 115
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Kimberly A. Hatfield",
+       "p": "R",
+       "v": 981,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Marlene E. Spory",
+       "p": "R",
+       "v": 962,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Audrey Hamlin",
+       "p": "R",
+       "v": 1005,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Donnie L. Davis",
+       "p": "R",
+       "v": 996,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Linda J. Woods",
+       "p": "R",
+       "v": 981,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Brenda Swedberg",
+       "p": "I",
+       "v": 861,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
   "Laclede": {
    "source": "Laclede County Clerk election summary (scanned)",
    "races": [
@@ -3592,6 +5185,23 @@
      "cat": "judge",
      "cands": [
       {
+       "n": "Russell J. Kruse",
+       "p": "R",
+       "v": 9534,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 258
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 3",
+     "cat": "judge",
+     "cands": [
+      {
        "n": "Kristen Ellis Hilbrenner",
        "p": "R",
        "v": 9505,
@@ -3605,8 +5215,8 @@
      ]
     },
     {
-     "office": "Associate Circuit Judge Division 3",
-     "cat": "judge",
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
      "cands": [
       {
        "n": "Harold Hoflander",
@@ -3622,8 +5232,8 @@
      ]
     },
     {
-     "office": "Presiding Commissioner",
-     "cat": "presiding",
+     "office": "Southern Associate Commissioner - Unexpired 2 Year Term",
+     "cat": "commish",
      "cands": [
       {
        "n": "Michael Brown",
@@ -3636,12 +5246,11 @@
        "p": "W",
        "v": 107
       }
-     ],
-     "note": "The county report shows the presiding commissioner race on about half the county’s ballots (5,731 of 11,758) and the southern-district race on all of them, which looks reversed. Check the county’s final report."
+     ]
     },
     {
-     "office": "Southern Associate Commissioner - Unexpired 2 Year Term",
-     "cat": "commish",
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
      "cands": [
       {
        "n": "Kim Mason",
@@ -3654,12 +5263,11 @@
        "p": "W",
        "v": 220
       }
-     ],
-     "note": "The county report shows the presiding commissioner race on about half the county’s ballots (5,731 of 11,758) and the southern-district race on all of them, which looks reversed. Check the county’s final report."
+     ]
     },
     {
-     "office": "Clerk of the Circuit Court",
-     "cat": "circuit",
+     "office": "County Clerk",
+     "cat": "clerk",
      "cands": [
       {
        "n": "Jessica White",
@@ -3675,8 +5283,8 @@
      ]
     },
     {
-     "office": "County Clerk",
-     "cat": "clerk",
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
      "cands": [
       {
        "n": "JoAnn Swartz",
@@ -3692,8 +5300,30 @@
      ]
     },
     {
-     "office": "Recorder of Deeds",
-     "cat": "recorder",
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Amanda McFatrich",
+       "p": "R",
+       "v": 7754,
+       "w": 1
+      },
+      {
+       "n": "Pamela Fetter",
+       "p": "D",
+       "v": 3740
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 12
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
      "cands": [
       {
        "n": "John C. Boyer",
@@ -3709,8 +5339,8 @@
      ]
     },
     {
-     "office": "Collector of Revenue",
-     "cat": "collector",
+     "office": "County Auditor",
+     "cat": "auditor",
      "cands": [
       {
        "n": "Jaimie Umhoefer",
@@ -3729,26 +5359,105 @@
        "v": 12
       }
      ]
+    }
+   ]
+  },
+  "Lawrence": {
+   "source": "Lawrence County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division II",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Matthew Kasper",
+       "p": "R",
+       "v": 9444,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Bob Senninger",
+       "p": "R",
+       "v": 9606,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Pam Mieswinkel Fobair",
+       "p": "R",
+       "v": 9601,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Tammy (Cole) Riebe",
+       "p": "R",
+       "v": 9681,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Denise Massie",
+       "p": "R",
+       "v": 9620,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Steve Wendler",
+       "p": "R",
+       "v": 9593,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Erin Owens",
+       "p": "R",
+       "v": 9522,
+       "w": 1
+      }
+     ]
     },
     {
      "office": "Prosecuting Attorney",
      "cat": "prosecutor",
      "cands": [
       {
-       "n": "Amanda McFatrich",
+       "n": "Darlene Parrigon",
        "p": "R",
-       "v": 7754,
+       "v": 9346,
        "w": 1
-      },
-      {
-       "n": "Pamela Fetter",
-       "p": "D",
-       "v": 3740
-      },
-      {
-       "n": "Write-in",
-       "p": "W",
-       "v": 12
       }
      ]
     }
@@ -4032,30 +5741,500 @@
    "partial": true
   },
   "McDonald": {
-   "source": "KOAM election results (contested races only, no party labels)",
+   "source": "McDonald County Clerk unofficial statement of votes cast",
    "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Dylan Thomas",
+       "p": "R",
+       "v": 5049,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 87
+      }
+     ]
+    },
     {
      "office": "Presiding Commissioner",
      "cat": "presiding",
      "cands": [
       {
        "n": "Bryan Hall",
-       "p": "",
+       "p": "R",
        "v": 4106,
        "w": 1
       },
       {
        "n": "Jonica Bridenstine",
-       "p": "",
+       "p": "I",
        "v": 862
       },
       {
        "n": "James McCool",
-       "p": "",
+       "p": "D",
        "v": 850
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 15
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Tanya Lewis",
+       "p": "R",
+       "v": 5085,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 76
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Jessica Cole",
+       "p": "R",
+       "v": 5076,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 71
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Michelle Barker",
+       "p": "R",
+       "v": 5062,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 75
+      }
+     ]
+    },
+    {
+     "office": "Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Sheila Gideon Fuller",
+       "p": "R",
+       "v": 5045,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 73
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Jennifer Weber",
+       "p": "R",
+       "v": 5083,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 72
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Maleia Cheney",
+       "p": "R",
+       "v": 4797,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 130
+      }
+     ]
+    }
+   ]
+  },
+  "Miller": {
+   "source": "Miller County Clerk general election results (scanned)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Gerard \"Jay\" Harms, Jr.",
+       "p": "R",
+       "v": 6296,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Neil R. Atkinson",
+       "p": "R",
+       "v": 6383,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Sheila Curtman",
+       "p": "R",
+       "v": 6393,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Clinton A. Jenkins",
+       "p": "R",
+       "v": 6494,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Kathy \"Kate\" Plemmons",
+       "p": "R",
+       "v": 6371,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Mindy Robison-Kampeter",
+       "p": "R",
+       "v": 6403,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Jody Vance",
+       "p": "R",
+       "v": 6419,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Robert J. Seek",
+       "p": "R",
+       "v": 6138,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
+  "Mississippi": {
+   "source": "KFVS12 election results (contested races only)",
+   "races": [
+    {
+     "office": "Sheriff",
+     "cat": "other",
+     "cands": [
+      {
+       "n": "Steve Kuykendall",
+       "p": "",
+       "v": 1579,
+       "w": 1
+      },
+      {
+       "n": "Keith Moore",
+       "p": "",
+       "v": 654
+      },
+      {
+       "n": "Barry Morgan",
+       "p": "",
+       "v": 604
+      },
+      {
+       "n": "Jonathan Hall",
+       "p": "",
+       "v": 271
       }
      ],
-     "note": "KOAM lists only contested county races; party labels not given"
+     "note": "As listed by KFVS12; party labels not given"
+    }
+   ],
+   "partial": true
+  },
+  "Moniteau": {
+   "source": "Moniteau County Clerk unofficial results (via California Democrat)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Aaron J Martin",
+       "p": "R",
+       "v": 3826,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "James Bonecutter",
+       "p": "R",
+       "v": 3830,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court & Ex Officio Recorder of Deeds",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Andy Burger",
+       "p": "R",
+       "v": 3889,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Roberta Elliott",
+       "p": "R",
+       "v": 3923,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Sarah B. Jones",
+       "p": "R",
+       "v": 3871,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Russell P. Hill",
+       "p": "R",
+       "v": 3796,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Derik Kinde",
+       "p": "R",
+       "v": 3750,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
+  "Monroe": {
+   "source": "Monroe County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Talley M. Smith",
+       "p": "R",
+       "v": 2342,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Curt Wheeler",
+       "p": "R",
+       "v": 2290,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Heather D. Wheeler",
+       "p": "R",
+       "v": 2302,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Beth Whelan",
+       "p": "R",
+       "v": 2294,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Julie Neer",
+       "p": "R",
+       "v": 2290,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Sheila Jurgesmeyer",
+       "p": "D",
+       "v": 1864,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Chrissy Graupman",
+       "p": "R",
+       "v": 2332,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Jake Peak",
+       "p": "R",
+       "v": 2323,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
+  "Morgan": {
+   "source": "KRMS radio (only some races listed)",
+   "races": [
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Tony Stephens",
+       "p": "",
+       "v": 4388,
+       "w": 1
+      },
+      {
+       "n": "Lavern Zimmerman",
+       "p": "I",
+       "v": 1693
+      }
+     ]
     }
    ],
    "partial": true
@@ -4083,6 +6262,118 @@
     }
    ],
    "partial": true
+  },
+  "Nodaway": {
+   "source": "Nodaway County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Robert (Bob) L. Rice",
+       "p": "R",
+       "v": 5484,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 94
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Chris Burns",
+       "p": "R",
+       "v": 3736,
+       "w": 1
+      },
+      {
+       "n": "Scott Wilson",
+       "p": "I",
+       "v": 2697
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 17
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Elaine Wilson",
+       "p": "R",
+       "v": 5658,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 72
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Melinda Patton",
+       "p": "R",
+       "v": 5647,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 72
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Lisa James",
+       "p": "R",
+       "v": 5606,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 68
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "David L. Hershberger",
+       "p": "R",
+       "v": 5430,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 94
+      }
+     ]
+    }
+   ]
   },
   "Oregon": {
    "source": "KY3 election results (contested races only)",
@@ -4214,6 +6505,164 @@
        "p": "R",
        "v": 4506,
        "w": 1
+      }
+     ]
+    }
+   ]
+  },
+  "Pemiscot": {
+   "source": "Pemiscot County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division 2",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Bill Carter",
+       "p": "R",
+       "v": 2267,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 76
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 3",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "W. Keith Currie",
+       "p": "D",
+       "v": 2122,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 64
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Mark Cartee",
+       "p": "R",
+       "v": 2221,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 82
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Tonya Hillhouse",
+       "p": "R",
+       "v": 2276,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 65
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Pam Treece",
+       "p": "R",
+       "v": 2398,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 58
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Amanda Littleton Gordon",
+       "p": "R",
+       "v": 2284,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 66
+      }
+     ]
+    },
+    {
+     "office": "Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Susan Tillman Faulkner",
+       "p": "R",
+       "v": 2290,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 63
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Rhonda Parkinson Price",
+       "p": "R",
+       "v": 2363,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 61
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Ryan Dicus",
+       "p": "R",
+       "v": 2261,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 66
       }
      ]
     }
@@ -4484,14 +6933,38 @@
    ]
   },
   "Phelps": {
-   "source": "KY3 election results (contested races only)",
+   "source": "Phelps County Clerk cumulative results",
    "races": [
+    {
+     "office": "Associate Circuit Judge Division 1 & Probate",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Kenneth G Clayton",
+       "p": "R",
+       "v": 10169,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 2",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Carolyn Buschjost",
+       "p": "R",
+       "v": 10061,
+       "w": 1
+      }
+     ]
+    },
     {
      "office": "Presiding Commissioner",
      "cat": "presiding",
      "cands": [
       {
-       "n": "Joey Auxler",
+       "n": "Joey Auxier",
        "p": "R",
        "v": 8037,
        "w": 1
@@ -4501,11 +6974,81 @@
        "p": "D",
        "v": 4421
       }
-     ],
-     "note": "KY3 lists only contested county races"
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Marlaina Wallace",
+       "p": "R",
+       "v": 10060,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Laura Johnson",
+       "p": "R",
+       "v": 10052,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Joshua Meyer",
+       "p": "R",
+       "v": 9963,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Cathy Tipton",
+       "p": "R",
+       "v": 10054,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Faith Barnes",
+       "p": "R",
+       "v": 10182,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Taylor Banholzer",
+       "p": "R",
+       "v": 9925,
+       "w": 1
+      }
+     ]
     }
-   ],
-   "partial": true
+   ]
   },
   "Pike": {
    "source": "Pike County Clerk unofficial results",
@@ -4513,6 +7056,23 @@
     {
      "office": "Associate Circuit Judge",
      "cat": "judge",
+     "cands": [
+      {
+       "n": "Milan Berry",
+       "p": "R",
+       "v": 4152,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 61
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
      "cands": [
       {
        "n": "Bill Allen",
@@ -4528,8 +7088,8 @@
      ]
     },
     {
-     "office": "Presiding Commissioner",
-     "cat": "presiding",
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
      "cands": [
       {
        "n": "Kathy Turner",
@@ -4545,8 +7105,8 @@
      ]
     },
     {
-     "office": "Clerk of the Circuit Court",
-     "cat": "circuit",
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
      "cands": [
       {
        "n": "Laura Stumbaugh",
@@ -4562,8 +7122,8 @@
      ]
     },
     {
-     "office": "Clerk of the County Commission",
-     "cat": "clerk",
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
      "cands": [
       {
        "n": "Kimberly S. Martin Luebrecht",
@@ -4579,25 +7139,8 @@
      ]
     },
     {
-     "office": "Recorder of Deeds",
-     "cat": "recorder",
-     "cands": [
-      {
-       "n": "Alex G. Ellison",
-       "p": "R",
-       "v": 4089,
-       "w": 1
-      },
-      {
-       "n": "Write-in",
-       "p": "W",
-       "v": 62
-      }
-     ]
-    },
-    {
-     "office": "Collector of Revenue",
-     "cat": "collector",
+     "office": "Treasurer",
+     "cat": "treasurer",
      "cands": [
       {
        "n": "Jade Meier",
@@ -4613,8 +7156,8 @@
      ]
     },
     {
-     "office": "Prosecuting Attorney",
-     "cat": "prosecutor",
+     "office": "Collector of Revenue",
+     "cat": "collector",
      "cands": [
       {
        "n": "Tara Morrison-Eskew",
@@ -4626,6 +7169,23 @@
        "n": "Write-in",
        "p": "W",
        "v": 57
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Alex G. Ellison",
+       "p": "R",
+       "v": 4089,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 62
       }
      ]
     }
@@ -5432,6 +7992,112 @@
     }
    ]
   },
+  "Scotland": {
+   "source": "Scotland County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Kimberly J. Nicoli",
+       "p": "R",
+       "v": 1084,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Michael Billings",
+       "p": "R",
+       "v": 1116,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Julie Eggleston Monroe",
+       "p": "R",
+       "v": 1124,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Tammy Kirchner",
+       "p": "R",
+       "v": 1074,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Teresa Creek",
+       "p": "R",
+       "v": 1121,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Tasha Fadiga",
+       "p": "R",
+       "v": 1096,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Carol Shoemaker",
+       "p": "R",
+       "v": 671,
+       "w": 1
+      },
+      {
+       "n": "Diane Tague",
+       "p": "D",
+       "v": 590
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "G. David Briggs",
+       "p": "I",
+       "v": 1028,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
   "Scott": {
    "source": "Southeast Missourian roundup (no party labels)",
    "races": [
@@ -5587,6 +8253,641 @@
    ],
    "partial": true
   },
+  "St. Charles": {
+   "source": "St. Charles County Election Authority election-night results",
+   "races": [
+    {
+     "office": "County Executive",
+     "cat": "exec",
+     "cands": [
+      {
+       "n": "Steve Ehlmann",
+       "p": "R",
+       "v": 89440,
+       "w": 1
+      },
+      {
+       "n": "David Veneziano",
+       "p": "D",
+       "v": 70335
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 393
+      }
+     ]
+    },
+    {
+     "office": "County Council District 1",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Matt Swanson",
+       "p": "R",
+       "v": 14846,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 651
+      }
+     ]
+    },
+    {
+     "office": "County Council District 3",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Mike Elam",
+       "p": "R",
+       "v": 16224,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 722
+      }
+     ]
+    },
+    {
+     "office": "County Council District 5",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Terry Hollander",
+       "p": "R",
+       "v": 14505,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 777
+      }
+     ]
+    },
+    {
+     "office": "County Council District 7",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Tim Baker",
+       "p": "R",
+       "v": 12609,
+       "w": 1
+      },
+      {
+       "n": "Monica Balestreri",
+       "p": "D",
+       "v": 12468
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 26
+      }
+     ]
+    },
+    {
+     "office": "St. Charles City Council, Ward 4 (unexpired term)",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Steven Felder",
+       "p": "",
+       "v": 743,
+       "w": 1
+      },
+      {
+       "n": "Tom Bruening",
+       "p": "",
+       "v": 683
+      },
+      {
+       "n": "Brett Larkin",
+       "p": "",
+       "v": 371
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 39
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Circuit 11 Division 6",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Trisha Elizabeth McCulloch",
+       "p": "R",
+       "v": 106036,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5695
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Circuit 11 Division 8",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Peter A Lassiter",
+       "p": "R",
+       "v": 104799,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5648
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Circuit 11 Division 9",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Jeff Sandcork",
+       "p": "R",
+       "v": 104116,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5534
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Circuit 11 Division 10",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Dennis Chassaniol",
+       "p": "R",
+       "v": 104109,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5523
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Circuit 11 Division 11",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Denise L Childress",
+       "p": "R",
+       "v": 104215,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5467
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Circuit 11 Division 12",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "William Byrnes",
+       "p": "R",
+       "v": 103250,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5414
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Mary E Dempsey",
+       "p": "R",
+       "v": 107720,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 4890
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Michelle D McBride",
+       "p": "R",
+       "v": 111283,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 4798
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Joseph G McCulloch",
+       "p": "R",
+       "v": 108379,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5133
+      }
+     ]
+    },
+    {
+     "office": "County Assessor",
+     "cat": "other",
+     "cands": [
+      {
+       "n": "Travis Welge",
+       "p": "R",
+       "v": 105724,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 4857
+      }
+     ]
+    },
+    {
+     "office": "County Sheriff",
+     "cat": "other",
+     "cands": [
+      {
+       "n": "Scott A Lewis",
+       "p": "R",
+       "v": 107242,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 5066
+      }
+     ]
+    },
+    {
+     "office": "Director of Elections",
+     "cat": "other",
+     "cands": [
+      {
+       "n": "Kurt Bahr",
+       "p": "R",
+       "v": 100153,
+       "w": 1
+      },
+      {
+       "n": "Carl Herman Freese",
+       "p": "L",
+       "v": 46247
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 1340
+      }
+     ]
+    }
+   ]
+  },
+  "St. Francois": {
+   "source": "St. Francois County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Circuit 24 Division 4",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Patrick L. King",
+       "p": "R",
+       "v": 12610,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Circuit 24 Division 5",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Todd T Smith",
+       "p": "R",
+       "v": 12242,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Kent Scism",
+       "p": "R",
+       "v": 8507,
+       "w": 1
+      },
+      {
+       "n": "Bill Young",
+       "p": "D",
+       "v": 7732
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Kristina Bone",
+       "p": "R",
+       "v": 12546,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Kevin Engler",
+       "p": "R",
+       "v": 12123,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Jay Graf",
+       "p": "R",
+       "v": 12413,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Angie K Usery",
+       "p": "R",
+       "v": 12650,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Blake Dudley",
+       "p": "R",
+       "v": 12220,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Auditor",
+     "cat": "auditor",
+     "cands": [
+      {
+       "n": "Louie Seiberlich",
+       "p": "R",
+       "v": 12343,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
+  "St. Louis City": {
+   "source": "St. Louis Board of Election Commissioners unofficial results",
+   "races": [
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Shane Cohn",
+       "p": "D",
+       "v": 74515,
+       "w": 1
+      },
+      {
+       "n": "Jerome H. Bauer",
+       "p": "G",
+       "v": 7983
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Gregory F.X. Daly",
+       "p": "D",
+       "v": 79614,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "License Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Mavis \"Tessa\" Thompson",
+       "p": "D",
+       "v": 77407,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Board of Education (vote for 2)",
+     "cat": "other",
+     "cands": [
+      {
+       "n": "Donna R. Jones",
+       "p": "",
+       "v": 35373,
+       "w": 1
+      },
+      {
+       "n": "Wendy Goss",
+       "p": "",
+       "v": 33445,
+       "w": 1
+      },
+      {
+       "n": "Emily Hubbard",
+       "p": "",
+       "v": 25082
+      },
+      {
+       "n": "Zach Davis",
+       "p": "",
+       "v": 18627
+      },
+      {
+       "n": "Aneetra Williams Jones",
+       "p": "",
+       "v": 14753
+      }
+     ],
+     "note": "Two seats; nonpartisan"
+    }
+   ]
+  },
+  "St. Louis County": {
+   "source": "St. Louis Post-Dispatch election results (contested races only)",
+   "races": [
+    {
+     "office": "County Executive",
+     "cat": "exec",
+     "cands": [
+      {
+       "n": "Jake Zimmerman",
+       "p": "D",
+       "v": 251305,
+       "w": 1
+      },
+      {
+       "n": "Dennis Hancock",
+       "p": "R",
+       "v": 126949
+      },
+      {
+       "n": "J. D. McFarland",
+       "p": "G",
+       "v": 7929
+      }
+     ]
+    },
+    {
+     "office": "County Council, District 3",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Mark Osmack",
+       "p": "D",
+       "v": 36829,
+       "w": 1
+      },
+      {
+       "n": "Andrew Koenig",
+       "p": "R",
+       "v": 30315
+      }
+     ]
+    },
+    {
+     "office": "County Council, District 7",
+     "cat": "leg",
+     "cands": [
+      {
+       "n": "Mark Harder",
+       "p": "R",
+       "v": 33590,
+       "w": 1
+      },
+      {
+       "n": "John Kiehne",
+       "p": "D",
+       "v": 31798
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Melissa Price Smith",
+       "p": "D",
+       "v": 289877,
+       "w": 1
+      },
+      {
+       "n": "Theo Brown Sr.",
+       "p": "L",
+       "v": 60867
+      }
+     ]
+    },
+    {
+     "office": "County Assessor",
+     "cat": "other",
+     "cands": [
+      {
+       "n": "Doug Clemens",
+       "p": "D",
+       "v": 244380,
+       "w": 1
+      },
+      {
+       "n": "David Messner",
+       "p": "R",
+       "v": 129802
+      },
+      {
+       "n": "Austin Brown",
+       "p": "G",
+       "v": 8411
+      }
+     ]
+    }
+   ],
+   "partial": true
+  },
   "Ste. Genevieve": {
    "source": "Ste. Genevieve County Clerk election-night results",
    "races": [
@@ -5723,6 +9024,287 @@
        "n": "Write-in",
        "p": "W",
        "v": 81
+      }
+     ]
+    }
+   ]
+  },
+  "Stoddard": {
+   "source": "Stoddard County Clerk unofficial totals",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division II",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "LeAnn Below",
+       "p": "R",
+       "v": 6656,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division III",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Bradley D. Jarrell",
+       "p": "R",
+       "v": 6645,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Greg Mathis",
+       "p": "R",
+       "v": 6756,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "LeAnne Brady",
+       "p": "R",
+       "v": 6648,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Courtney Aslin",
+       "p": "R",
+       "v": 6790,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Candy Collier",
+       "p": "R",
+       "v": 6741,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Sawyer Smith",
+       "p": "R",
+       "v": 6496,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
+  "Stone": {
+   "source": "Stone County Clerk election-night results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division I",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Andrea Pate",
+       "p": "R",
+       "v": 10772,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 166
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division II",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Eric Chavez",
+       "p": "R",
+       "v": 10775,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 175
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Kelly Power",
+       "p": "R",
+       "v": 10657,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 240
+      }
+     ]
+    },
+    {
+     "office": "Northern Road Commissioner",
+     "cat": "commish",
+     "cands": [
+      {
+       "n": "Bo Jenkins",
+       "p": "R",
+       "v": 4666,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 53
+      }
+     ]
+    },
+    {
+     "office": "Southern Road Commissioner",
+     "cat": "commish",
+     "cands": [
+      {
+       "n": "Roy Campbell",
+       "p": "R",
+       "v": 5996,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 72
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Mechelee Lebow",
+       "p": "R",
+       "v": 10885,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 122
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Denise Dickens",
+       "p": "R",
+       "v": 10879,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 154
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Amy Jo Larson",
+       "p": "R",
+       "v": 10911,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 121
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Kristi Stephens",
+       "p": "R",
+       "v": 10832,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 132
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Anna Burk",
+       "p": "R",
+       "v": 10961,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 121
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Wesley M. Weber",
+       "p": "R",
+       "v": 10672,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 153
       }
      ]
     }
@@ -5954,8 +9536,20 @@
    ]
   },
   "Texas": {
-   "source": "KY3 election results (contested races only)",
+   "source": "Texas County Clerk unofficial results",
    "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Parke Stevens, Jr.",
+       "p": "R",
+       "v": 6312,
+       "w": 1
+      }
+     ]
+    },
     {
      "office": "Presiding Commissioner",
      "cat": "presiding",
@@ -5971,8 +9565,31 @@
        "p": "D",
        "v": 1658
       }
-     ],
-     "note": "KY3 lists only contested county races"
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Erin Smith",
+       "p": "R",
+       "v": 6438,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Peggy Dixon Seyler",
+       "p": "R",
+       "v": 6464,
+       "w": 1
+      }
+     ]
     },
     {
      "office": "Recorder of Deeds",
@@ -5989,11 +9606,286 @@
        "p": "D",
        "v": 1362
       }
-     ],
-     "note": "KY3 lists only contested county races"
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Jacob P. Smith",
+       "p": "R",
+       "v": 6353,
+       "w": 1
+      }
+     ]
     }
-   ],
-   "partial": true
+   ]
+  },
+  "Vernon": {
+   "source": "Vernon County Clerk unofficial canvass",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Brandon Fisher",
+       "p": "R",
+       "v": 4694,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 81
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Traci Cliffman",
+       "p": "R",
+       "v": 4602,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 183
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Carrie Poe",
+       "p": "R",
+       "v": 4741,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 59
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Adrienne Lee",
+       "p": "R",
+       "v": 4659,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 93
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Shelly Baldwin",
+       "p": "R",
+       "v": 4764,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 44
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Brandi L. McInroy",
+       "p": "R",
+       "v": 4588,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 77
+      }
+     ]
+    }
+   ]
+  },
+  "Washington": {
+   "source": "Washington County Clerk unofficial results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division 8",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Tony Dorsett",
+       "p": "R",
+       "v": 4820,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 153
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "David Sansegraw",
+       "p": "R",
+       "v": 4832,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 137
+      }
+     ]
+    },
+    {
+     "office": "County Commissioner District 2",
+     "cat": "commish",
+     "cands": [
+      {
+       "n": "Lynn Portell",
+       "p": "R",
+       "v": 2382,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 55
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Ashley Drummond Gum",
+       "p": "R",
+       "v": 4879,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 114
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Jeanette \"Jenny\" Allen",
+       "p": "R",
+       "v": 5007,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 107
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Jamie Miner",
+       "p": "R",
+       "v": 4873,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 105
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "John M. Robinson III",
+       "p": "R",
+       "v": 4854,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 103
+      }
+     ]
+    },
+    {
+     "office": "Collector",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Kris Richards",
+       "p": "R",
+       "v": 4946,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 110
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "John I Jones, IV",
+       "p": "R",
+       "v": 4728,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 133
+      }
+     ]
+    }
+   ]
   },
   "Wayne": {
    "source": "KFVS12 election results (contested races only)",
@@ -6020,8 +9912,32 @@
    "partial": true
   },
   "Webster": {
-   "source": "KY3 election results (contested races only)",
+   "source": "Webster County Clerk unofficial results (12 of 12 precincts)",
    "races": [
+    {
+     "office": "Associate Circuit Judge Division 2",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Justin M. Evans",
+       "p": "R",
+       "v": 10907,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division 3",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Cynthia R. Black",
+       "p": "R",
+       "v": 10694,
+       "w": 1
+      }
+     ]
+    },
     {
      "office": "Presiding Commissioner",
      "cat": "presiding",
@@ -6029,19 +9945,190 @@
       {
        "n": "Alan Rost",
        "p": "R",
-       "v": 6192,
+       "v": 9541,
        "w": 1
       },
       {
        "n": "Gail Peak Brown",
        "p": "I",
-       "v": 2168
+       "v": 3191
       }
-     ],
-     "note": "KY3 lists only contested county races"
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Stephanie D. Vestal",
+       "p": "R",
+       "v": 10941,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Stanley D. Whitehurst",
+       "p": "R",
+       "v": 11260,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Stacy Atkison",
+       "p": "R",
+       "v": 11040,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Todd Hungerford",
+       "p": "R",
+       "v": 10892,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Kevin Farr",
+       "p": "R",
+       "v": 11095,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Benjamin J. Berkstresser",
+       "p": "R",
+       "v": 10665,
+       "w": 1
+      }
+     ]
     }
-   ],
-   "partial": true
+   ]
+  },
+  "Wright": {
+   "source": "Wright County Clerk unofficial results (no party labels)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Jason MacPherson",
+       "p": "",
+       "v": 5002,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Doug Moseley",
+       "p": "",
+       "v": 5044,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Lori Marah Jones",
+       "p": "",
+       "v": 5009,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the County Commission",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Loni Pedersen",
+       "p": "",
+       "v": 4973,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Amanda Hoffman",
+       "p": "",
+       "v": 4996,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Treasurer",
+     "cat": "treasurer",
+     "cands": [
+      {
+       "n": "Lisa Hensley",
+       "p": "",
+       "v": 4950,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Shelly Chadwell",
+       "p": "",
+       "v": 5017,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "John Tyrrell",
+       "p": "",
+       "v": 4936,
+       "w": 1
+      }
+     ]
+    }
+   ]
   }
  }
 }

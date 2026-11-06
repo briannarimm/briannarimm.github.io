@@ -35,6 +35,12 @@ def split_party(name):
 def parse(text):
     L = [l.strip() for l in text.replace('\r', '').split('\n')]
     out, cur, buf = [], None, []
+    # "Summary Results Report" PDFs with Times Cast tables: pdftotext puts each contest's title AFTER its
+    # results, so a title closes the block above it instead of opening the one below.
+    first_title = next((i for i, l in enumerate(L) if re.search(r'\(Vote for \d+\)\s*$', l, re.I)), None)
+    first_cand = next((i for i, l in enumerate(L) if re.match(r'^Candidate Party Total', l)), None)
+    shifted = bool(re.search(r'Times Cast', text)) and first_cand is not None and first_title is not None and first_cand < first_title
+    if shifted: cur = {'contest': None, 'cands': [], 'total': None}
     def is_header(i):
         l = L[i]
         if not re.match(r"^[A-Z0-9][A-Za-z0-9 .,'’&/#()\-]{5,}$", l): return False
@@ -45,9 +51,12 @@ def parse(text):
         if not l: continue
         m2 = re.match(r"^(.*?)\s*\(Vote for \d+\)\s*$", l, re.I)
         if (m2 and len(m2.group(1)) > 4) or is_header(i):
-            title = m2.group(1) if m2 and len(m2.group(1)) > 4 else l
-            cur = {'contest': re.sub(r"\s*\(?VOTE FOR.*$", "", title, flags=re.I).strip(), 'cands': [], 'total': None}
-            out.append(cur); buf = []; continue
+            title = re.sub(r"\s*\(?VOTE FOR.*$", "", m2.group(1) if m2 and len(m2.group(1)) > 4 else l, flags=re.I).strip()
+            if shifted:
+                cur['contest'] = title; out.append(cur); cur = {'contest': None, 'cands': [], 'total': None}
+            else:
+                cur = {'contest': title, 'cands': [], 'total': None}; out.append(cur)
+            buf = []; continue
         if cur is None: continue
         mt = re.match(r"^Total Votes(?: Cast)?:?\s*(" + NUM + r")?(?:\s.*)?$", l, re.I)
         if mt:
@@ -66,7 +75,7 @@ def parse(text):
             cur['cands'].append([n, p, int(re.sub(r"[,.]", "", m.group('v')))]); continue
         if re.search(r"[A-Za-z]", l) and len(l) < 60: buf.append(l)
         else: buf = []
-    return [c for c in out if c['cands']]
+    return [c for c in out if c['cands'] and c['contest']]
 
 def offices(text):
     return [c for c in parse(text) if OFFICE.search(c['contest']) and not NOT.search(c['contest'])]

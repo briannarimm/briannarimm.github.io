@@ -179,12 +179,8 @@ Wayne|Presiding Commissioner|Jason A. Street:R:2806;Chuck Banks:D:580|KFVS lists
 Dallas|County Clerk|Savannah Skinner:R:3762;Julianna Hall:I:1267|KY3 lists only contested county races
 Greene|County Auditor|Cindy S. Stein:R:54898;Angela Crawford:D:47069|KY3 lists only contested county races
 Oregon|County Clerk|Tracy Bridges:D:1549;Babe Reese:R:1320|KY3 lists only contested county races
-Phelps|Presiding Commissioner|Joey Auxler:R:8037;Bill Lindgren:D:4421|KY3 lists only contested county races
 Shannon|Presiding Commissioner|Dennis Baker:R:1741;Kenny Schulz:D:707|KY3 lists only contested county races
 Shannon|County Treasurer|Michelle Osborne Shedd:R:1813;Debra Blackburn:D:848|KY3 lists only contested county races
-Texas|Recorder of Deeds|Lindsay Koch:R:5974;Madeline Miller:D:1362|KY3 lists only contested county races
-Texas|Presiding Commissioner|Scott Long:R:5658;Lee Kern:D:1658|KY3 lists only contested county races
-Webster|Presiding Commissioner|Alan Rost:R:6192;Gail Peak Brown:I:2168|KY3 lists only contested county races
 Pulaski|County Clerk|Dustin Robertson:R:7667
 Pulaski|Circuit Clerk and Recorder|Rachelle Beasley:D:7147
 Pulaski|County Treasurer|Mack Wilkerson:R:7654
@@ -213,7 +209,6 @@ Andrew|Recorder of Deeds|Chanler M. Williams:R:5370
 Andrew|Treasurer|Cindy Esely:R:5490
 Andrew|Prosecuting Attorney|Reilly DeLong:R:5400
 Andrew|Collector|Phillip (Phil) N. Rogers:R:5499
-McDonald|Presiding Commissioner|Bryan Hall::4106;Jonica Bridenstine::862;James McCool::850|KOAM lists only contested county races; party labels not given
 Newton|Presiding Commissioner|Mark Bridges::14104;Martin Lindstedt::2442|KOAM lists only contested county races; party labels not given
 Chariton|Associate Circuit Judge|Andrea Vandeloech:D:1874;Write-in:W:31
 Chariton|Presiding Commissioner|Evan M. Emmerich:R:2091;Write-in:W:33
@@ -237,3 +232,267 @@ Platte|Prosecuting Attorney|Tony Luetkemeyer:R:30292
 Platte|County Auditor|Kevin Robinson:I:21045;Laura Waldon:R:20165
 Platte|County Collector|Holly Cayer:I:22139;Jim Bosch:R:19304
 Platte|County Treasurer|Chris Kendall:I:22128;Krysten Jury:R:19205
+St. Louis County|County Executive|Jake Zimmerman:D:251305;Dennis Hancock:R:126949;J. D. McFarland:G:7929
+St. Louis County|County Council, District 3|Mark Osmack:D:36829;Andrew Koenig:R:30315
+St. Louis County|County Council, District 7|Mark Harder:R:33590;John Kiehne:D:31798
+St. Louis County|County Assessor|Doug Clemens:D:244380;David Messner:R:129802;Austin Brown:G:8411
+St. Louis County|Prosecuting Attorney|Melissa Price Smith:D:289877;Theo Brown Sr.:L:60867
+@Grundy|KTTN (unopposed races; vote counts not reported)
+Grundy|Presiding Commissioner|Phillip Ray::|Unopposed; vote count not reported
+Grundy|County Clerk|Courtney Campbell::|Unopposed; vote count not reported
+Grundy|Circuit Clerk and Ex Officio Recorder of Deeds|Michelle Vandevender::|Unopposed; vote count not reported
+Grundy|Associate Circuit Judge|Carrie Lamm-Clark::|Unopposed; vote count not reported
+Grundy|Prosecuting Attorney|Kelly Puckett::|Unopposed; vote count not reported
+@Harrison|KTTN (only some races listed)
+Harrison|County Clerk|Chancel Crabtree:I:1719;Lee Ann Miles::547
+@Clay|Clay County Board of Election Commissioners results
+Clay|Presiding Commissioner|Jennifer Justus:N:48831;Jerry Nolte:N:38056;Write-in:W:856|Nonpartisan race under the county charter
+Clay|Eastern Commissioner|Jay R. Johnson:N:23847;Mark McAuliffe:N:20940;Write-in:W:331|Nonpartisan; Eastern District voters only
+@Howell|Howell County Clerk election results (9:47 p.m.)
+Howell|Associate Circuit Judge Division 2|Melissa Stewart:R:9323
+Howell|Associate Circuit Judge Division 3|Heath Hardman:R:9191
+Howell|Presiding Commissioner|Ralph Riggs:R:9203
+Howell|County Clerk|Kelly Waggoner:R:9400
+Howell|Circuit Clerk|Cynthia Lee:R:9261
+Howell|Recorder of Deeds|Jeff Brasier:R:9178
+Howell|County Treasurer|Nancy Franz:R:9266
+Howell|Prosecuting Attorney|Michael P. Hutchings:R:9130
+Howell|County Collector|Janet Crow:R:9145
+@Lawrence|Lawrence County Clerk unofficial results
+Lawrence|Associate Circuit Judge Division II|Matthew Kasper:R:9444
+Lawrence|Presiding Commissioner|Bob Senninger:R:9606
+Lawrence|County Clerk|Tammy (Cole) Riebe:R:9681
+Lawrence|Circuit Clerk|Pam Mieswinkel Fobair:R:9601
+Lawrence|Recorder of Deeds|Denise Massie:R:9620
+Lawrence|County Treasurer|Steve Wendler:R:9593
+Lawrence|Prosecuting Attorney|Darlene Parrigon:R:9346
+Lawrence|Collector of Revenue|Erin Owens:R:9522
+@Knox|Knox County Clerk unofficial results
+Knox|Associate Circuit Judge|Andrew A. Boster:R:908
+Knox|Presiding Commissioner|Leslie Cardwell:I:653;Weldon Woodward:R:267;Chaise A. Stull:I:115
+Knox|County Clerk|Marlene E. Spory:R:962
+Knox|Circuit Clerk|Kimberly A. Hatfield:R:981
+Knox|Recorder of Deeds|Audrey Hamlin:R:1005
+Knox|County Treasurer|Donnie L. Davis:R:996
+Knox|Prosecuting Attorney|Brenda Swedberg:I:861
+Knox|Collector of Revenue|Linda J. Woods:R:981
+@St. Francois|St. Francois County Clerk unofficial results
+St. Francois|Associate Circuit Judge Circuit 24 Division 4|Patrick L. King:R:12610
+St. Francois|Associate Circuit Judge Circuit 24 Division 5|Todd T Smith:R:12242
+St. Francois|Presiding Commissioner|Kent Scism:R:8507;Bill Young:D:7732
+St. Francois|County Clerk|Kevin Engler:R:12123
+St. Francois|Circuit Clerk|Kristina Bone:R:12546
+St. Francois|Recorder of Deeds|Jay Graf:R:12413
+St. Francois|Prosecuting Attorney|Blake Dudley:R:12220
+St. Francois|County Collector|Angie K Usery:R:12650
+St. Francois|County Auditor|Louie Seiberlich:R:12343
+@Hickory|Hickory County Clerk unofficial results
+Hickory|Associate Circuit Judge|James A. Hackett:D:2321
+Hickory|Presiding Commissioner|Robert Sawyer:R:2915
+Hickory|Clerk of the County Commission|Tamara Weidman:R:2975
+Hickory|Circuit Clerk|Alana (Barger) Brauch:R:2919
+Hickory|Recorder of Deeds|Pamela Hutton:R:2937
+Hickory|County Treasurer|Kenny Ratliff:R:1355;Anita Moss:W:997;Lindsey Pitts:W:331|Moss and Pitts were declared write-in candidates
+Hickory|Prosecuting Attorney|Darla J. Mueller:R:2845
+Hickory|Collector of Revenue|Karen Stokes:R:3003
+@Miller|Miller County Clerk general election results (scanned)
+Miller|Associate Circuit Judge|Gerard "Jay" Harms, Jr.:R:6296
+Miller|Presiding Commissioner|Neil R. Atkinson:R:6383
+Miller|County Clerk|Clinton A. Jenkins:R:6494
+Miller|Circuit Clerk|Sheila Curtman:R:6393
+Miller|Recorder of Deeds|Kathy "Kate" Plemmons:R:6371
+Miller|County Treasurer|Mindy Robison-Kampeter:R:6403
+Miller|Prosecuting Attorney|Robert J. Seek:R:6138
+Miller|County Collector|Jody Vance:R:6419
+@Monroe|Monroe County Clerk unofficial results
+Monroe|Associate Circuit Judge|Talley M. Smith:R:2342
+Monroe|Presiding Commissioner|Curt Wheeler:R:2290
+Monroe|County Clerk|Beth Whelan:R:2294
+Monroe|Circuit Clerk|Heather D. Wheeler:R:2302
+Monroe|Recorder|Julie Neer:R:2290
+Monroe|Treasurer|Sheila Jurgesmeyer:D:1864
+Monroe|Prosecuting Attorney|Jake Peak:R:2323
+Monroe|Collector|Chrissy Graupman:R:2332
+@Scotland|Scotland County Clerk unofficial results
+Scotland|Associate Circuit Judge|Kimberly J. Nicoli:R:1084
+Scotland|Presiding Commissioner|Michael Billings:R:1116
+Scotland|County Clerk|Tammy Kirchner:R:1074
+Scotland|Circuit Clerk|Julie Eggleston Monroe:R:1124
+Scotland|Recorder of Deeds|Teresa Creek:R:1121
+Scotland|Treasurer|Tasha Fadiga:R:1096
+Scotland|Prosecuting Attorney|G. David Briggs:I:1028
+Scotland|County Collector|Carol Shoemaker:R:671;Diane Tague:D:590
+@Stoddard|Stoddard County Clerk unofficial totals
+Stoddard|Associate Circuit Judge Division II|LeAnn Below:R:6656
+Stoddard|Associate Circuit Judge Division III|Bradley D. Jarrell:R:6645
+Stoddard|Presiding Commissioner|Greg Mathis:R:6756
+Stoddard|County Clerk|Courtney Aslin:R:6790
+Stoddard|Circuit Clerk|LeAnne Brady:R:6648
+Stoddard|Recorder of Deeds|Candy Collier:R:6741
+Stoddard|Prosecuting Attorney|Sawyer Smith:R:6496
+@Vernon|Vernon County Clerk unofficial canvass
+Vernon|Associate Circuit Judge|Brandon Fisher:R:4694;Write-in:W:81
+Vernon|Presiding Commissioner|Traci Cliffman:R:4602;Write-in:W:183
+Vernon|Clerk of the Circuit Court|Carrie Poe:R:4741;Write-in:W:59
+Vernon|County Clerk|Adrienne Lee:R:4659;Write-in:W:93
+Vernon|Prosecuting Attorney|Brandi L. McInroy:R:4588;Write-in:W:77
+Vernon|Recorder of Deeds|Shelly Baldwin:R:4764;Write-in:W:44
+@Wright|Wright County Clerk unofficial results (no party labels)
+Wright|Associate Circuit Judge|Jason MacPherson::5002
+Wright|Presiding Commissioner|Doug Moseley::5044
+Wright|Clerk of the Circuit Court|Lori Marah Jones::5009
+Wright|Clerk of the County Commission|Loni Pedersen::4973
+Wright|Recorder of Deeds|Amanda Hoffman::4996
+Wright|Prosecuting Attorney|John Tyrrell::4936
+Wright|Collector of Revenue|Shelly Chadwell::5017
+Wright|Treasurer|Lisa Hensley::4950
+@Cedar|Cedar County Clerk unofficial results (header says 6 of 9 precincts, but the totals match the state's final count)
+Cedar|Associate Circuit Judge|Jacob Dawson:R:3879;Write-in:W:44
+Cedar|Clerk of the Circuit Court|Sarah Turner:R:3870;Write-in:W:37
+Cedar|Presiding Commissioner|Kenneth Thornton:R:3761;Write-in:W:64
+Cedar|County Clerk|Chrislynn Price:R:3813;Write-in:W:47
+Cedar|Recorder of Deeds|Melissa Heskett:R:3820;Write-in:W:44
+Cedar|Prosecuting Attorney|Nicole L Barrett:R:3806;Write-in:W:35
+Cedar|Collector of Revenue|Lisa Nelson:R:3893;Write-in:W:37
+Cedar|County Treasurer|Carla Lowe:R:3810;Write-in:W:31
+@Butler|Butler County Clerk unofficial results
+Butler|Associate Circuit Judge Division 2|Wade Pierce:R:8760;Write-in:W:170
+Butler|Associate Circuit Judge Division 3|John H. Shock:R:8724;Write-in:W:177
+Butler|Presiding Commissioner|Vince Lampe:R:8718;Write-in:W:186
+Butler|Clerk of the Circuit Court|Holly Lawson:R:8706;Write-in:W:151
+Butler|Clerk of the County Commission|Donna Hillis:R:8758;Write-in:W:147
+Butler|Recorder of Deeds|Lisa Larmie:R:8695;Write-in:W:164
+Butler|Prosecuting Attorney|Ted Liszewski:R:8619;Write-in:W:175
+Butler|Collector of Revenue|Emily Parks:R:8789;Write-in:W:150
+Butler|Treasurer|Tammy Marler:R:8754;Write-in:W:150
+@Dunklin|Dunklin County Clerk unofficial results (9:26 p.m.)
+Dunklin|Associate Circuit Judge Division 2|John Spielman:R:4375;Write-in:W:125
+Dunklin|Associate Circuit Judge Division 3|Jason M. Scherer:R:4337;Write-in:W:115
+Dunklin|Presiding Commissioner|Don Collins:R:4342;Write-in:W:122
+Dunklin|Clerk of the Circuit Court|Paula S. Gargus:R:4340;Write-in:W:108
+Dunklin|County Clerk|Larry Ray:R:4292;Write-in:W:120
+Dunklin|Recorder of Deeds|Angela Smith Casey:R:4315;Write-in:W:107
+Dunklin|Prosecuting Attorney|Nicholas Dave Jain:R:4204;Write-in:W:144
+@Moniteau|Moniteau County Clerk unofficial results (via California Democrat)
+Moniteau|Associate Circuit Judge|Aaron J Martin:R:3826
+Moniteau|Presiding Commissioner|James Bonecutter:R:3830
+Moniteau|County Clerk|Roberta Elliott:R:3923
+Moniteau|Clerk of the Circuit Court & Ex Officio Recorder of Deeds|Andy Burger:R:3889
+Moniteau|County Treasurer|Sarah B. Jones:R:3871
+Moniteau|Prosecuting Attorney|Derik Kinde:R:3750
+Moniteau|Collector of Revenue|Russell P. Hill:R:3796
+@Morgan|KRMS radio (only some races listed)
+Morgan|Presiding Commissioner|Tony Stephens::4388;Lavern Zimmerman:I:1693
+@Mississippi|KFVS12 election results (contested races only)
+Mississippi|Sheriff|Steve Kuykendall::1579;Keith Moore::654;Barry Morgan::604;Jonathan Hall::271|As listed by KFVS12; party labels not given
+@Jefferson|Jefferson County Clerk election-night results
+Jefferson|Associate Circuit Judge Division 10|Lucas Null:R:44227;Colby Smith-Hynes:L:25023;Write-in:W:648
+Jefferson|Associate Circuit Judge Division 11|Juli Hand:R:54184;Write-in:W:2476
+Jefferson|Associate Circuit Judge Division 12|Renee Reuter:R:53401;Write-in:W:2659
+Jefferson|Associate Circuit Judge Division 13|Katherine Hardy Senkel:R:53711;Write-in:W:2416
+Jefferson|Associate Circuit Judge Division 14|Timothy Miller:R:53807;Write-in:W:2372
+Jefferson|Associate Circuit Judge Division 15|Michelle Hughes:R:53634;Write-in:W:2364
+Jefferson|Circuit Clerk|Mike Reuter:R:53277;Write-in:W:2516
+Jefferson|County Executive|Tim Whitney:R:45102;David Frank:D:30182;Write-in:W:161
+Jefferson|County Council Member District 1|John T Parker:R:7760;Write-in:W:372
+Jefferson|County Council Member District 3|Lori Arons:R:7696;Write-in:W:395
+Jefferson|County Council Member District 5|Timothy Bennett:R:5777;Danielle "Dani" Elliott:L:3985;Write-in:W:62
+Jefferson|County Council Member District 7|Bob Tullock:R:8209;Write-in:W:356
+Jefferson|County Clerk|Jaclyn Riebold:R:43869;Tracy Johnson:D:31403;Write-in:W:154
+Jefferson|Recorder of Deeds|Debbie (Dunnegan) Waters:R:54647;Write-in:W:2234
+Jefferson|Collector|Jennifer Modray:R:54014;Write-in:W:2194
+Jefferson|Auditor|Kristy Apprill:R:53897;Write-in:W:2208
+Jefferson|Prosecuting Attorney|Trisha C Stefanski:R:53809;Write-in:W:2358
+@St. Charles|St. Charles County Election Authority election-night results
+St. Charles|Associate Circuit Judge Circuit 11 Division 6|Trisha Elizabeth McCulloch:R:106036;Write-in:W:5695
+St. Charles|Associate Circuit Judge Circuit 11 Division 8|Peter A Lassiter:R:104799;Write-in:W:5648
+St. Charles|Associate Circuit Judge Circuit 11 Division 9|Jeff Sandcork:R:104116;Write-in:W:5534
+St. Charles|Associate Circuit Judge Circuit 11 Division 10|Dennis Chassaniol:R:104109;Write-in:W:5523
+St. Charles|Associate Circuit Judge Circuit 11 Division 11|Denise L Childress:R:104215;Write-in:W:5467
+St. Charles|Associate Circuit Judge Circuit 11 Division 12|William Byrnes:R:103250;Write-in:W:5414
+St. Charles|County Executive|Steve Ehlmann:R:89440;David Veneziano:D:70335;Write-in:W:393
+St. Charles|Director of Elections|Kurt Bahr:R:100153;Carl Herman Freese:L:46247;Write-in:W:1340
+St. Charles|Recorder of Deeds|Mary E Dempsey:R:107720;Write-in:W:4890
+St. Charles|Prosecuting Attorney|Joseph G McCulloch:R:108379;Write-in:W:5133
+St. Charles|Collector of Revenue|Michelle D McBride:R:111283;Write-in:W:4798
+St. Charles|County Sheriff|Scott A Lewis:R:107242;Write-in:W:5066
+St. Charles|County Assessor|Travis Welge:R:105724;Write-in:W:4857
+St. Charles|County Council District 1|Matt Swanson:R:14846;Write-in:W:651
+St. Charles|County Council District 3|Mike Elam:R:16224;Write-in:W:722
+St. Charles|County Council District 5|Terry Hollander:R:14505;Write-in:W:777
+St. Charles|County Council District 7|Tim Baker:R:12609;Monica Balestreri:D:12468;Write-in:W:26
+St. Charles|St. Charles City Council, Ward 4 (unexpired term)|Steven Felder::743;Tom Bruening::683;Brett Larkin::371;Write-in:W:39
+@McDonald|McDonald County Clerk unofficial statement of votes cast
+McDonald|Associate Circuit Judge|Dylan Thomas:R:5049;Write-in:W:87
+McDonald|Presiding Commissioner|Bryan Hall:R:4106;Jonica Bridenstine:I:862;James McCool:D:850;Write-in:W:15
+McDonald|Clerk of the Circuit Court|Tanya Lewis:R:5085;Write-in:W:76
+McDonald|Clerk of the County Commission|Jessica Cole:R:5076;Write-in:W:71
+McDonald|Recorder of Deeds|Michelle Barker:R:5062;Write-in:W:75
+McDonald|Prosecuting Attorney|Maleia Cheney:R:4797;Write-in:W:130
+McDonald|Collector of Revenue|Jennifer Weber:R:5083;Write-in:W:72
+McDonald|Treasurer|Sheila Gideon Fuller:R:5045;Write-in:W:73
+@Webster|Webster County Clerk unofficial results (12 of 12 precincts)
+Webster|Associate Circuit Judge Division 2|Justin M. Evans:R:10907
+Webster|Associate Circuit Judge Division 3|Cynthia R. Black:R:10694
+Webster|Presiding Commissioner|Alan Rost:R:9541;Gail Peak Brown:I:3191
+Webster|County Clerk|Stanley D. Whitehurst:R:11260
+Webster|Circuit Clerk|Stephanie D. Vestal:R:10941
+Webster|Recorder of Deeds|Stacy Atkison:R:11040
+Webster|County Treasurer|Todd Hungerford:R:10892
+Webster|Prosecuting Attorney|Benjamin J. Berkstresser:R:10665
+Webster|Collector of Revenue|Kevin Farr:R:11095
+@Texas|Texas County Clerk unofficial results
+Texas|Associate Circuit Judge|Parke Stevens, Jr.:R:6312
+Texas|Presiding Commissioner|Scott Long:R:5658;Lee Kern:D:1658
+Texas|County Clerk|Peggy Dixon Seyler:R:6464
+Texas|Clerk of the Circuit Court|Erin Smith:R:6438
+Texas|Recorder of Deeds|Lindsay Koch:R:5974;Madeline Miller:D:1362
+Texas|Prosecuting Attorney|Jacob P. Smith:R:6353
+@Pemiscot|Pemiscot County Clerk unofficial results
+Pemiscot|Associate Circuit Judge Division 2|Bill Carter:R:2267;Write-in:W:76
+Pemiscot|Associate Circuit Judge Division 3|W. Keith Currie:D:2122;Write-in:W:64
+Pemiscot|Presiding Commissioner|Mark Cartee:R:2221;Write-in:W:82
+Pemiscot|Clerk of the Circuit Court|Tonya Hillhouse:R:2276;Write-in:W:65
+Pemiscot|Clerk of the County Commission|Pam Treece:R:2398;Write-in:W:58
+Pemiscot|Recorder of Deeds|Amanda Littleton Gordon:R:2284;Write-in:W:66
+Pemiscot|Prosecuting Attorney|Ryan Dicus:R:2261;Write-in:W:66
+Pemiscot|Collector of Revenue|Rhonda Parkinson Price:R:2363;Write-in:W:61
+Pemiscot|Treasurer|Susan Tillman Faulkner:R:2290;Write-in:W:63
+@St. Louis City|St. Louis Board of Election Commissioners unofficial results
+St. Louis City|Collector of Revenue|Gregory F.X. Daly:D:79614
+St. Louis City|License Collector|Mavis "Tessa" Thompson:D:77407
+St. Louis City|Recorder of Deeds|Shane Cohn:D:74515;Jerome H. Bauer:G:7983
+St. Louis City|Board of Education (vote for 2)|Donna R. Jones::35373;Wendy Goss::33445;Emily Hubbard::25082;Zach Davis::18627;Aneetra Williams Jones::14753|Two seats; nonpartisan
+@Franklin|Franklin County Clerk election-night results
+Franklin|ASSOCIATE CIRCUIT JUDGE DIVISION V|JOE PURSCHKE:R:30113;Write-in:W:879
+Franklin|ASSOCIATE CIRCUIT JUDGE DIVISION VI|MATTHEW HOUSTON:R:29304;Write-in:W:904
+Franklin|ASSOCIATE CIRCUIT JUDGE DIVISION VII|MARK E. BRINKMANN:R:29475;Write-in:W:866
+Franklin|PRESIDING COMMISSIONER|DAVE SCHATZ:R:17531;RICHELE LANDA:D:15475;THOMAS KRAUSCH:L:4780;Write-in:W:129
+Franklin|COUNTY CLERK|TIM BAKER:R:30878;Write-in:W:751
+Franklin|CLERK OF THE CIRCUIT COURT|CONNIE S. WARD:R:30027;Write-in:W:728
+Franklin|RECORDER OF DEEDS|LISA SMART:R:30009;Write-in:W:716
+Franklin|PROSECUTING ATTORNEY|MATTHEW BECKER:R:29669;Write-in:W:792
+Franklin|COLLECTOR OF REVENUE|DOUG TRENTMANN:R:30228;Write-in:W:734
+Franklin|COUNTY AUDITOR|ANNE BARRY:R:29716;Write-in:W:716
+@Stone|Stone County Clerk election-night results
+Stone|ASSOCIATE CIRCUIT JUDGE DIVISION I|ANDREA PATE:R:10772;Write-in:W:166
+Stone|ASSOCIATE CIRCUIT JUDGE DIVISION II|ERIC CHAVEZ:R:10775;Write-in:W:175
+Stone|PRESIDING COMMISSIONER|KELLY POWER:R:10657;Write-in:W:240
+Stone|COUNTY CLERK|DENISE DICKENS:R:10879;Write-in:W:154
+Stone|CLERK OF THE CIRCUIT COURT|MECHELEE LEBOW:R:10885;Write-in:W:122
+Stone|RECORDER OF DEEDS|AMY JO LARSON:R:10911;Write-in:W:121
+Stone|COUNTY TREASURER|KRISTI STEPHENS:R:10832;Write-in:W:132
+Stone|PROSECUTING ATTORNEY|WESLEY M. WEBER:R:10672;Write-in:W:153
+Stone|COLLECTOR OF REVENUE|ANNA BURK:R:10961;Write-in:W:121
+Stone|NORTHERN ROAD COMMISSIONER|BO JENKINS:R:4666;Write-in:W:53
+Stone|SOUTHERN ROAD COMMISSIONER|ROY CAMPBELL:R:5996;Write-in:W:72
+@Washington|Washington County Clerk unofficial results
+Washington|Associate Circuit Judge Division 8|Tony Dorsett:R:4820;Write-in:W:153
+Washington|Presiding Commissioner|David Sansegraw:R:4832;Write-in:W:137
+Washington|County Commissioner District 2|Lynn Portell:R:2382;Write-in:W:55
+Washington|County Clerk|Jeanette "Jenny" Allen:R:5007;Write-in:W:107
+Washington|Circuit Clerk|Ashley Drummond Gum:R:4879;Write-in:W:114
+Washington|Recorder of Deeds|Jamie Miner:R:4873;Write-in:W:105
+Washington|County Treasurer|John M. Robinson III:R:4854;Write-in:W:103
+Washington|Prosecuting Attorney|John I Jones, IV:R:4728;Write-in:W:133
+Washington|County Collector|Kris Richards:R:4946;Write-in:W:110

@@ -30,6 +30,9 @@ AUTO = {  # file -> (county, source label)
     'e205b0c52dca23a06472ae9113555cf6.txt': ('DeKalb', 'DeKalb County Clerk election summary'),
     'nov_2026__election_summary_.txt': ('Johnson', 'Johnson County Clerk election summary'),
     'ray.txt': ('Ray', 'Ray County Clerk election summary'),
+    '/home/claude/web/dl/nodaway.txt': ('Nodaway', 'Nodaway County Clerk unofficial results'),
+    '/home/claude/web/dl/phelps.txt': ('Phelps', 'Phelps County Clerk cumulative results'),
+    '/home/claude/web/dl/jasper.txt': ('Jasper', 'Jasper County Clerk unofficial results'),
 }
 MANUAL_SRC = {
     'Barry': 'Barry County Clerk election summary (scanned)', 'Benton': 'Benton County Clerk election summary',
@@ -54,7 +57,11 @@ MANUAL_SRC = {
     'Pulaski': 'Pulaski County Clerk election summary (photos)', 'Laclede': 'Laclede County Clerk election summary (scanned)',
     'Andrew': 'Andrew County Clerk unofficial results', 'Chariton': 'Chariton County Clerk statement of votes cast (scanned)',
     'Platte': 'Platte County Clerk election summary',
-    'Jackson': 'The Beacon (KC), unofficial results as of 10 p.m. Nov. 3',
+    'St. Louis County': 'St. Louis Post-Dispatch election results (contested races only)',
+    'St. Louis City': 'St. Louis Post-Dispatch election results (contested races only)',
+    'Franklin': 'St. Louis Post-Dispatch election results (contested races only)',
+
+    'Jackson': 'Jackson County and Kansas City election boards combined, via The Beacon (unofficial as of 10 p.m. Nov. 3)',
 }
 # counties where the source only lists contested races, so uncontested offices are missing
 PARTIAL = {k for k, v in MANUAL_SRC.items() if 'contested races only' in v} | {'Jackson'}
@@ -68,7 +75,8 @@ def tcase(s):
             t = t.capitalize() if (i == 0 or t not in SMALL) else t
             t = re.sub(r"^(\(?)[Mm]c([a-z])", lambda m: m.group(1) + 'Mc' + m.group(2).upper(), t)
             t = re.sub(r"(['\-(\"])([a-z])", lambda m: m.group(1) + m.group(2).upper(), t)
-            t = re.sub(r"^(Ii|Iii|Iv)$", lambda m: m.group(1).upper(), t)
+            t = re.sub(r"^(Ii|Iii|Iv|Vi|Vii|Viii|Ix)$", lambda m: m.group(1).upper(), t)
+            if i and t in ("v", "V") and s.lower().split()[i-1] == "division": t = "V"
             t = re.sub(r"^Dl", "Dl", t)
             w.append(t)
         s = ' '.join(w)
@@ -116,25 +124,24 @@ def add(county, src, office, cands, note=''):
     c['races'].append({'office': office, 'cat': cat(office), 'cands': cands, **({'note': note} if note else {})})
 
 for f, (county, src) in AUTO.items():
-    for c in offices(open(T + f, errors='ignore').read()):
+    for c in offices(open(f if f.startswith('/') else T + f, errors='ignore').read()):
         off = office_name(c['contest'])
         cs = [x for x in c['cands'] if not re.search(r'Precincts Reporting', x[0])]
         if all(x[0] in ('Yes', 'No') for x in cs): continue  # a ballot question, not an office (Pike, Lafayette)
         note = ''
-        if county == 'Lafayette' and re.search(r'presiding|southern', off, re.I):
-            note = ('The county report shows the presiding commissioner race on about half the county\u2019s ballots (5,731 of 11,758) '
-                    'and the southern-district race on all of them, which looks reversed. Check the county\u2019s final report.')
         add(county, src, off, [{'n': tcase(n), 'p': p, 'v': v} for n, p, v in cs], note)
 
 for line in open(MANUAL):
     if line.startswith('#') or not line.strip(): continue
+    if line.startswith('@'):  # @County|source label  (sets or overrides a county's source)
+        k, v = line[1:].rstrip('\n').split('|', 1); MANUAL_SRC[k] = v; continue
     p = line.rstrip('\n').split('|')
     county, off, cl = p[0], p[1], p[2]
     note = p[3] if len(p) > 3 else ''
     cands = []
     for c in filter(None, cl.split(';')):
         n, pa, v = c.rsplit(':', 2)
-        cands.append({'n': n, 'p': pa, 'v': int(v) if v else None})
+        cands.append({'n': tcase(n), 'p': pa, 'v': int(v) if v else None})
     add(county, MANUAL_SRC[county], office_name(off), cands, note)
 
 # winner = top vote-getter who isn't a lone write-in total (or the named write-in winner)
@@ -148,7 +155,7 @@ for c in counties.values():
     order = [k for k, _, _ in CATS]
     nat = lambda t: [int(x) if x.isdigit() else x for x in re.split(r'(\d+)', t)]
     c['races'].sort(key=lambda r: (order.index(r['cat']), nat(r['office'])))
-    if c['source'] and any(k in c['source'] for k in ['contested races only']) or c['source'].startswith('The Beacon'):
+    if re.search(r'contested races only|some races|only some', c['source']) or c['source'].startswith('The Beacon'):
         c['partial'] = True
 
 out = {
