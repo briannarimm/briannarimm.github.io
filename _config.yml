@@ -38,3 +38,7 @@ exclude:
   - Gemfile.lock
   - vendor/
   - node_modules/
+  # Cloudflare Workers files (see cloudflare/README.md)
+  - cloudflare/
+  - wrangler.jsonc
+  - .wrangler/
