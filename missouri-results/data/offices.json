@@ -2449,13 +2449,13 @@
      "cat": "clerk",
      "cands": [
       {
-       "n": "Sheila Lewis",
+       "n": "Kassie Lewis",
        "p": "R",
        "v": 1895,
        "w": 1
       },
       {
-       "n": "Kassie McGrew",
+       "n": "Sheila McGrew",
        "p": "D",
        "v": 607
       }
@@ -3745,8 +3745,96 @@
       },
       {
        "n": "Lee Ann Miles",
-       "p": "",
+       "p": "R",
        "v": 547
+      }
+     ]
+    }
+   ],
+   "partial": true
+  },
+  "Henry": {
+   "source": "KDKD radio, from Henry County results (only some races may be listed)",
+   "races": [
+    {
+     "office": "Associate Circuit Judge",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Harold L. Dump",
+       "p": "R",
+       "v": 5933,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Daniel P. Wilson",
+       "p": "R",
+       "v": 4138,
+       "w": 1
+      },
+      {
+       "n": "Shannon Hills",
+       "p": "D",
+       "v": 2420
+      },
+      {
+       "n": "Amanda J. Johnson",
+       "p": "I",
+       "v": 642
+      }
+     ]
+    },
+    {
+     "office": "Circuit Clerk",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Wendi McGhee",
+       "p": "R",
+       "v": 5976,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Kelly Marriott",
+       "p": "R",
+       "v": 6040,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Gail A. Perrymann",
+       "p": "R",
+       "v": 5968,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Fred R. Bunch",
+       "p": "D",
+       "v": 4943,
+       "w": 1
       }
      ]
     }
@@ -5064,6 +5152,11 @@
        "p": "R",
        "v": 9712,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 231
       }
      ]
     },
@@ -5076,6 +5169,11 @@
        "p": "R",
        "v": 9648,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 206
       }
      ]
     },
@@ -5088,6 +5186,11 @@
        "p": "R",
        "v": 9662,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 243
       }
      ]
     },
@@ -5100,6 +5203,11 @@
        "p": "R",
        "v": 9756,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 179
       }
      ]
     },
@@ -5112,6 +5220,11 @@
        "p": "R",
        "v": 9751,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 186
       }
      ]
     },
@@ -5124,6 +5237,11 @@
        "p": "R",
        "v": 9720,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 168
       }
      ]
     },
@@ -5136,6 +5254,11 @@
        "p": "R",
        "v": 9709,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 174
       }
      ]
     },
@@ -5148,6 +5271,11 @@
        "p": "R",
        "v": 9763,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 173
       }
      ]
     },
@@ -5160,6 +5288,11 @@
        "p": "R",
        "v": 9617,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 216
       }
      ]
     },
@@ -5172,6 +5305,11 @@
        "p": "R",
        "v": 9678,
        "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 186
       }
      ]
     }
@@ -5457,6 +5595,124 @@
        "n": "Darlene Parrigon",
        "p": "R",
        "v": 9346,
+       "w": 1
+      }
+     ]
+    }
+   ]
+  },
+  "Lincoln": {
+   "source": "Lincoln County Clerk election-night results",
+   "races": [
+    {
+     "office": "Associate Circuit Judge Division II",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Rebecca A Richardson",
+       "p": "R",
+       "v": 15789,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Associate Circuit Judge Division III",
+     "cat": "judge",
+     "cands": [
+      {
+       "n": "Michael Jacobs",
+       "p": "R",
+       "v": 15651,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Presiding Commissioner",
+     "cat": "presiding",
+     "cands": [
+      {
+       "n": "Joe Kaimann",
+       "p": "R",
+       "v": 15489,
+       "w": 1
+      },
+      {
+       "n": "Write-in",
+       "p": "W",
+       "v": 677
+      }
+     ]
+    },
+    {
+     "office": "Clerk of the Circuit Court",
+     "cat": "circuit",
+     "cands": [
+      {
+       "n": "Kathy Krieg Hall",
+       "p": "R",
+       "v": 15712,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Clerk",
+     "cat": "clerk",
+     "cands": [
+      {
+       "n": "Kenneth Schulte",
+       "p": "R",
+       "v": 15752,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Recorder of Deeds",
+     "cat": "recorder",
+     "cands": [
+      {
+       "n": "Tracy K. Martin",
+       "p": "R",
+       "v": 15815,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Collector of Revenue",
+     "cat": "collector",
+     "cands": [
+      {
+       "n": "Jessica Zumwalt",
+       "p": "R",
+       "v": 16191,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "Prosecuting Attorney",
+     "cat": "prosecutor",
+     "cands": [
+      {
+       "n": "Mike Wood",
+       "p": "R",
+       "v": 15685,
+       "w": 1
+      }
+     ]
+    },
+    {
+     "office": "County Auditor",
+     "cat": "auditor",
+     "cands": [
+      {
+       "n": "Brenda Luck Schulte",
+       "p": "R",
+       "v": 15565,
        "w": 1
       }
      ]

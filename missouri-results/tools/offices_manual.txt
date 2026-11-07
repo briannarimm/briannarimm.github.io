@@ -191,16 +191,16 @@ Pulaski|Associate Circuit Judge (Probate)|Michael V. Headrick:R:7809
 Pulaski|Presiding Commissioner|Robert Goodrich:R:7751
 Pulaski|911 Board, Western District (vote for 2)|Dave Howlett::1494;Bart Warren::1431;Rex Larson::1382|Two seats; top two win
 Pulaski|911 Board, Eastern District (vote for 2)|Deborah Decker::5429;L.D. Curran::4947|Two seats
-Laclede|Associate Circuit Judge Division 4|Larry Winfrey Jr.:R:9712
-Laclede|Associate Circuit Judge Division 5|Steve Jackson:R:9648
-Laclede|Presiding Commissioner|Randy Angst:R:9662
-Laclede|County Clerk|Linda Cansler:R:9751
-Laclede|Circuit Clerk|Heather Officer:R:9756
-Laclede|Collector|Toni Morris:R:9763
-Laclede|Prosecuting Attorney|Amy Folsom:R:9617
-Laclede|Public Administrator|Rebecka Woolley:R:9678
-Laclede|Recorder of Deeds|Jennifer Raef:R:9720
-Laclede|Treasurer|Kristy Carr:R:9709
+Laclede|Associate Circuit Judge Division 4|Larry Winfrey Jr.:R:9712;Write-in:W:231
+Laclede|Associate Circuit Judge Division 5|Steve Jackson:R:9648;Write-in:W:206
+Laclede|Presiding Commissioner|Randy Angst:R:9662;Write-in:W:243
+Laclede|County Clerk|Linda Cansler:R:9751;Write-in:W:186
+Laclede|Circuit Clerk|Heather Officer:R:9756;Write-in:W:179
+Laclede|Collector|Toni Morris:R:9763;Write-in:W:173
+Laclede|Prosecuting Attorney|Amy Folsom:R:9617;Write-in:W:216
+Laclede|Public Administrator|Rebecka Woolley:R:9678;Write-in:W:186
+Laclede|Recorder of Deeds|Jennifer Raef:R:9720;Write-in:W:168
+Laclede|Treasurer|Kristy Carr:R:9709;Write-in:W:174
 Andrew|Associate Circuit Judge|Emily M. Bauman:R:5564
 Andrew|Presiding Commissioner|Fritz Hegeman:R:5409
 Andrew|County Clerk|Sarah E. Miller:R:5551
@@ -212,7 +212,7 @@ Andrew|Collector|Phillip (Phil) N. Rogers:R:5499
 Newton|Presiding Commissioner|Mark Bridges::14104;Martin Lindstedt::2442|KOAM lists only contested county races; party labels not given
 Chariton|Associate Circuit Judge|Andrea Vandeloech:D:1874;Write-in:W:31
 Chariton|Presiding Commissioner|Evan M. Emmerich:R:2091;Write-in:W:33
-Chariton|County Clerk|Sheila Lewis:R:1895;Kassie McGrew:D:607
+Chariton|County Clerk|Kassie Lewis:R:1895;Sheila McGrew:D:607
 Chariton|Circuit Clerk/Recorder of Deeds|Eric Stallo:D:1994;Write-in:W:25
 Chariton|Prosecuting Attorney|Cliff Thornburg:D:1812;Write-in:W:42
 Jackson|County Executive|Stacy Lake:D:163582;Alan Rohlfing:R:75058|The Beacon, unofficial as of 10 p.m. Nov. 3 (both election boards)
@@ -244,7 +244,7 @@ Grundy|Circuit Clerk and Ex Officio Recorder of Deeds|Michelle Vandevender::|Uno
 Grundy|Associate Circuit Judge|Carrie Lamm-Clark::|Unopposed; vote count not reported
 Grundy|Prosecuting Attorney|Kelly Puckett::|Unopposed; vote count not reported
 @Harrison|KTTN (only some races listed)
-Harrison|County Clerk|Chancel Crabtree:I:1719;Lee Ann Miles::547
+Harrison|County Clerk|Chancel Crabtree:I:1719;Lee Ann Miles:R:547
 @Clay|Clay County Board of Election Commissioners results
 Clay|Presiding Commissioner|Jennifer Justus:N:48831;Jerry Nolte:N:38056;Write-in:W:856|Nonpartisan race under the county charter
 Clay|Eastern Commissioner|Jay R. Johnson:N:23847;Mark McAuliffe:N:20940;Write-in:W:331|Nonpartisan; Eastern District voters only
@@ -496,3 +496,20 @@ Washington|Recorder of Deeds|Jamie Miner:R:4873;Write-in:W:105
 Washington|County Treasurer|John M. Robinson III:R:4854;Write-in:W:103
 Washington|Prosecuting Attorney|John I Jones, IV:R:4728;Write-in:W:133
 Washington|County Collector|Kris Richards:R:4946;Write-in:W:110
+@Lincoln|Lincoln County Clerk election-night results
+Lincoln|Associate Circuit Judge Division II|Rebecca A Richardson:R:15789
+Lincoln|Associate Circuit Judge Division III|Michael Jacobs:R:15651
+Lincoln|Presiding Commissioner|Joe Kaimann:R:15489;Write-in:W:677
+Lincoln|County Clerk|Kenneth Schulte:R:15752
+Lincoln|Clerk of the Circuit Court|Kathy Krieg Hall:R:15712
+Lincoln|Prosecuting Attorney|Mike Wood:R:15685
+Lincoln|County Auditor|Brenda Luck Schulte:R:15565
+Lincoln|Collector of Revenue|Jessica Zumwalt:R:16191
+Lincoln|Recorder of Deeds|Tracy K. Martin:R:15815
+@Henry|KDKD radio, from Henry County results (only some races may be listed)
+Henry|Presiding Commissioner|Daniel P. Wilson:R:4138;Shannon Hills:D:2420;Amanda J. Johnson:I:642
+Henry|County Clerk|Kelly Marriott:R:6040
+Henry|Circuit Clerk|Wendi McGhee:R:5976
+Henry|Recorder of Deeds|Gail A. Perrymann:R:5968
+Henry|Prosecuting Attorney|Fred R. Bunch:D:4943
+Henry|Associate Circuit Judge|Harold L. Dump:R:5933
