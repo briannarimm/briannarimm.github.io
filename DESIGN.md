@@ -2,9 +2,11 @@
 
 A reusable spec for the look and feel of briannaimm.com. Hand this file to a person or to Claude when building another page, and the result should read as the same family.
 
-**In one sentence:** a dark, quiet stage lit by slow dusty-blue and dusty-pink light, with editorial serif headlines, restrained sans-serif body text, depth from soft gradients and shadows, and small, deliberate motion.
+**In one sentence:** a dark, quiet stage lit by slow dusty-blue and dusty-pink light, with editorial serif titles, clean sans-serif text, depth from soft gradients and shadows, and small, deliberate motion.
 
 The source of truth is [style.css](style.css) and [script.js](script.js). This document explains the intent so you can apply it to new layouts, not just copy the old ones.
+
+**Changing this document:** change DESIGN.md only on an explicit request from Brianna. An explicit request is enough; no other approval is needed. Keep the copy in the blog repository (`bri-blog/DESIGN.md`) the same as this one.
 
 ---
 
@@ -12,7 +14,7 @@ The source of truth is [style.css](style.css) and [script.js](script.js). This d
 
 1. **Sleek, not techy.** No neon, no monospace, no terminal motifs, no emoji. Prefer soft, desaturated color and a warm serif over cold saturation (cyan, magenta).
 2. **Dark stage, soft light.** Near-black background; color arrives as blurred, slow-moving light behind the content, never as flat fills.
-3. **Editorial hierarchy.** Big light serif for headlines, small uppercase labels for metadata, calm sans-serif for reading.
+3. **Editorial hierarchy.** A serif for titles and h1, small uppercase labels for metadata, and a calm sans-serif for every other heading and for reading.
 4. **One accent at a time.** Blue is the primary accent, for links, icons, and active states. Pink is the secondary, for tags, dates, and labels. The two meet only in the blue-to-pink gradient. Indigo shows up only in the background and the focus ring.
 5. **Motion is garnish.** Everything animated is slow, small, or triggered by the user, and every animation turns off for `prefers-reduced-motion`.
 6. **Depth on purpose.** Gradients and layered shadows make cards and buttons feel physical, never flat and never skeuomorphic.
@@ -95,35 +97,36 @@ Set under `:root[data-theme="light"]`, and under `@media (prefers-color-scheme: 
 
 | Role | Font | Notes |
 | --- | --- | --- |
-| Display and headings | **Fraunces** (400 for h1/h2, 600 for h3) | Fallback `"Iowan Old Style", Georgia, serif` |
-| Body and UI | **Inter** (400, 500, 600) | Fallback `system-ui, -apple-system, "Segoe UI", sans-serif` |
+| Titles and main headings (h1): page, site, and item titles | **EB Garamond** (400; 500 for small titles such as a name caption) | Token `--serif`. Fallback `Garamond, Georgia, "Times New Roman", serif` |
+| Everything else: h2 to h6, body, UI, labels, buttons, numbers | **Lato** (400 and 700; 300 sparingly for very large text; italic 400) | Token `--sans`. Fallback `system-ui, -apple-system, "Segoe UI", sans-serif` |
 
 Load from Google Fonts:
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap">
 ```
 
 **Scale**
 
 | Element | Size | Weight | Tracking | Line height |
 | --- | --- | --- | --- | --- |
-| h1 (item and collection titles) | `clamp(2.8rem, 10vw, 6.5rem)` | 400 | `-0.03em` | 1.02 |
-| h2 | `clamp(1.9rem, 5vw, 2.7rem)` | 400 | `-0.02em` | default |
-| h3 (card) | `1.3rem` | 600 | `-0.02em` | default |
-| h3 (timeline) | `1.2rem` | 600 | `-0.02em` | default |
+| h1 (EB Garamond; page, item, and collection titles) | `clamp(2.8rem, 10vw, 6.5rem)` | 400 | `-0.01em` | 1.04 |
+| h2 (Lato) | `clamp(1.9rem, 5vw, 2.7rem)` | 400 | `-0.02em` | default |
+| h3 (Lato; card) | `1.3rem` | 700 | `-0.02em` | default |
+| h3 (Lato; timeline) | `1.2rem` | 700 | `-0.02em` | default |
 | Lead paragraph | `clamp(1.15rem, 2.8vw, 1.6rem)` | 400, `--muted` | | 1.45 |
 | Body | `1.0625rem` | 400 | | 1.7 |
 | Card body | `0.98rem` | 400, `--muted` | | 1.7 |
-| Label (eyebrow, tag, date) | `0.75rem` to `0.85rem` | 600 | `+0.08em` to `+0.1em`, UPPERCASE | |
+| Label (eyebrow, tag, date) | `0.75rem` to `0.85rem` | 700 | `+0.08em` to `+0.1em`, UPPERCASE | |
 
 **Rules**
 
-- Headlines are large, light, and tightly tracked. Do not bold them.
+- Titles (h1) are large, regular-weight EB Garamond with only slight negative tracking. Do not bold them.
+- Every other heading is Lato: 400 for large section headings (h2), 700 for small ones (h3 to h6), labels, and buttons.
 - Small caps-style labels are always uppercase with wide tracking. Never use them for sentences.
-- One serif, one sans. Do not add a third family.
+- One serif (EB Garamond, for titles and h1), one sans (Lato, for everything else). Do not add a third family. Lato has no 500 or 600 weight: use 400 or 700. Exception: a page with math may set the math itself in a math font (the equation workbench uses STIX Two Text).
 - Section headings carry a small number (`01`, `02`) in `--accent-blue`, set at `0.9rem`, `vertical-align: super`.
 
 ---
@@ -143,7 +146,7 @@ Load from Google Fonts:
 
 ### Glass card
 `background: var(--card-fill); border: 1px solid var(--border); box-shadow: var(--shadow-1); backdrop-filter: blur(10px); border-radius: 1.2rem; padding: 1.6rem;`
-Anatomy: uppercase **tag** (`--accent-pink`), serif **h3**, muted **paragraph**, optional **more** link with an arrow. Linked cards lift into a 1px `--accent-blue` ring plus `--shadow-2` on hover and tilt up to 8 degrees toward the cursor. A "coming soon" card uses a dashed border, a transparent fill, and no shadow. Tiles, education cards, link rows, sidebar blocks, and the citation box use the same fill and resting shadow.
+Anatomy: uppercase **tag** (`--accent-pink`), Lato **h3**, muted **paragraph**, optional **more** link with an arrow. Linked cards lift into a 1px `--accent-blue` ring plus `--shadow-2` on hover and tilt up to 8 degrees toward the cursor. A "coming soon" card uses a dashed border, a transparent fill, and no shadow. Tiles, education cards, link rows, sidebar blocks, and the citation box use the same fill and resting shadow.
 
 Featured items may carry a 1px gradient hairline (`--grad` at 35% opacity). The site uses none today.
 
@@ -173,9 +176,9 @@ Arch-shaped frame (`border-radius: 999px 999px 1.4rem 1.4rem`, `aspect-ratio: 4/
 ### Collection components
 The Papers & Projects collection adds these components. All use the same tokens.
 
-- **Item card:** a glass card with a 16:10 media area on top (thumbnail, or a blue-and-pink placeholder with the first letter of the title in Fraunces), a "Project" or "Paper" chip over the image, the tag and AI-assisted badge, a serif title, and pill links. "View item" is always the primary pill.
+- **Item card:** a glass card with a 16:10 media area on top (thumbnail, or a blue-and-pink placeholder with the first letter of the title in EB Garamond), a "Project" or "Paper" chip over the image, the tag and AI-assisted badge, a serif title, and pill links. "View item" is always the primary pill.
 - **Filter pills:** pill buttons with a count. The active pill is solid `--wm-blue` with Ink text.
-- **Item page:** breadcrumb, label row, a large light serif title, the lead paragraph, and buttons (the first link is the gradient primary button). Below: a carousel or a single framed image, the Markdown body with a sticky sidebar (Files, Tags, Collection), the Dublin Core table, and a citation box.
+- **Item page:** breadcrumb, label row, a large EB Garamond title, the lead paragraph, and buttons (the first link is the gradient primary button). Below: a carousel or a single framed image, the Markdown body with a sticky sidebar (Files, Tags, Collection), the Dublin Core table, and a citation box.
 - **Carousel:** a scroll-snap track with round glass arrow buttons and pill dots (the active dot widens and turns `--accent-blue`). Captions sit in a dark glass label at the bottom left.
 - **Dublin Core table:** two columns. Uppercase muted labels on the left, values on the right, hairlines between rows. Links in `--accent-blue`.
 
@@ -258,7 +261,7 @@ Only hide `.reveal` elements when the `js` class is present on `<html>`, so the 
 ### Checklist
 
 - [ ] Background `#0a0e13`, text `#f3f1ec`, blue and pink accents from tokens, no retired colors
-- [ ] Fraunces for headings, Inter for body, no third font
+- [ ] EB Garamond for titles and h1, Lato for everything else, no third font
 - [ ] No emoji or Unicode arrows; icons are inline SVG
 - [ ] No gradient text; the name is the SVG wordmark
 - [ ] Both themes checked, and the pastels are never text on light
@@ -271,7 +274,7 @@ Only hide `.reveal` elements when the `js` class is present on `<html>`, so the 
 
 ## 10. Wordmark
 
-The mark is "bri." in outlined Fraunces letters with a blue-to-pink gradient and a separate period. It is artwork, not text: never set it from the font.
+The mark is "bri." in outlined serif letters with a blue-to-pink gradient and a separate period. It is artwork, not text: never set it from the font.
 
 **Files** (in `images/`)
 
@@ -292,7 +295,7 @@ On the site, `_includes/wordmark.html` places the primary mark inline. Its perio
 
 **Do not:**
 
-- Re-type the mark in Fraunces or any other font.
+- Re-type the mark in any font.
 - Change the gradient's colors, direction, or stops, or apply it to some letters only.
 - Give the period the gradient, or color the letters flat while the period stays colored (that is the mono version).
 - Add a stroke, shadow, glow, bevel, or other effect to the mark. Ambient light may sit behind it, never on it.

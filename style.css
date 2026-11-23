@@ -15,7 +15,8 @@
   --shadow-2: 0 20px 60px -24px rgba(165, 197, 226, 0.45);
   --btn-depth: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.25);
   --card-fill: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-  --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --serif: "EB Garamond", Garamond, Georgia, "Times New Roman", serif; /* titles and h1 */
+  --sans: "Lato", system-ui, -apple-system, "Segoe UI", sans-serif; /* everything else */
   /* Theme-dependent helpers (dark values; the light set is below). */
   --wm-period: #e6e6ec;
   --frame-mid: rgba(255, 255, 255, 0.04);
@@ -79,7 +80,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 1.0625rem/1.7 "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font: 1.0625rem/1.7 var(--sans);
   overflow-x: clip;
 }
 
@@ -144,7 +145,7 @@ nav a:hover { color: var(--fg); }
 nav { align-items: center; }
 .theme-toggle {
   display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer;
-  font: inherit; font-size: 0.85rem; font-weight: 500; line-height: 1.2; color: var(--muted);
+  font: inherit; font-size: 0.85rem; font-weight: 400; line-height: 1.2; color: var(--muted);
   padding: 0.35rem 0.8rem; border-radius: 999px;
   border: 1px solid var(--border); background: var(--card);
   transition: color 0.2s, border-color 0.2s;
@@ -163,10 +164,11 @@ section { padding: 5rem 0; }
   display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: center;
 }
 .eyebrow { color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.85rem; margin: 0 0 1rem; }
-h1, h2, h3 { font-family: var(--serif); font-weight: 600; }
+h1 { font-family: var(--serif); font-weight: 400; }
+h2, h3, h4, h5, h6 { font-family: var(--sans); font-weight: 700; }
 h1 {
   font-size: clamp(2.8rem, 10vw, 6.5rem);
-  line-height: 1.02; letter-spacing: -0.03em;
+  line-height: 1.04; letter-spacing: -0.01em;
   margin: 0 0 1.5rem; font-weight: 400;
 }
 .hero-logo {
@@ -178,14 +180,14 @@ h1 {
 .hero-logo.is-floating { pointer-events: none; }
 
 .lead { font-size: clamp(1.15rem, 2.8vw, 1.6rem); color: var(--muted); max-width: 36rem; margin: 0 0 2rem; line-height: 1.45; }
-.rotator { color: var(--fg); font-weight: 600; white-space: nowrap; border-bottom: 2px solid var(--accent-blue); }
+.rotator { color: var(--fg); font-weight: 700; white-space: nowrap; border-bottom: 2px solid var(--accent-blue); }
 .rotator-word { display: inline-block; transition: opacity 0.35s, transform 0.35s; }
 .rotator-word.out { opacity: 0; transform: translateY(0.4em); }
 
 .cta { display: flex; gap: 0.9rem; flex-wrap: wrap; }
 .btn {
   padding: 0.8rem 1.5rem; border-radius: 999px; border: 1px solid var(--border);
-  background: var(--card); font-weight: 600; font-size: 0.98rem;
+  background: var(--card); font-weight: 700; font-size: 0.98rem;
   transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .btn:hover { transform: translateY(-2px); border-color: var(--hover-line); }
@@ -205,7 +207,7 @@ h1 {
 
 /* ---------- sections ---------- */
 h2 { font-size: clamp(1.9rem, 5vw, 2.7rem); font-weight: 400; letter-spacing: -0.02em; margin: 0 0 2rem; }
-h2 .num { font-size: 0.9rem; color: var(--accent-blue); font-weight: 600; letter-spacing: 0.1em; vertical-align: super; margin-right: 0.6rem; }
+h2 .num { font-size: 0.9rem; color: var(--accent-blue); font-weight: 700; letter-spacing: 0.1em; vertical-align: super; margin-right: 0.6rem; }
 
 .about-grid { display: grid; gap: 2.5rem; grid-template-columns: 1.4fr 1fr; align-items: start; }
 .about-grid p { margin: 0 0 1.2rem; color: var(--text-soft); }
@@ -233,8 +235,8 @@ h2 .num { font-size: 0.9rem; color: var(--accent-blue); font-weight: 600; letter
 a.card:hover, .card.tilt:hover { border-color: transparent; box-shadow: 0 0 0 1px var(--accent-blue), var(--shadow-2); }
 .card h3 { margin: 0.2rem 0 0; font-size: 1.3rem; letter-spacing: -0.02em; }
 .card p { margin: 0; color: var(--muted); font-size: 0.98rem; flex: 1; }
-.tag { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-pink); font-weight: 600; }
-.more { margin-top: 0.8rem; font-weight: 600; font-size: 0.95rem; }
+.tag { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-pink); font-weight: 700; }
+.more { margin-top: 0.8rem; font-weight: 700; font-size: 0.95rem; }
 .more i { display: inline-block; font-style: normal; transition: transform 0.2s; }
 .ico { width: 1em; height: 1em; vertical-align: -0.12em; margin-left: 0.15em; }
 a.card:hover .more i { transform: translateX(6px); }
@@ -307,7 +309,7 @@ footer p { margin: 0; }
   width: 9px; height: 9px; border-radius: 50%; background: var(--accent-blue);
   box-shadow: 0 0 0 4px var(--bg), 0 0 14px var(--accent-blue);
 }
-.when { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-pink); font-weight: 600; }
+.when { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-pink); font-weight: 700; }
 .timeline h3 { margin: 0.2rem 0 0; font-size: 1.2rem; letter-spacing: -0.02em; }
 .timeline .org { margin: 0 0 0.4rem; color: var(--accent-blue); font-size: 0.95rem; }
 .timeline p:last-child { margin: 0; color: var(--muted); font-size: 0.98rem; max-width: 40rem; }
@@ -336,7 +338,7 @@ h3.sub { font-size: 1.3rem; margin: 3rem 0 1rem; letter-spacing: -0.02em; }
   display: flex; flex-direction: column; gap: 0.4rem; padding: 1.2rem 1.3rem;
   border: 1px solid var(--border); border-radius: 1rem; background: var(--card-fill); box-shadow: var(--shadow-1);
 }
-.tiles b { font-family: var(--serif); font-weight: 600; font-size: 1.05rem; letter-spacing: -0.01em; }
+.tiles b { font-family: var(--sans); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
 .tiles span { color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
 
 .edu { margin-top: 2.5rem; }
@@ -367,13 +369,13 @@ h3.sub { font-size: 1.3rem; margin: 3rem 0 1rem; letter-spacing: -0.02em; }
 /* ---------- project cards ---------- */
 .card-top { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; min-height: 3.1rem; }
 .badge {
-  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
   color: var(--accent-blue); border: 1px solid rgba(165, 197, 226, 0.4); border-radius: 999px; padding: 0.1rem 0.6rem;
 }
 .card-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.9rem; }
 .plink {
   display: inline-flex; align-items: center; gap: 0.2rem;
-  padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.88rem; font-weight: 600;
+  padding: 0.45rem 1rem; border-radius: 999px; font-size: 0.88rem; font-weight: 700;
   border: 1px solid var(--border); background: var(--card);
   transition: transform 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
@@ -409,7 +411,7 @@ section[id] { scroll-margin-top: 4.5rem; }
 .ph span { font-family: var(--serif); font-size: 4.2rem; line-height: 1; color: rgba(243, 241, 236, 0.85); }
 .media-chip {
   position: absolute; top: 0.7rem; left: 0.7rem;
-  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
   padding: 0.2rem 0.65rem; border-radius: 999px;
   background: rgba(10, 14, 19, 0.72); color: #f3f1ec; border: 1px solid rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(6px);
@@ -421,7 +423,7 @@ section[id] { scroll-margin-top: 4.5rem; }
 /* ---------- filters, search, empty state ---------- */
 .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.5rem; }
 .filter {
-  font: inherit; font-size: 0.9rem; font-weight: 500; cursor: pointer;
+  font: inherit; font-size: 0.9rem; font-weight: 400; cursor: pointer;
   padding: 0.45rem 1rem; border-radius: 999px;
   border: 1px solid var(--border); background: var(--card); color: var(--muted);
   transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -515,7 +517,7 @@ section[id] { scroll-margin-top: 4.5rem; }
 
 .item-side { display: grid; gap: 1.2rem; position: sticky; top: 5rem; }
 .side-block { padding: 1.2rem 1.3rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--card-fill); box-shadow: var(--shadow-1); }
-.side-h { font-family: "Inter", system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-pink); margin: 0 0 0.8rem; }
+.side-h { font-family: var(--sans); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-pink); margin: 0 0 0.8rem; }
 .side-p { margin: 0; color: var(--muted); font-size: 0.92rem; }
 .side-p a { color: var(--accent-blue); }
 .side-block .chips li { font-size: 0.82rem; padding: 0.3rem 0.75rem; }
@@ -523,7 +525,7 @@ section[id] { scroll-margin-top: 4.5rem; }
 .files a { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.55rem 0.7rem; border-radius: 0.7rem; border: 1px solid var(--border); transition: border-color 0.2s; }
 .files a:hover { border-color: var(--accent-blue); }
 .files .ico { color: var(--accent-blue); margin: 0.2rem 0 0; flex: none; }
-.files b { display: block; font-weight: 500; font-size: 0.92rem; overflow-wrap: anywhere; }
+.files b { display: block; font-weight: 400; font-size: 0.92rem; overflow-wrap: anywhere; }
 .files small { display: block; color: var(--muted); font-size: 0.8rem; }
 
 /* ---------- Dublin Core table and citation ---------- */
@@ -531,11 +533,11 @@ section[id] { scroll-margin-top: 4.5rem; }
 .dc h2 .num { vertical-align: super; }
 .dc-table { margin: 0; border-top: 1px solid var(--border); }
 .dc-row { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border); }
-.dc-row dt { color: var(--muted); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding-top: 0.2rem; }
+.dc-row dt { color: var(--muted); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding-top: 0.2rem; }
 .dc-row dd { margin: 0; display: flex; flex-direction: column; gap: 0.25rem; overflow-wrap: anywhere; }
 .dc-row dd a { color: var(--accent-blue); }
 .cite { margin-top: 2.5rem; padding: 1.4rem 1.5rem; border: 1px solid var(--border); border-radius: 1rem; background: var(--card-fill); box-shadow: var(--shadow-1); }
-.cite-text { margin: 0 0 0.8rem; font-family: var(--serif); font-size: 1.05rem; line-height: 1.6; overflow-wrap: anywhere; }
+.cite-text { margin: 0 0 0.8rem; font-family: var(--sans); font-size: 1.05rem; line-height: 1.6; overflow-wrap: anywhere; }
 
 @media (max-width: 48rem) {
   .item-body { grid-template-columns: 1fr; gap: 2rem; }
@@ -558,7 +560,7 @@ section[id] { scroll-margin-top: 4.5rem; }
 .legal .prose h2 { font-size: 1.55rem; margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid var(--border); }
 .legal .prose h3 { font-size: 1.15rem; margin-top: 1.8rem; }
 .legal .prose table { margin: 0.5rem 0 1.4rem; }
-.legal .prose th { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+.legal .prose th { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
 .legal .prose td:first-child { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.9em; color: var(--fg); }
 .legal-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 3rem; }
 .legal-links a { padding: 0.45rem 1rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-size: 0.9rem; transition: border-color 0.2s; }
