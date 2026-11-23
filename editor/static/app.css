@@ -10,7 +10,7 @@
   --c: #7f95e8;
   --danger: #f08a7e;
   --grad: linear-gradient(120deg, #ecd3a6, #d8b47a 35%, #6fcdb3 75%, #9fb0f5);
-  --serif: "EB Garamond", Garamond, Georgia, "Times New Roman", serif;
+  --serif: "Merriweather", Georgia, "Times New Roman", serif;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -30,7 +30,7 @@ code { font-size: 0.85em; padding: 0.05em 0.35em; border-radius: 0.3rem; backgro
   background: linear-gradient(90deg, rgba(26, 111, 102, 0.18), transparent 40%, rgba(184, 137, 74, 0.14));
 }
 .bar-left, .bar-right { display: flex; align-items: center; gap: 0.7rem; min-width: 0; }
-.logo { font-family: var(--serif); font-weight: 600; font-size: 1.3rem; }
+.logo { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; }
 .logo span { color: var(--a); }
 .app-name { color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; margin-right: 0.6rem; white-space: nowrap; }
 .picker select {

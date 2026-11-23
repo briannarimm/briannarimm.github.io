@@ -15,13 +15,13 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
 [hidden] { display: none !important; }
 img { max-width: 100%; }
 /* Layout: sticky header, short intro, then the workbench: a sticky palette rail beside the editor,
    with numbered sections for logic, copying and saved work.
-   Fonts: EB Garamond (titles and h1), Lato (everything else), STIX Two Text inside math only. */
+   Fonts: Merriweather (titles and h1), Lato (everything else), STIX Two Text inside math only. */
 :root {
   --bg: #0a0e13; --fg: #f3f1ec; --muted: #9aa3ad;
   --card: rgba(255, 255, 255, 0.04); --card-2: rgba(255, 255, 255, 0.075);
@@ -45,7 +45,7 @@ img { max-width: 100%; }
   --hdr-fade: rgba(10, 14, 19, 0.92);
   --tip-bg: #1a2029; --tip-fg: #f3f1ec; --tip-muted: #b3bbc4; --tip-border: rgba(255, 255, 255, 0.12);
   --chk-light: #f4f4f2; --chk-light-2: #e4e4e0; --chk-dark: #1b1f25; --chk-dark-2: #272c34; --paper-white: #ffffff;
-  --serif: "EB Garamond", Garamond, Georgia, "Times New Roman", serif;
+  --serif: "Merriweather", Georgia, "Times New Roman", serif;
   --sans: "Lato", system-ui, -apple-system, "Segoe UI", sans-serif;
   --math: "STIX Two Text", "STIX Two Math", "Cambria Math", "Latin Modern Math", "Times New Roman", serif;
   color-scheme: dark;
@@ -122,12 +122,12 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .wm-link { display: inline-flex; padding: 0.3rem 0.25rem; border-radius: 0.4rem; }
 .wm { display: block; height: 1.75rem; width: 2.82rem; overflow: visible; }
 .wm .wm-period { fill: var(--wm-period); }
-.brand { font-family: var(--serif); font-weight: 600; font-size: 1.2rem; letter-spacing: -0.02em; padding-left: 0.85rem; border-left: 1px solid var(--border); white-space: nowrap; }
+.brand { font-family: var(--serif); font-weight: 700; font-size: 1.2rem; letter-spacing: -0.02em; padding-left: 0.85rem; border-left: 1px solid var(--border); white-space: nowrap; }
 .site-nav { display: flex; gap: 0.3rem 1.4rem; flex-wrap: wrap; }
 .site-nav a { color: var(--muted); font-size: 0.95rem; text-decoration: none; transition: color 0.2s; }
 .site-nav a:hover { color: var(--fg); }
 .hero { padding-block: 2.5rem 3.5rem; }
-.hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.8rem, 10vw, 6.5rem); line-height: 1.02; letter-spacing: -0.03em; margin: 0 0 1.4rem; text-wrap: balance; }
+.hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.6rem, 8vw, 5.5rem); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 1.4rem; text-wrap: balance; }
 .rot { display: inline-block; color: var(--accent-blue); transition: opacity 0.35s, transform 0.35s; }
 .rot.out { opacity: 0; transform: translateY(0.4em); }
 .hero .lead { margin: 0; color: var(--muted); font-size: clamp(1.15rem, 2.8vw, 1.6rem); line-height: 1.45; max-width: 44rem; }

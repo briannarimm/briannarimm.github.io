@@ -1,4 +1,4 @@
-/* Missouri Election Results. Styled to DESIGN.md: the site's tokens, EB Garamond (titles) + Lato,
+/* Missouri Election Results. Styled to DESIGN.md: the site's tokens, Merriweather (titles) + Lato,
    glass cards over the aurora, and an election palette (blue, red, purple) built from the
    same dusty pastels the election-night dashboard uses. Dark by default, light theme available. */
 
@@ -12,7 +12,7 @@
   --wm-blue: #a5c5e2; --wm-pink: #e3b7c3; --accent-blue: #a5c5e2; --accent-pink: #e3b7c3; --c: #7f95e8;
   --grad: linear-gradient(120deg, #8fb4e3, #b3a3e6 55%, #e39a97);
   --ink: #0a0e13; --on-strong: #0a0e13;
-  --serif: "EB Garamond", Garamond, Georgia, "Times New Roman", serif;
+  --serif: "Merriweather", Georgia, "Times New Roman", serif;
   --sans: "Lato", system-ui, -apple-system, "Segoe UI", sans-serif;
   --spot: rgba(255,255,255,0.06); --aurora-k: 1;
   /* Election palette. Four steps per family: thin margin to wide margin. */

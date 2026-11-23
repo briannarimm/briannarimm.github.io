@@ -97,7 +97,7 @@ Set under `:root[data-theme="light"]`, and under `@media (prefers-color-scheme: 
 
 | Role | Font | Notes |
 | --- | --- | --- |
-| Titles and main headings (h1): page, site, and item titles | **EB Garamond** (400; 500 for small titles such as a name caption) | Token `--serif`. Fallback `Garamond, Georgia, "Times New Roman", serif` |
+| Titles and main headings (h1): page, site, and item titles | **Merriweather** (400; 700 sparingly, for small titles) | Token `--serif`. Fallback `Georgia, "Times New Roman", serif` |
 | Everything else: h2 to h6, body, UI, labels, buttons, numbers | **Lato** (400 and 700; 300 sparingly for very large text; italic 400) | Token `--sans`. Fallback `system-ui, -apple-system, "Segoe UI", sans-serif` |
 
 Load from Google Fonts:
@@ -105,14 +105,15 @@ Load from Google Fonts:
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap">
 ```
 
 **Scale**
 
 | Element | Size | Weight | Tracking | Line height |
 | --- | --- | --- | --- | --- |
-| h1 (EB Garamond; page, item, and collection titles) | `clamp(2.8rem, 10vw, 6.5rem)` | 400 | `-0.01em` | 1.04 |
+| h1 (Merriweather; page titles) | `clamp(2.6rem, 8vw, 5.5rem)` | 400 | `-0.02em` | 1.1 |
+| h1 (Merriweather; item and collection titles) | `clamp(2.1rem, 6vw, 3.8rem)` | 400 | `-0.02em` | 1.12 |
 | h2 (Lato) | `clamp(1.9rem, 5vw, 2.7rem)` | 400 | `-0.02em` | default |
 | h3 (Lato; card) | `1.3rem` | 700 | `-0.02em` | default |
 | h3 (Lato; timeline) | `1.2rem` | 700 | `-0.02em` | default |
@@ -123,10 +124,10 @@ Load from Google Fonts:
 
 **Rules**
 
-- Titles (h1) are large, regular-weight EB Garamond with only slight negative tracking. Do not bold them.
+- Titles (h1) are regular-weight Merriweather with slight negative tracking. Merriweather is large for its size, so keep titles smaller than a lighter serif would need. Do not bold them.
 - Every other heading is Lato: 400 for large section headings (h2), 700 for small ones (h3 to h6), labels, and buttons.
 - Small caps-style labels are always uppercase with wide tracking. Never use them for sentences.
-- One serif (EB Garamond, for titles and h1), one sans (Lato, for everything else). Do not add a third family. Lato has no 500 or 600 weight: use 400 or 700. Exception: a page with math may set the math itself in a math font (the equation workbench uses STIX Two Text).
+- One serif (Merriweather, for titles and h1), one sans (Lato, for everything else). Do not add a third family. Neither Merriweather nor Lato has a 500 or 600 weight: use 400 or 700. Exception: a page with math may set the math itself in a math font (the equation workbench uses STIX Two Text).
 - Section headings carry a small number (`01`, `02`) in `--accent-blue`, set at `0.9rem`, `vertical-align: super`.
 
 ---
@@ -176,9 +177,9 @@ Arch-shaped frame (`border-radius: 999px 999px 1.4rem 1.4rem`, `aspect-ratio: 4/
 ### Collection components
 The Papers & Projects collection adds these components. All use the same tokens.
 
-- **Item card:** a glass card with a 16:10 media area on top (thumbnail, or a blue-and-pink placeholder with the first letter of the title in EB Garamond), a "Project" or "Paper" chip over the image, the tag and AI-assisted badge, a serif title, and pill links. "View item" is always the primary pill.
+- **Item card:** a glass card with a 16:10 media area on top (thumbnail, or a blue-and-pink placeholder with the first letter of the title in Merriweather), a "Project" or "Paper" chip over the image, the tag and AI-assisted badge, a serif title, and pill links. "View item" is always the primary pill.
 - **Filter pills:** pill buttons with a count. The active pill is solid `--wm-blue` with Ink text.
-- **Item page:** breadcrumb, label row, a large EB Garamond title, the lead paragraph, and buttons (the first link is the gradient primary button). Below: a carousel or a single framed image, the Markdown body with a sticky sidebar (Files, Tags, Collection), the Dublin Core table, and a citation box.
+- **Item page:** breadcrumb, label row, a large Merriweather title, the lead paragraph, and buttons (the first link is the gradient primary button). Below: a carousel or a single framed image, the Markdown body with a sticky sidebar (Files, Tags, Collection), the Dublin Core table, and a citation box.
 - **Carousel:** a scroll-snap track with round glass arrow buttons and pill dots (the active dot widens and turns `--accent-blue`). Captions sit in a dark glass label at the bottom left.
 - **Dublin Core table:** two columns. Uppercase muted labels on the left, values on the right, hairlines between rows. Links in `--accent-blue`.
 
@@ -261,7 +262,7 @@ Only hide `.reveal` elements when the `js` class is present on `<html>`, so the 
 ### Checklist
 
 - [ ] Background `#0a0e13`, text `#f3f1ec`, blue and pink accents from tokens, no retired colors
-- [ ] EB Garamond for titles and h1, Lato for everything else, no third font
+- [ ] Merriweather for titles and h1, Lato for everything else, no third font
 - [ ] No emoji or Unicode arrows; icons are inline SVG
 - [ ] No gradient text; the name is the SVG wordmark
 - [ ] Both themes checked, and the pastels are never text on light

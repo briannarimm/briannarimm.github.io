@@ -15,7 +15,7 @@
   --shadow-2: 0 20px 60px -24px rgba(165, 197, 226, 0.45);
   --btn-depth: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.25);
   --card-fill: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-  --serif: "EB Garamond", Garamond, Georgia, "Times New Roman", serif; /* titles and h1 */
+  --serif: "Merriweather", Georgia, "Times New Roman", serif; /* titles and h1 */
   --sans: "Lato", system-ui, -apple-system, "Segoe UI", sans-serif; /* everything else */
   /* Theme-dependent helpers (dark values; the light set is below). */
   --wm-period: #e6e6ec;
@@ -167,8 +167,8 @@ section { padding: 5rem 0; }
 h1 { font-family: var(--serif); font-weight: 400; }
 h2, h3, h4, h5, h6 { font-family: var(--sans); font-weight: 700; }
 h1 {
-  font-size: clamp(2.8rem, 10vw, 6.5rem);
-  line-height: 1.04; letter-spacing: -0.01em;
+  font-size: clamp(2.6rem, 8vw, 5.5rem);
+  line-height: 1.1; letter-spacing: -0.02em;
   margin: 0 0 1.5rem; font-weight: 400;
 }
 .hero-logo {
@@ -452,7 +452,7 @@ section[id] { scroll-margin-top: 4.5rem; }
 .crumbs { display: flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; color: var(--muted); margin-bottom: 1.6rem; }
 .crumbs a { color: var(--muted); transition: color 0.2s; }
 .crumbs a:hover { color: var(--fg); }
-.item-title { font-size: clamp(2.3rem, 7vw, 4.4rem); line-height: 1.05; margin: 0.6rem 0 1.2rem; font-weight: 400; }
+.item-title { font-size: clamp(2.1rem, 6vw, 3.8rem); line-height: 1.12; margin: 0.6rem 0 1.2rem; font-weight: 400; }
 .item-page { padding: 3rem 0 2rem; }
 .item-head .lead { max-width: 44rem; }
 .item-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.5rem; }
