@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<article class="legal">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="{{ '/' | relative_url }}"><svg class="ico" aria-hidden="true"><use href="#arrow-left"/></svg> Home</a>
+  </nav>
+  <p class="eyebrow">Legal</p>
+  <h1 class="item-title">{{ page.title }}</h1>
+  <div class="prose">
+{{ content }}
+  </div>
+  <nav class="legal-links" aria-label="Legal pages">
+    <a href="{{ '/tos/' | relative_url }}"{% if page.url == '/tos/' %} aria-current="page"{% endif %}>Terms of Service</a>
+    <a href="{{ '/privacy-policy/' | relative_url }}"{% if page.url == '/privacy-policy/' %} aria-current="page"{% endif %}>Privacy Policy</a>
+  </nav>
+</article>
