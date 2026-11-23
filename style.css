@@ -550,3 +550,19 @@ section[id] { scroll-margin-top: 4.5rem; }
   .toolbar { flex-direction: column; align-items: stretch; }
   .search { flex-basis: auto; }
 }
+
+/* ---------- legal pages (/tos/, /privacy-policy/) ---------- */
+.legal { padding: 3rem 0 2rem; max-width: 46rem; }
+.legal .item-title { margin-bottom: 2rem; }
+.legal .prose { max-width: none; }
+.legal .prose h2 { font-size: 1.55rem; margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid var(--border); }
+.legal .prose h3 { font-size: 1.15rem; margin-top: 1.8rem; }
+.legal .prose table { margin: 0.5rem 0 1.4rem; }
+.legal .prose th { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+.legal .prose td:first-child { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.9em; color: var(--fg); }
+.legal-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 3rem; }
+.legal-links a { padding: 0.45rem 1rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-size: 0.9rem; transition: border-color 0.2s; }
+.legal-links a:hover { border-color: var(--a); }
+.legal-links a[aria-current="page"] { color: #0a0e13; background: var(--a); border-color: transparent; }
+footer a { color: var(--muted); text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.2); text-underline-offset: 0.2em; }
+footer a:hover { color: var(--fg); }
