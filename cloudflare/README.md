@@ -101,6 +101,6 @@ These steps are optional.
 ## Day-to-day after the move
 
 * **Publish a change:** push to `main`, as now. Cloudflare builds and deploys the Worker. Each Worker's **Deployments** tab shows the builds.
-* **Previews:** a push to any other branch makes a preview build with its own link. In CodePix, a branch other than `main` builds the release candidate (the `rc` channel, saved under `codepix-save-rc`).
+* **Previews:** a push to any other branch makes a preview build with its own link. Workers Builds deploys these with `npx wrangler preview`, which needs the `"previews": {}` block in `wrangler.jsonc`. In CodePix, a branch other than `main` builds the release candidate (the `rc` channel, saved under `codepix-save-rc`).
 * **CodePix checks:** GitHub Actions still runs the CodePix checks. Cloudflare only builds.
 * **Project folders:** each project build writes its files to `.cloudflare-dist/<path>/`, for example `.cloudflare-dist/CodePix/`. A request for `/CodePix/` finds them by path. (Cloudflare's `base_path` setting would do the same job, but it is not turned on for this account: deploys failed with error 100343.)
