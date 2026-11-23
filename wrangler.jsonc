@@ -10,5 +10,8 @@
   "assets": {
     "directory": "./_site",
     "html_handling": "auto-trailing-slash"
-  }
+  },
+  // Builds of branches other than main run `npx wrangler preview`, which needs this block.
+  // It can stay empty: assets and compatibility settings above apply to previews too.
+  "previews": {}
 }
