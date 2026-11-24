@@ -1,0 +1,89 @@
+# Pages for the visual sitemap (/sitemap/) and sitemap.xml.
+# Items in the Papers & Projects collection (_items/) are added to both automatically.
+#
+# Fields:
+#   title, url   Required. A url that starts with "/" is on www.briannaimm.com.
+#   note         One line under the link on /sitemap/.
+#   xml          true: also list the page in sitemap.xml (for search engines).
+#                false: list it on /sitemap/ only. Use false for pages marked
+#                noindex or "sitemap: false", for redirects, and for other sites.
+#   parts        Optional links to sections of a page (shown as small pills).
+#
+# ScholarSync (research.briannaimm.com) is no longer running, so it is not listed.
+
+pages:
+  - title: Home
+    url: /
+    note: Introduction, experience, recent papers and projects, and links
+    xml: true
+    parts:
+      - { title: About, url: "/#about" }
+      - { title: Experience, url: "/#experience" }
+      - { title: Papers & Projects, url: "/#work" }
+      - { title: Elsewhere, url: "/#links" }
+  - title: Papers & Projects
+    url: /items/
+    note: Search and filter the full collection
+    xml: true
+  - title: Sitemap
+    url: /sitemap/
+    note: This page
+    xml: true
+  - title: Terms of Service
+    url: /tos/
+    note: Terms for briannaimm.com and ReKanban
+    xml: true
+  - title: Privacy Policy
+    url: /privacy-policy/
+    note: How briannaimm.com and ReKanban handle information
+    xml: true
+
+apps:
+  - title: Equation Workbench
+    url: /equation-workbench/
+    note: Build, check, and export math equations in the browser
+    xml: true
+  - title: ML Applications in Anthropology
+    url: /ml-applications-in-anthropology/
+    note: Interactive maps and K-Modes clustering of 141 societies
+    xml: true
+  - title: AI Pix Explorer
+    url: /ai-pix-explorer/
+    note: An interactive textbook game about how language models work
+    xml: true
+  - title: CodePix
+    url: /CodePix/
+    note: A visual-novel textbook for Python and machine learning
+    xml: false
+  - title: Missouri Election Results
+    url: /missouri-results/
+    note: Results of the November 3, 2026 general election in Missouri
+    xml: true
+  - title: Election Night
+    url: /election/
+    note: A live election-night dashboard
+    xml: false
+
+guides:
+  - title: FM27 guides
+    url: /fm27-guides/
+    note: Football Manager 27 save guides
+    xml: false
+  - title: "Manchester United: an FM27 day-one guide"
+    url: /fm27-guides/manchester-united/
+    note: A long-term rebuild, with a journal
+    xml: false
+  - title: "Fortuna Düsseldorf: an FM27 road-to-glory guide"
+    url: /fm27-guides/fortuna-dusseldorf/
+    note: From the second tier upward
+    xml: false
+
+elsewhere:
+  - title: Blog
+    url: https://blog.briannaimm.com/
+    note: Writing on librarianship, law, and legal scholarship
+    parts:
+      - { title: Blog sitemap, url: "https://blog.briannaimm.com/sitemap" }
+  - title: ReKanban
+    url: https://kanban.briannaimm.com/
+    note: A kanban board app (invitation only)

@@ -568,3 +568,27 @@ section[id] { scroll-margin-top: 4.5rem; }
 .legal-links a[aria-current="page"] { color: #0a0e13; background: var(--a); border-color: transparent; }
 footer a { color: var(--muted); text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.2); text-underline-offset: 0.2em; }
 footer a:hover { color: var(--fg); }
+
+/* ---------- sitemap (/sitemap/) and 404 ---------- */
+.sitemap-page { padding: 3rem 0 2rem; }
+.sitemap-page .lead { max-width: 44rem; }
+.sitemap-page .lead a { color: var(--accent-blue); text-decoration: underline; text-decoration-color: var(--hover-line); text-underline-offset: 0.2em; }
+.sitemap-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+.sitemap-section { min-width: 0; padding: 1.5rem; border: 1px solid var(--border); border-radius: 1.2rem; background: var(--card-fill), var(--card); box-shadow: var(--shadow-1); }
+.sitemap-wide { grid-column: 1 / -1; }
+.sitemap-section h2 { font-size: 1.5rem; margin: 0 0 1rem; }
+.sitemap-section h3 { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-pink); margin: 0 0 0.4rem; }
+.sitemap-section ul { margin: 0; padding: 0; list-style: none; }
+.sitemap-section li { padding: 0.7rem 0; border-top: 1px solid var(--border); }
+.sitemap-section li > a { color: var(--fg); font-weight: 700; transition: color 0.2s; }
+.sitemap-section li > a:hover { color: var(--accent-blue); }
+.sitemap-section li > a .ico { color: var(--accent-blue); }
+.sitemap-note { display: block; margin-top: 0.15rem; color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+.sitemap-parts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+.sitemap-parts a { padding: 0.2rem 0.7rem; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 0.8rem; transition: color 0.2s, border-color 0.2s; }
+.sitemap-parts a:hover { color: var(--fg); border-color: var(--accent-blue); }
+.sitemap-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.notfound { padding-bottom: 4rem; }
+@media (max-width: 44rem) {
+  .sitemap-grid, .sitemap-cols { grid-template-columns: 1fr; }
+}
