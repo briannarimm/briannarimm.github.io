@@ -1,5 +1,7 @@
 # robots.txt for www.briannaimm.com
-# Cloudflare also adds its own content-signal rules for AI crawlers to this file.
+# This file replaces the robots.txt that Cloudflare manages for the zone. That
+# file held only explanatory comments about content signals, with no rules.
+# To restrict AI crawlers, add Content-Signal or Disallow lines here.
 User-agent: *
 Allow: /
 
