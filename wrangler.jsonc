@@ -9,7 +9,9 @@
   "routes": [{ "pattern": "www.briannaimm.com/*", "zone_name": "briannaimm.com" }],
   "assets": {
     "directory": "./_site",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    // Serve _site/404.html, with status 404, for addresses that do not exist.
+    "not_found_handling": "404-page"
   },
   // Builds of branches other than main run `npx wrangler preview`, which needs this block.
   // It can stay empty: assets and compatibility settings above apply to previews too.

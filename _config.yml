@@ -28,6 +28,10 @@ defaults:
     values:
       layout: item
 
+# Jekyll skips dot-folders unless they are listed here.
+include:
+  - .well-known
+
 exclude:
   - README.md
   - DESIGN.md

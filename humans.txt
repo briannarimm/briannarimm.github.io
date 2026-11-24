@@ -1,0 +1,15 @@
+/* PERSON */
+Name: Brianna R. Imm
+Role: Law library professional (J.D.; MLIS candidate)
+Site: https://www.briannaimm.com
+Contact: https://www.briannaimm.com/#links
+GitHub: https://github.com/briannarimm
+
+/* THANKS */
+Built with help from Claude Code (Anthropic), as noted on AI-assisted items.
+
+/* SITE */
+Standards: HTML, CSS, JavaScript
+Components: Jekyll, Cloudflare Workers
+Fonts: Merriweather and Lato (Google Fonts)
+Design: DESIGN.md in https://github.com/briannarimm/briannarimm.github.io

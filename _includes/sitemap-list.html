@@ -1,0 +1,18 @@
+{%- comment -%} One list of links for /sitemap/. Parameter: links (from _data/sitemap.yml). {%- endcomment -%}
+<ul>
+  {%- for p in include.links %}
+  {%- assign first = p.url | slice: 0 %}
+  <li>
+    <a href="{% if first == '/' %}{{ p.url | relative_url }}{% else %}{{ p.url }}{% endif %}"{% if first != '/' %} rel="noopener"{% endif %}>{{ p.title }}{% if first != '/' %} <svg class="ico" aria-hidden="true"><use href="#arrow-up-right"/></svg>{% endif %}</a>
+    {%- if p.note %}<span class="sitemap-note">{{ p.note }}</span>{% endif %}
+    {%- if p.parts %}
+    <span class="sitemap-parts">
+      {%- for part in p.parts %}
+      {%- assign pf = part.url | slice: 0 %}
+      <a href="{% if pf == '/' %}{{ part.url | relative_url }}{% else %}{{ part.url }}{% endif %}">{{ part.title }}</a>
+      {%- endfor %}
+    </span>
+    {%- endif %}
+  </li>
+  {%- endfor %}
+</ul>

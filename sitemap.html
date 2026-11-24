@@ -1,0 +1,70 @@
+---
+layout: default
+title: Sitemap
+description: "Every page on briannaimm.com: the home page, papers and projects, apps, guides, and related sites."
+permalink: /sitemap/
+---
+{%- comment -%}
+  The visual sitemap. Pages come from _data/sitemap.yml; collection items come from site.items.
+  sitemap.xml reads the same data.
+{%- endcomment -%}
+{%- assign sm = site.data.sitemap %}
+{%- assign items = site.items | sort: "date" | reverse %}
+{%- assign papers = items | where: "category", "paper" %}
+{%- assign projects = items | where: "category", "project" %}
+<article class="sitemap-page">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="{{ '/' | relative_url }}"><svg class="ico" aria-hidden="true"><use href="#arrow-left"/></svg> Home</a>
+  </nav>
+  <p class="eyebrow">Site guide</p>
+  <h1 class="item-title">Sitemap</h1>
+  <p class="lead">Every page on this site, including tools and guides that are not linked from the home page. A version for search engines is at <a href="{{ '/sitemap.xml' | relative_url }}">sitemap.xml</a>.</p>
+
+  <div class="sitemap-grid">
+    <section class="sitemap-section" aria-labelledby="sm-pages">
+      <h2 id="sm-pages">Pages</h2>
+      {% include sitemap-list.html links=sm.pages %}
+    </section>
+
+    <section class="sitemap-section" aria-labelledby="sm-apps">
+      <h2 id="sm-apps">Apps and tools</h2>
+      {% include sitemap-list.html links=sm.apps %}
+    </section>
+
+    <section class="sitemap-section sitemap-wide" aria-labelledby="sm-work">
+      <h2 id="sm-work">Papers &amp; Projects</h2>
+      <div class="sitemap-cols">
+        <section aria-labelledby="sm-papers">
+          <h3 id="sm-papers">Papers</h3>
+          {%- if papers.size > 0 %}
+          <ul>
+            {%- for it in papers %}
+            <li><a href="{{ it.url | relative_url }}">{{ it.title }}</a><span class="sitemap-note">{{ it.date | date: "%B %-d, %Y" }}{% if it.display_tag %} &middot; {{ it.display_tag }}{% endif %}</span></li>
+            {%- endfor %}
+          </ul>
+          {%- else %}<p class="sitemap-note">No papers yet.</p>{% endif %}
+        </section>
+        <section aria-labelledby="sm-projects">
+          <h3 id="sm-projects">Projects</h3>
+          {%- if projects.size > 0 %}
+          <ul>
+            {%- for it in projects %}
+            <li><a href="{{ it.url | relative_url }}">{{ it.title }}</a><span class="sitemap-note">{{ it.date | date: "%B %-d, %Y" }}{% if it.display_tag %} &middot; {{ it.display_tag }}{% endif %}</span></li>
+            {%- endfor %}
+          </ul>
+          {%- else %}<p class="sitemap-note">No projects yet.</p>{% endif %}
+        </section>
+      </div>
+    </section>
+
+    <section class="sitemap-section" aria-labelledby="sm-guides">
+      <h2 id="sm-guides">Guides</h2>
+      {% include sitemap-list.html links=sm.guides %}
+    </section>
+
+    <section class="sitemap-section" aria-labelledby="sm-elsewhere">
+      <h2 id="sm-elsewhere">Elsewhere on briannaimm.com</h2>
+      {% include sitemap-list.html links=sm.elsewhere %}
+    </section>
+  </div>
+</article>
