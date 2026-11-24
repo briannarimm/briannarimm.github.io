@@ -17,7 +17,7 @@ collections:
   items:
     output: true
     permalink: /items/:name/
-  # Journal entries for /fm27-manu-rebuild/. Each file in _fm27_journal/ shows in the Journal tab, newest first.
+  # Journal entries for /fm27-guides/manchester-united/. Each file in _fm27_journal/ shows in the Journal tab, newest first.
   fm27_journal:
     output: false
 
